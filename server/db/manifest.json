@@ -1,0 +1,803 @@
+{
+  "updatedAt": "2026-11-10T23:17:59.338Z",
+  "totalCounts": {
+    "theories": 20,
+    "flashcards": 47,
+    "cases": 10,
+    "questions": 13
+  },
+  "modules": [
+    {
+      "id": "mod1",
+      "number": 1,
+      "title": "인지·자아·사회·도덕성 발달",
+      "subtitle": "Cognitive, Self, Social & Moral Development",
+      "sourceMapping": "Woolfolk Ch.2, 3 / Seifert & Sutton Ch.3",
+      "description": "피아제·비고츠키 인지발달론의 현대적 재해석(신피아제 학파·작업기억 병목), 브론펜브레너 생태체계이론, 에릭슨·마샤 정체성 발달, 마음이론과 사회정보처리모형 기반 도덕·사회성 발달을 다룹니다.",
+      "counts": {
+        "theories": 4,
+        "flashcards": 8,
+        "cases": 2,
+        "questions": 2
+      }
+    },
+    {
+      "id": "mod2",
+      "number": 2,
+      "title": "학습자 다양성과 특수 교육적 요구",
+      "subtitle": "Learner Differences, CHC/Wechsler, CLT, Prosthetics, RTI & ADHD",
+      "sourceMapping": "Woolfolk Ch.4 / Seifert & Sutton Ch.4, 5",
+      "description": "가드너 다중지능·학습양식 통념 비판과 CHC/웩슬러 지능이론, 유동성 지능의 안정성을 보완하는 스키마 자동화·인지부하이론(CLT), 신경심리학적 환경적 보철, RTI/MTSS 및 ADHD 실행기능 지원을 다룹니다.",
+      "counts": {
+        "theories": 4,
+        "flashcards": 9,
+        "cases": 2,
+        "questions": 2
+      }
+    },
+    {
+      "id": "mod3",
+      "number": 3,
+      "title": "행동주의 학습이론과 긍정적 행동지원",
+      "subtitle": "Behavioral Learning, FBA & Positive Behavior Support (PBS)",
+      "sourceMapping": "Woolfolk Ch.7 / Seifert & Sutton Ch.2",
+      "description": "조작적 조건형성, 부적 강화와 처벌의 역설, 기능적 행동평가(FBA: A-B-C 분석), 사전교정(Precorrection), 대체행동 교수 및 긍정적 행동지원(PBS)을 다룹니다.",
+      "counts": {
+        "theories": 4,
+        "flashcards": 10,
+        "cases": 2,
+        "questions": 3
+      }
+    },
+    {
+      "id": "mod4",
+      "number": 4,
+      "title": "인지·사회인지 학습과 자기조절",
+      "subtitle": "Cognitive & Social Cognitive Learning, Metacognition & SRL",
+      "sourceMapping": "Woolfolk Ch.8, 9, 11 / Seifert & Sutton Ch.2, 9",
+      "description": "작업기억-장기기억 정보처리 모형, 메타인지(유창성 착각)와 바람직한 어려움(인출연습·분산학습), 반두라 자기효능감과 짐머만의 자기조절학습(SRL) 3단계 순환 모형을 다룹니다.",
+      "counts": {
+        "theories": 4,
+        "flashcards": 10,
+        "cases": 2,
+        "questions": 3
+      }
+    },
+    {
+      "id": "mod5",
+      "number": 5,
+      "title": "학습 동기 및 상담적 학급경영",
+      "subtitle": "Motivation (SDT, Attribution, Self-Worth) & Classroom Management",
+      "sourceMapping": "Woolfolk Ch.12, 13 / Seifert & Sutton Ch.6, 7, 8",
+      "description": "데시와 라이언의 자기결정성이론(자율성·유능감·관계성), 와이너 귀인이론, 코빙턴 자기가치이론(자기구실 만들기) 및 고든 의사소통·회복적 정의를 다룹니다.",
+      "counts": {
+        "theories": 4,
+        "flashcards": 10,
+        "cases": 2,
+        "questions": 3
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "mod1-theory-piaget",
+      "moduleId": "mod1",
+      "type": "theory",
+      "titleKo": "피아제 인지발달이론과 신피아제 학파의 재해석",
+      "titleEn": "Piaget's Cognitive Development & Neo-Piagetian Perspectives",
+      "filePath": "server/db/mod1/theories.json"
+    },
+    {
+      "id": "mod1-theory-vygotsky",
+      "moduleId": "mod1",
+      "type": "theory",
+      "titleKo": "비고츠키 사회문화적 이론과 근접발달영역(ZPD)·비계설정",
+      "titleEn": "Vygotsky's Sociocultural Theory, ZPD & Scaffolding",
+      "filePath": "server/db/mod1/theories.json"
+    },
+    {
+      "id": "mod1-theory-ecological",
+      "moduleId": "mod1",
+      "type": "theory",
+      "titleKo": "브론펜브레너 생물생태학적 모형과 에릭슨·마샤 정체성 발달",
+      "titleEn": "Bronfenbrenner's Bioecological Model & Erikson/Marcia Identity Development",
+      "filePath": "server/db/mod1/theories.json"
+    },
+    {
+      "id": "mod1-theory-moral",
+      "moduleId": "mod1",
+      "type": "theory",
+      "titleKo": "도덕성 발달(콜버그·사회적 영역이론)과 사회정보처리모형",
+      "titleEn": "Moral Development, Social Domain Theory & Social Information Processing",
+      "filePath": "server/db/mod1/theories.json"
+    },
+    {
+      "id": "mod1-fc-equilibration",
+      "moduleId": "mod1",
+      "type": "flashcard",
+      "titleKo": "평형화와 인지적 불균형",
+      "titleEn": "Equilibration & Cognitive Disequilibrium",
+      "filePath": "server/db/mod1/flashcards.json"
+    },
+    {
+      "id": "mod1-fc-neopiagetian",
+      "moduleId": "mod1",
+      "type": "flashcard",
+      "titleKo": "신피아제 이론",
+      "titleEn": "Neo-Piagetian Theory",
+      "filePath": "server/db/mod1/flashcards.json"
+    },
+    {
+      "id": "mod1-fc-zpd",
+      "moduleId": "mod1",
+      "type": "flashcard",
+      "titleKo": "근접발달영역",
+      "titleEn": "Zone of Proximal Development (ZPD)",
+      "filePath": "server/db/mod1/flashcards.json"
+    },
+    {
+      "id": "mod1-fc-scaffolding",
+      "moduleId": "mod1",
+      "type": "flashcard",
+      "titleKo": "비계설정과 점진적 소거",
+      "titleEn": "Scaffolding & Fading",
+      "filePath": "server/db/mod1/flashcards.json"
+    },
+    {
+      "id": "mod1-fc-privatespeech",
+      "moduleId": "mod1",
+      "type": "flashcard",
+      "titleKo": "혼잣말 (사적 언어)",
+      "titleEn": "Private Speech",
+      "filePath": "server/db/mod1/flashcards.json"
+    },
+    {
+      "id": "mod1-fc-mesosystem",
+      "moduleId": "mod1",
+      "type": "flashcard",
+      "titleKo": "중간체계와 근접과정",
+      "titleEn": "Mesosystem & Proximal Processes",
+      "filePath": "server/db/mod1/flashcards.json"
+    },
+    {
+      "id": "mod1-fc-identitystatus",
+      "moduleId": "mod1",
+      "type": "flashcard",
+      "titleKo": "정체성 유예 vs. 정체성 유실",
+      "titleEn": "Identity Moratorium vs. Identity Foreclosure",
+      "filePath": "server/db/mod1/flashcards.json"
+    },
+    {
+      "id": "mod1-fc-hostileattribution",
+      "moduleId": "mod1",
+      "type": "flashcard",
+      "titleKo": "적대적 귀인 편향",
+      "titleEn": "Hostile Attribution Bias",
+      "filePath": "server/db/mod1/flashcards.json"
+    },
+    {
+      "id": "mod1-case-hostile",
+      "moduleId": "mod1",
+      "type": "case",
+      "titleKo": "사소한 신체 접촉에도 폭발하며 친구를 공격하는 민준이",
+      "titleEn": "초등학교 4학년",
+      "filePath": "server/db/mod1/cases.json"
+    },
+    {
+      "id": "mod1-case-foreclosure",
+      "moduleId": "mod1",
+      "type": "case",
+      "titleKo": "부모가 정해준 진로 목표 아래 극심한 시험불안과 무기력을 겪는 서연이",
+      "titleEn": "고등학교 1학년",
+      "filePath": "server/db/mod1/cases.json"
+    },
+    {
+      "id": "mod1-q-piaget-vygotsky",
+      "moduleId": "mod1",
+      "type": "question",
+      "titleKo": "피아제(Piaget)와 비고츠키(Vygotsky)의 인지발달 이론이 학습자의 성장을 바라보는 관점의 차이를 설명하고, 두 이론을 현대 정보처리·인지부하 관점과 통합하여 학교상담 및 학습컨설팅에 어떻게 적용할지 말씀해 보세요.",
+      "titleEn": "근접발달영역(ZPD), 비계설정(Scaffolding), 점진적 소거(Fading), 작업기억(Working Memory), 외재적 인지부하(Extraneous Load), 혼잣말(Private Speech)",
+      "filePath": "server/db/mod1/questions.json"
+    },
+    {
+      "id": "mod1-q-moral-sip",
+      "moduleId": "mod1",
+      "type": "question",
+      "titleKo": "학교폭력이나 잦은 또래 갈등을 일으키는 학생에게 도덕적 규범 교육이나 반성문 작성을 반복해도 행동이 교정되지 않는 이유를 도덕성 발달 및 사회인지 이론에 근거하여 진단하고, 효과적인 상담 개입 방안을 제시해 보세요.",
+      "titleEn": "적대적 귀인 편향(Hostile Attribution Bias), 사회정보처리모형, 조망수용(Perspective-Taking), 작업기억 마비(인지적 과부하), 환경적 보철, 투리엘 사회적 영역이론",
+      "filePath": "server/db/mod1/questions.json"
+    },
+    {
+      "id": "mod2-theory-chc",
+      "moduleId": "mod2",
+      "type": "theory",
+      "titleKo": "지능이론의 재검토: 가드너 다중지능이론의 심리측정적 한계와 CHC·웩슬러(WISC-V) 모형",
+      "titleEn": "Critique of Multiple Intelligences vs. CHC Theory & Wechsler Intelligence Scales",
+      "filePath": "server/db/mod2/theories.json"
+    },
+    {
+      "id": "mod2-theory-clt-prosthetics",
+      "moduleId": "mod2",
+      "type": "theory",
+      "titleKo": "유동성 지능의 안정성을 보완하는 스키마 자동화·인지부하이론과 신경심리학적 환경적 보철",
+      "titleEn": "Schema Automatization, Cognitive Load Theory (CLT) & Neuropsychological Environmental Prosthetics",
+      "filePath": "server/db/mod2/theories.json"
+    },
+    {
+      "id": "mod2-theory-rti",
+      "moduleId": "mod2",
+      "type": "theory",
+      "titleKo": "중재반응모형(RTI / MTSS)과 학습장애(SLD)의 조기 선별·지원 체계",
+      "titleEn": "Response to Intervention (RTI / MTSS) & Specific Learning Disabilities",
+      "filePath": "server/db/mod2/theories.json"
+    },
+    {
+      "id": "mod2-theory-adhd",
+      "moduleId": "mod2",
+      "type": "theory",
+      "titleKo": "ADHD 및 실행기능(Executive Function) 취약 학생을 위한 과학적 지원",
+      "titleEn": "ADHD, Executive Functioning (Barkley Model) & Multimodal Classroom Interventions",
+      "filePath": "server/db/mod2/theories.json"
+    },
+    {
+      "id": "mod2-fc-chc",
+      "moduleId": "mod2",
+      "type": "flashcard",
+      "titleKo": "CHC 지능이론",
+      "titleEn": "CHC Theory of Intelligence (Cattell-Horn-Carroll)",
+      "filePath": "server/db/mod2/flashcards.json"
+    },
+    {
+      "id": "mod2-fc-wmi-psi",
+      "moduleId": "mod2",
+      "type": "flashcard",
+      "titleKo": "작업기억 지표(WMI)와 처리속도 지표(PSI)",
+      "titleEn": "Working Memory Index (WMI) & Processing Speed Index (PSI)",
+      "filePath": "server/db/mod2/flashcards.json"
+    },
+    {
+      "id": "mod2-fc-schema-automatization",
+      "moduleId": "mod2",
+      "type": "flashcard",
+      "titleKo": "스키마 자동화와 유동성 지능 보완",
+      "titleEn": "Schema Automatization & Fluid Intelligence Compensation",
+      "filePath": "server/db/mod2/flashcards.json"
+    },
+    {
+      "id": "mod2-fc-clt",
+      "moduleId": "mod2",
+      "type": "flashcard",
+      "titleKo": "외재적 인지부하 vs. 본유적 인지부하",
+      "titleEn": "Extraneous vs. Germane Cognitive Load",
+      "filePath": "server/db/mod2/flashcards.json"
+    },
+    {
+      "id": "mod2-fc-prosthetics",
+      "moduleId": "mod2",
+      "type": "flashcard",
+      "titleKo": "신경심리학적 환경적 보철",
+      "titleEn": "Neuropsychological Environmental Prosthetics",
+      "filePath": "server/db/mod2/flashcards.json"
+    },
+    {
+      "id": "mod2-fc-rti",
+      "moduleId": "mod2",
+      "type": "flashcard",
+      "titleKo": "중재반응모형 / 다층적 지원체계",
+      "titleEn": "Response to Intervention (RTI) / MTSS",
+      "filePath": "server/db/mod2/flashcards.json"
+    },
+    {
+      "id": "mod2-fc-meshing",
+      "moduleId": "mod2",
+      "type": "flashcard",
+      "titleKo": "학습양식 맞추기 가설의 실증적 비판",
+      "titleEn": "Critique of Learning Styles (Meshing Hypothesis)",
+      "filePath": "server/db/mod2/flashcards.json"
+    },
+    {
+      "id": "mod2-fc-inhibition",
+      "moduleId": "mod2",
+      "type": "flashcard",
+      "titleKo": "반응 억제와 실행기능",
+      "titleEn": "Response Inhibition & Executive Functions",
+      "filePath": "server/db/mod2/flashcards.json"
+    },
+    {
+      "id": "mod2-fc-drc",
+      "moduleId": "mod2",
+      "type": "flashcard",
+      "titleKo": "일일행동보고카드",
+      "titleEn": "Daily Report Card (DRC)",
+      "filePath": "server/db/mod2/flashcards.json"
+    },
+    {
+      "id": "mod2-case-wisc-bottleneck",
+      "moduleId": "mod2",
+      "type": "case",
+      "titleKo": "구두 토론은 뛰어나지만 지필 과제만 주어지면 백지로 내고 엎드리는 도윤이 (K-WISC-V 프로파일 사례)",
+      "titleEn": "초등학교 5학년",
+      "filePath": "server/db/mod2/cases.json"
+    },
+    {
+      "id": "mod2-case-adhd-drc",
+      "moduleId": "mod2",
+      "type": "case",
+      "titleKo": "수업 중 불쑥 자리를 이탈하고 모둠 과제를 망쳐 또래에게 배제되는 ADHD 성향 하준이",
+      "titleEn": "초등학교 3학년",
+      "filePath": "server/db/mod2/cases.json"
+    },
+    {
+      "id": "mod2-q-chc-clt",
+      "moduleId": "mod2",
+      "type": "question",
+      "titleKo": "학교 현장에서 흔히 활용되는 가드너(Gardner)의 다중지능이론이나 감각적 학습양식(Learning Styles) 이론의 심리측정적·실증적 한계를 과학자-실무자 관점에서 비평하고, 학습부진 학생을 진단·지원할 때 CHC 지능이론과 인지부하이론(CLT)을 어떻게 대안적으로 적용할지 설명해 보세요.",
+      "titleEn": "CHC 지능이론, 작업기억(WMI) 및 처리속도(PSI) 병목, 스키마 자동화(Schema Automatization), 외재적 인지부하(Extraneous Load), 환경적 보철(Environmental Prosthetics), 완결된 예제(Worked Examples)",
+      "filePath": "server/db/mod2/questions.json"
+    },
+    {
+      "id": "mod2-q-rti-adhd",
+      "moduleId": "mod2",
+      "type": "question",
+      "titleKo": "과거 학습장애 진단에 사용되던 지능-성취 불일치 모형의 한계를 지적하고, 중재반응모형(RTI / MTSS)을 학교상담 및 학습지원 체계에 어떻게 적용할 수 있는지 단계별로 설명해 보세요.",
+      "titleEn": "중재반응모형(RTI / MTSS), 실패 대기 모형(Wait-to-Fail), 반응 억제(Response Inhibition), 수행의 장애(Disorder of Performance), 수행 시점(Point of Performance), 일일행동보고카드(DRC)",
+      "filePath": "server/db/mod2/questions.json"
+    },
+    {
+      "id": "mod3-theory-operant-punishment",
+      "moduleId": "mod3",
+      "type": "theory",
+      "titleKo": "조작적 조건형성: 정적·부적 강화의 원리와 수여·박탈 벌(Punishment)의 심리학적 한계",
+      "titleEn": "Operant Conditioning: Positive/Negative Reinforcement & Limitations of Presentation/Removal Punishment",
+      "filePath": "server/db/mod3/theories.json"
+    },
+    {
+      "id": "mod3-theory-premack-shaping-task",
+      "moduleId": "mod3",
+      "type": "theory",
+      "titleKo": "프리맥 원리(Premack Principle), 조형(Shaping)과 과제분석(Task Analysis) 및 토큰 강화",
+      "titleEn": "Premack Principle, Shaping, Task Analysis & Token Economy Systems",
+      "filePath": "server/db/mod3/theories.json"
+    },
+    {
+      "id": "mod3-theory-aba-differential",
+      "moduleId": "mod3",
+      "type": "theory",
+      "titleKo": "응용행동분석(ABA): 자극 통제, 차별강화(DRA·DRI·DRO)와 소거 폭발(Extinction Burst) 관리",
+      "titleEn": "Applied Behavior Analysis (ABA), Differential Reinforcement & Managing Extinction Bursts",
+      "filePath": "server/db/mod3/theories.json"
+    },
+    {
+      "id": "mod3-theory-fba-pbs",
+      "moduleId": "mod3",
+      "type": "theory",
+      "titleKo": "기능적 행동평가(FBA: A-B-C 관찰과 4대 행동 기능)와 긍정적 행동지원(PBS: 사전교정과 대체행동 교수)",
+      "titleEn": "Functional Behavioral Assessment (FBA) & Positive Behavior Support (PBS: Precorrection & FCT)",
+      "filePath": "server/db/mod3/theories.json"
+    },
+    {
+      "id": "mod3-fc-negative-reinforcement",
+      "moduleId": "mod3",
+      "type": "flashcard",
+      "titleKo": "부적 강화 vs. 벌(처벌)",
+      "titleEn": "Negative Reinforcement vs. Punishment",
+      "filePath": "server/db/mod3/flashcards.json"
+    },
+    {
+      "id": "mod3-fc-presentation-removal-punishment",
+      "moduleId": "mod3",
+      "type": "flashcard",
+      "titleKo": "수여 벌(1형 벌)과 박탈 벌(2형 벌)",
+      "titleEn": "Presentation Punishment (Type I) & Removal Punishment (Type II)",
+      "filePath": "server/db/mod3/flashcards.json"
+    },
+    {
+      "id": "mod3-fc-premack",
+      "moduleId": "mod3",
+      "type": "flashcard",
+      "titleKo": "프리맥 원리 (할머니의 법칙)",
+      "titleEn": "Premack Principle (Grandma's Rule)",
+      "filePath": "server/db/mod3/flashcards.json"
+    },
+    {
+      "id": "mod3-fc-shaping-task-analysis",
+      "moduleId": "mod3",
+      "type": "flashcard",
+      "titleKo": "조형(점진적 접근법)과 과제분석",
+      "titleEn": "Shaping (Successive Approximations) & Task Analysis",
+      "filePath": "server/db/mod3/flashcards.json"
+    },
+    {
+      "id": "mod3-fc-extinction-burst",
+      "moduleId": "mod3",
+      "type": "flashcard",
+      "titleKo": "소거와 소거 폭발",
+      "titleEn": "Extinction & Extinction Burst",
+      "filePath": "server/db/mod3/flashcards.json"
+    },
+    {
+      "id": "mod3-fc-differential-reinforcement",
+      "moduleId": "mod3",
+      "type": "flashcard",
+      "titleKo": "차별강화 (대체행동·상반행동·타행동 차별강화)",
+      "titleEn": "Differential Reinforcement (DRA / DRI / DRO)",
+      "filePath": "server/db/mod3/flashcards.json"
+    },
+    {
+      "id": "mod3-fc-fba",
+      "moduleId": "mod3",
+      "type": "flashcard",
+      "titleKo": "기능적 행동평가와 A-B-C 관찰",
+      "titleEn": "Functional Behavioral Assessment (FBA: A-B-C Analysis)",
+      "filePath": "server/db/mod3/flashcards.json"
+    },
+    {
+      "id": "mod3-fc-precorrection",
+      "moduleId": "mod3",
+      "type": "flashcard",
+      "titleKo": "사전교정 (선행사건 수정)",
+      "titleEn": "Precorrection (Antecedent Modification)",
+      "filePath": "server/db/mod3/flashcards.json"
+    },
+    {
+      "id": "mod3-fc-fct",
+      "moduleId": "mod3",
+      "type": "flashcard",
+      "titleKo": "기능적 의사소통 훈련",
+      "titleEn": "Functional Communication Training (FCT)",
+      "filePath": "server/db/mod3/flashcards.json"
+    },
+    {
+      "id": "mod3-fc-token-response-cost",
+      "moduleId": "mod3",
+      "type": "flashcard",
+      "titleKo": "토큰 강화 체제와 반응대가",
+      "titleEn": "Token Economy & Response Cost",
+      "filePath": "server/db/mod3/flashcards.json"
+    },
+    {
+      "id": "mod3-case-aggression-escape",
+      "moduleId": "mod3",
+      "type": "case",
+      "titleKo": "글쓰기·독후감 시간마다 연필을 집어던지고 교실 밖으로 뛰쳐나가는 태현이",
+      "titleEn": "초등학교 3학년",
+      "filePath": "server/db/mod3/cases.json"
+    },
+    {
+      "id": "mod3-case-escape",
+      "moduleId": "mod3",
+      "type": "case",
+      "titleKo": "모둠 읽기 시간마다 엉뚱한 농담과 기괴한 소리로 수업을 방해하는 지호",
+      "titleEn": "중학교 1학년",
+      "filePath": "server/db/mod3/cases.json"
+    },
+    {
+      "id": "mod3-q-fba-pbs",
+      "moduleId": "mod3",
+      "type": "question",
+      "titleKo": "수업 시간에 반복적으로 문제행동을 일으키는 학생을 교실 밖으로 내보내거나 벌점을 주는 전통적 훈육이 실패하는 이유를 조작적 조건형성(부적 강화)과 기능적 행동평가(FBA) 관점에서 설명하고, 긍정적 행동지원(PBS)에 기반한 대안을 제시해 보세요.",
+      "titleEn": "기능적 행동평가(FBA: A-B-C 분석), 부적 강화(Negative Reinforcement), 사전교정(Precorrection), 기능적 의사소통 훈련(FCT), 대체행동 차별강화(DRA), 과제 세분화(Task Analysis)",
+      "filePath": "server/db/mod3/questions.json"
+    },
+    {
+      "id": "mod3-q-extinction-burst-consultation",
+      "moduleId": "mod3",
+      "type": "question",
+      "titleKo": "담임교사가 교사의 관심을 끌기 위해 수업 중 괴성을 지르는 초등학생의 행동을 고치겠다며 '계획적 무시(소거)'를 사흘간 적용했는데, 오히려 아이가 책상을 내리치며 더 크게 소리를 지른다고 호소합니다. 과학자-실무자 관점에서 이 현상의 원인을 진단하고 교사 자문 방안을 제시해 보세요.",
+      "titleEn": "소거(Extinction), 소거 폭발(Extinction Burst), 변동비율 간헐 강화(VR Schedule), 상반행동 차별강화(DRI), 대체행동 차별강화(DRA), 사전교정(Precorrection)",
+      "filePath": "server/db/mod3/questions.json"
+    },
+    {
+      "id": "mod3-q-shaping-premack",
+      "moduleId": "mod3",
+      "type": "question",
+      "titleKo": "수업 시간 40분 내내 한 글자도 쓰지 않고 엎드려 있는 학생에게 담임교사가 '오늘 학습지 2쪽을 전부 다 끝내기 전엔 집에 못 간다'고 엄포를 놓았으나 효과가 없었습니다. 조형(Shaping), 과제분석(Task Analysis), 프리맥 원리(Premack Principle)를 활용해 이 중재를 어떻게 재설계하겠습니까?",
+      "titleEn": "과제분석(Task Analysis), 조형(Shaping: 점진적 접근), 프리맥 원리(Premack Principle), 연속 강화(Continuous Reinforcement), 간헐 강화(Intermittent Reinforcement), 용암(Fading)과 일반화",
+      "filePath": "server/db/mod3/questions.json"
+    },
+    {
+      "id": "mod4-theory-ipm-working-memory",
+      "moduleId": "mod4",
+      "type": "theory",
+      "titleKo": "정보처리모델과 배들리(Baddeley)의 다중요소 작업기억(음운루프·시공간잡기장·중앙집행기)",
+      "titleEn": "Information Processing Model & Baddeley's Multi-component Working Memory System",
+      "filePath": "server/db/mod4/theories.json"
+    },
+    {
+      "id": "mod4-theory-clt-automatization-chunking",
+      "moduleId": "mod4",
+      "type": "theory",
+      "titleKo": "스웰러(Sweller)의 인지부하이론(내재적·외재적·본유적 부하)과 스키마 자동화 및 청킹",
+      "titleEn": "Sweller's Cognitive Load Theory (Intrinsic, Extraneous, Germane Load), Schema Automatization & Chunking",
+      "filePath": "server/db/mod4/theories.json"
+    },
+    {
+      "id": "mod4-theory-metacognition-srl",
+      "moduleId": "mod4",
+      "type": "theory",
+      "titleKo": "초인지(Metacognition)의 3요소와 지머만(Zimmerman)의 순환적 자기조절학습 모형",
+      "titleEn": "Metacognition (Knowledge & Regulation) & Zimmerman's Cyclical Model of Self-Regulated Learning",
+      "filePath": "server/db/mod4/theories.json"
+    },
+    {
+      "id": "mod4-theory-bandura-meichenbaum-casel",
+      "moduleId": "mod4",
+      "type": "theory",
+      "titleKo": "반두라의 삼원적 상호결정론·자기효능감, 마이켄바움의 자기교수법(CBM) 및 정서적 자기조절(CASEL)",
+      "titleEn": "Bandura's Triadic Reciprocal Determinism & Self-Efficacy, Meichenbaum's Self-Instruction & CASEL SEL",
+      "filePath": "server/db/mod4/theories.json"
+    },
+    {
+      "id": "mod4-fc-baddeley-wm",
+      "moduleId": "mod4",
+      "type": "flashcard",
+      "titleKo": "배들리의 다중요소 작업기억 (음운루프·시공간잡기장·중앙집행기)",
+      "titleEn": "Baddeley's Multi-component Working Memory (Phonological Loop, Visuospatial Sketchpad, Central Executive)",
+      "filePath": "server/db/mod4/flashcards.json"
+    },
+    {
+      "id": "mod4-fc-clt-three-loads",
+      "moduleId": "mod4",
+      "type": "flashcard",
+      "titleKo": "내재적·외재적·본유적 인지부하",
+      "titleEn": "Intrinsic, Extraneous, and Germane Cognitive Load",
+      "filePath": "server/db/mod4/flashcards.json"
+    },
+    {
+      "id": "mod4-fc-schema-chunking",
+      "moduleId": "mod4",
+      "type": "flashcard",
+      "titleKo": "스키마 자동화와 청킹(의미 덩어리 짓기)",
+      "titleEn": "Schema Automatization & Chunking",
+      "filePath": "server/db/mod4/flashcards.json"
+    },
+    {
+      "id": "mod4-fc-worked-examples",
+      "moduleId": "mod4",
+      "type": "flashcard",
+      "titleKo": "완결된 예제와 부분 완성 문제",
+      "titleEn": "Worked Examples & Completion Problems",
+      "filePath": "server/db/mod4/flashcards.json"
+    },
+    {
+      "id": "mod4-fc-metacognition-conditional",
+      "moduleId": "mod4",
+      "type": "flashcard",
+      "titleKo": "초인지(메타인지)와 조건적 지식",
+      "titleEn": "Metacognition & Conditional Knowledge",
+      "filePath": "server/db/mod4/flashcards.json"
+    },
+    {
+      "id": "mod4-fc-triadic-reciprocal",
+      "moduleId": "mod4",
+      "type": "flashcard",
+      "titleKo": "삼원적 상호결정론",
+      "titleEn": "Triadic Reciprocal Determinism",
+      "filePath": "server/db/mod4/flashcards.json"
+    },
+    {
+      "id": "mod4-fc-self-efficacy-sources",
+      "moduleId": "mod4",
+      "type": "flashcard",
+      "titleKo": "자기효능감의 4대 원천과 대처 모델(Coping Model)",
+      "titleEn": "Four Sources of Self-Efficacy & Coping Model",
+      "filePath": "server/db/mod4/flashcards.json"
+    },
+    {
+      "id": "mod4-fc-meichenbaum-cbm",
+      "moduleId": "mod4",
+      "type": "flashcard",
+      "titleKo": "마이켄바움의 인지행동수정 (5단계 자기교수법)",
+      "titleEn": "Meichenbaum's Cognitive Behavior Modification (Self-Instructional Training)",
+      "filePath": "server/db/mod4/flashcards.json"
+    },
+    {
+      "id": "mod4-fc-zimmerman-srl",
+      "moduleId": "mod4",
+      "type": "flashcard",
+      "titleKo": "지머만의 순환적 자기조절학습 3단계",
+      "titleEn": "Zimmerman's Cyclical Phases of Self-Regulated Learning",
+      "filePath": "server/db/mod4/flashcards.json"
+    },
+    {
+      "id": "mod4-fc-casel-sel",
+      "moduleId": "mod4",
+      "type": "flashcard",
+      "titleKo": "CASEL 사회정서학습 5대 핵심 역량",
+      "titleEn": "CASEL 5 Core Competencies of Social-Emotional Learning (SEL)",
+      "filePath": "server/db/mod4/flashcards.json"
+    },
+    {
+      "id": "mod4-case-impulsive-initiation",
+      "moduleId": "mod4",
+      "type": "case",
+      "titleKo": "충동적으로 오답을 적어버리거나 복잡한 활동지 앞에서 아예 착수하지 못하는 현우",
+      "titleEn": "초등학교 4학년",
+      "filePath": "server/db/mod4/cases.json"
+    },
+    {
+      "id": "mod4-case-srl",
+      "moduleId": "mod4",
+      "type": "case",
+      "titleKo": "밤늦게까지 교과서를 5번씩 정독하고도 시험만 보면 머릿속이 하얘지는 유진이",
+      "titleEn": "중학교 2학년",
+      "filePath": "server/db/mod4/cases.json"
+    },
+    {
+      "id": "mod4-q-meichenbaum-clt-prosthetics",
+      "moduleId": "mod4",
+      "type": "question",
+      "titleKo": "문제의 지시문을 끝까지 읽지 않고 충동적으로 답을 적거나, 조금만 복잡한 과제가 주어지면 아예 착수하지 못하고 멍하니 앉아 있는 초등학생이 있습니다. 스웰러의 인지부하이론, 외적 보철(시각적 단서), 마이켄바움(Meichenbaum)의 자기교수법을 결합하여 이 학생을 어떻게 지원하겠습니까?",
+      "titleEn": "외재적 인지부하 축소(Extraneous Load), 완결된 예제(Worked Examples), 신경심리학적 환경적 보철(시각적 단서), 마이켄바움의 자기교수법(5단계 내적 언어), 대처 모델(Coping Model), 성취경험(Mastery Experience)",
+      "filePath": "server/db/mod4/questions.json"
+    },
+    {
+      "id": "mod4-q-working-memory-automatization",
+      "moduleId": "mod4",
+      "type": "question",
+      "titleKo": "배들리(Baddeley)의 다중요소 작업기억 모형(음운루프·시공간잡기장·중앙집행기)의 구조적 특징을 설명하고, 작업기억 용량의 생물학적 한계를 극복하기 위해 왜 '청킹(Chunking)'과 '스키마 자동화(Schema Automatization)'가 필수적인지 설명해 보세요.",
+      "titleEn": "배들리 작업기억(음운루프·시공간잡기장·중앙집행기), 이중부호화(Dual Coding), 청킹(Chunking), 스키마 자동화(Schema Automatization), 내재적·외재적 인지부하, 본유적 인지부하(Germane Load)",
+      "filePath": "server/db/mod4/questions.json"
+    },
+    {
+      "id": "mod4-q-srl-efficacy",
+      "moduleId": "mod4",
+      "type": "question",
+      "titleKo": "공부 시간은 매우 긴데도 성적이 오르지 않아 '나는 머리가 나쁜가 봐요'라며 좌절하는 학생을 지머만(Zimmerman)의 자기조절학습 모형과 반두라(Bandura)의 자기효능감 이론을 적용해 어떻게 상담·코칭하겠습니까?",
+      "titleEn": "유창성 착각(Illusion of Competence), 초인지적 조건적 지식(Conditional Knowledge), 능동적 인출 연습(Retrieval Practice), 성취경험(Mastery Experience), 대처 모델(Coping Model), 지머만의 자기조절학습 3단계",
+      "filePath": "server/db/mod4/questions.json"
+    },
+    {
+      "id": "mod5-theory-sdt",
+      "moduleId": "mod5",
+      "type": "theory",
+      "titleKo": "데시와 라이언(Deci & Ryan)의 자기결정이론: 자율성·유능감·관계성과 정보적 피드백 vs 통제적 언어",
+      "titleEn": "Self-Determination Theory (SDT): Basic Psychological Needs & Informational vs. Controlling Feedback",
+      "filePath": "server/db/mod5/theories.json"
+    },
+    {
+      "id": "mod5-theory-achievement-goals-self-worth",
+      "moduleId": "mod5",
+      "type": "theory",
+      "titleKo": "성취목표이론(숙달목표 vs 수행접근·수행회피 목표)과 자기가치이론 및 자기구실 만들기(Self-Handicapping)",
+      "titleEn": "Achievement Goal Theory (Mastery vs. Performance-Approach/Avoidance) & Self-Worth Theory (Self-Handicapping)",
+      "filePath": "server/db/mod5/theories.json"
+    },
+    {
+      "id": "mod5-theory-attribution-helplessness",
+      "moduleId": "mod5",
+      "type": "theory",
+      "titleKo": "와이너(Weiner)의 3차원 귀인이론(인과소재·안정성·통제가능성)과 학습된 무기력 및 재귀인 훈련",
+      "titleEn": "Weiner's Three-Dimensional Attribution Theory, Learned Helplessness & Attribution Retraining",
+      "filePath": "server/db/mod5/theories.json"
+    },
+    {
+      "id": "mod5-theory-gordon-restorative-justice",
+      "moduleId": "mod5",
+      "type": "theory",
+      "titleKo": "고든(Gordon)의 의사소통 모형(문제 소유권·적극적 경청·나-전달법)과 또래조정 및 회복적 정의(Restorative Justice)",
+      "titleEn": "Gordon's Teacher Effectiveness Training (Problem Ownership, Active Listening, I-Messages) & Restorative Justice",
+      "filePath": "server/db/mod5/theories.json"
+    },
+    {
+      "id": "mod5-fc-sdt",
+      "moduleId": "mod5",
+      "type": "flashcard",
+      "titleKo": "자기결정이론과 3대 기본 심리욕구 (자율성·유능감·관계성)",
+      "titleEn": "Self-Determination Theory (Autonomy, Competence, Relatedness)",
+      "filePath": "server/db/mod5/flashcards.json"
+    },
+    {
+      "id": "mod5-fc-informational-vs-controlling",
+      "moduleId": "mod5",
+      "type": "flashcard",
+      "titleKo": "정보적 피드백 vs. 통제적 언어",
+      "titleEn": "Informational Feedback vs. Controlling Language",
+      "filePath": "server/db/mod5/flashcards.json"
+    },
+    {
+      "id": "mod5-fc-internalization-continuum",
+      "moduleId": "mod5",
+      "type": "flashcard",
+      "titleKo": "외재적 동기의 내면화 연속체 (외적·부과된·동일시·통합된 조절)",
+      "titleEn": "Continuum of Extrinsic Motivation Internalization (External, Introjected, Identified, Integrated)",
+      "filePath": "server/db/mod5/flashcards.json"
+    },
+    {
+      "id": "mod5-fc-mastery-performance-goals",
+      "moduleId": "mod5",
+      "type": "flashcard",
+      "titleKo": "숙달목표 vs. 수행접근·수행회피 목표",
+      "titleEn": "Mastery Goal vs. Performance-Approach / Performance-Avoidance Goal",
+      "filePath": "server/db/mod5/flashcards.json"
+    },
+    {
+      "id": "mod5-fc-self-handicapping",
+      "moduleId": "mod5",
+      "type": "flashcard",
+      "titleKo": "자기가치이론과 자기구실 만들기",
+      "titleEn": "Self-Worth Theory & Self-Handicapping",
+      "filePath": "server/db/mod5/flashcards.json"
+    },
+    {
+      "id": "mod5-fc-weiner-attribution",
+      "moduleId": "mod5",
+      "type": "flashcard",
+      "titleKo": "와이너의 3차원 귀인이론 (인과소재·안정성·통제가능성)",
+      "titleEn": "Weiner's Three-Dimensional Attribution Theory (Locus, Stability, Controllability)",
+      "filePath": "server/db/mod5/flashcards.json"
+    },
+    {
+      "id": "mod5-fc-learned-helplessness",
+      "moduleId": "mod5",
+      "type": "flashcard",
+      "titleKo": "학습된 무기력과 재귀인 훈련",
+      "titleEn": "Learned Helplessness & Attribution Retraining",
+      "filePath": "server/db/mod5/flashcards.json"
+    },
+    {
+      "id": "mod5-fc-gordon-problem-ownership",
+      "moduleId": "mod5",
+      "type": "flashcard",
+      "titleKo": "고든의 문제 소유권과 적극적 경청",
+      "titleEn": "Gordon's Problem Ownership & Active Listening",
+      "filePath": "server/db/mod5/flashcards.json"
+    },
+    {
+      "id": "mod5-fc-i-message",
+      "moduleId": "mod5",
+      "type": "flashcard",
+      "titleKo": "나-전달법 (비평가적 행동 + 구체적 영향 + 교사의 감정)",
+      "titleEn": "I-Message (Behavior + Concrete Effect + Feeling)",
+      "filePath": "server/db/mod5/flashcards.json"
+    },
+    {
+      "id": "mod5-fc-restorative-justice",
+      "moduleId": "mod5",
+      "type": "flashcard",
+      "titleKo": "회복적 정의(회복적 생활교육)와 또래조정",
+      "titleEn": "Restorative Justice & Peer Mediation",
+      "filePath": "server/db/mod5/flashcards.json"
+    },
+    {
+      "id": "mod5-case-helplessness",
+      "moduleId": "mod5",
+      "type": "case",
+      "titleKo": "반복된 실패로 '어차피 해봤자 안 돼요'라며 시험지를 백지로 내는 학습된 무기력 학생 서준이",
+      "titleEn": "중학교 3학년",
+      "filePath": "server/db/mod5/cases.json"
+    },
+    {
+      "id": "mod5-case-relational-aggression-restorative",
+      "moduleId": "mod5",
+      "type": "case",
+      "titleKo": "학급 내 은밀한 소외와 단톡방 뒷담화(관계적 공격성)로 등교를 거부하는 다은이",
+      "titleEn": "초등학교 6학년",
+      "filePath": "server/db/mod5/cases.json"
+    },
+    {
+      "id": "mod5-q-weiner-helplessness",
+      "moduleId": "mod5",
+      "type": "question",
+      "titleKo": "반복된 학업 실패로 '나는 머리가 나빠서 해봤자 소용없어요'라며 시험 전날 일부러 게임을 하는 학생을 와이너(Weiner)의 3차원 귀인이론, 코빙턴(Covington)의 자기가치이론(자기구실 만들기), 데시와 라이언(Deci & Ryan)의 자기결정이론을 통합하여 어떻게 상담하겠습니까?",
+      "titleEn": "와이너 3차원 귀인(내적·안정적·통제불가능), 학습된 무기력과 재귀인 훈련(Attribution Retraining), 자기가치이론과 자기구실 만들기(Self-Handicapping), 숙달목표(Mastery Goal), 자기결정이론(자율성·유능감·관계성), 정보적 피드백(Informational Feedback)",
+      "filePath": "server/db/mod5/questions.json"
+    },
+    {
+      "id": "mod5-q-sdt-feedback-overjustification",
+      "moduleId": "mod5",
+      "type": "question",
+      "titleKo": "데시와 라이언(Deci & Ryan)의 자기결정이론에서 '통제적 언어(Controlling Language)'와 '정보적 피드백(Informational Feedback)'이 학생의 내재적 동기에 미치는 차이를 설명하고, 외적 보상을 잘못 사용할 때 나타나는 과잉정당화 효과(Overjustification Effect)를 예방하는 방법을 제시해 보세요.",
+      "titleEn": "자기결정이론(자율성·유능감·관계성), 인지평가이론(정보적 피드백 vs 통제적 언어), 과잉정당화 효과(Overjustification Effect), 유기적 통합이론(내면화 연속체), 동일시 조절(Identified Regulation), 합리적 이유 설명(Rationale)과 감정 수용",
+      "filePath": "server/db/mod5/questions.json"
+    },
+    {
+      "id": "mod5-q-gordon-restorative-circle",
+      "moduleId": "mod5",
+      "type": "question",
+      "titleKo": "학급 내에서 특정 학생을 은밀하게 배제하거나 단톡방에서 조롱하는 '관계적 공격성(소외·따돌림)' 사안이 발생했습니다. 고든(Gordon)의 의사소통 모형(문제 소유권·적극적 경청·나-전달법)과 회복적 정의(Restorative Justice)에 기반하여 피해 학생 상담 및 학급 개입 절차를 설명해 보세요.",
+      "titleEn": "고든의 문제 소유권(Problem Ownership), 적극적 경청(Active Listening)과 의사소통 걸림돌 배제, 나-전달법(I-Message: 행동·영향·감정), 무패법(No-Lose Method), 회복적 정의(Restorative Justice)와 회복적 서클, 관계적 공격성(Relational Aggression)과 심리적 안전감",
+      "filePath": "server/db/mod5/questions.json"
+    }
+  ]
+}

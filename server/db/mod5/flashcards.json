@@ -1,0 +1,92 @@
+[
+  {
+    "id": "mod5-fc-sdt",
+    "moduleId": "mod5",
+    "termEn": "Self-Determination Theory (Autonomy, Competence, Relatedness)",
+    "termKo": "자기결정이론과 3대 기본 심리욕구 (자율성·유능감·관계성)",
+    "definition": "데시와 라이언(Deci & Ryan)이 제시한 동기 이론으로, 인간이 자율성(자기결정감), 유능감(과제 숙달 효능감), 관계성(안전한 소속감과 수용)의 3대 기본 심리욕구를 충족받을 때 내재적 동기와 자율적 내면화가 촉진된다는 이론.",
+    "classroomExample": "독서 과제 수행 시 도서 목록과 결과물 표현 방식(만화, 발표, 서평 중 택1)에 선택권을 부여(자율성)하고, 수준별 읽기 비계(유능감)와 모둠의 따뜻한 경청 규칙(관계성)을 결합한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod5-fc-informational-vs-controlling",
+    "moduleId": "mod5",
+    "termEn": "Informational Feedback vs. Controlling Language",
+    "termKo": "정보적 피드백 vs. 통제적 언어",
+    "definition": "인지평가이론에 따라 강압적 당위('~해야만 해', 감시·비교)를 담은 통제적 언어는 학생의 자율성을 침해해 내재적 동기를 꺾는 반면, 구체적 성장과 전략 개선점을 알려주는 정보적 피드백은 유능감을 높여 내재적 동기를 증진시킨다.",
+    "classroomExample": "'숙제 안 해오면 벌점이다(통제적 언어)' 대신 '지난번보다 문단 핵심어 찾기가 훨씬 정확해졌네. 여기에 근거 문장 1개만 더 연결하면 글의 설득력이 배가 될 거야(정보적 피드백)'라고 전달한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod5-fc-internalization-continuum",
+    "moduleId": "mod5",
+    "termEn": "Continuum of Extrinsic Motivation Internalization (External, Introjected, Identified, Integrated)",
+    "termKo": "외재적 동기의 내면화 연속체 (외적·부과된·동일시·통합된 조절)",
+    "definition": "외재적 동기가 자율성의 정도에 따라 외적 조절(보상·처벌) → 부과된 조절(죄책감·불안 회피, 자존심) → 동일시 조절(가치와 중요성 인정) → 통합된 조절(자기 정체성과 통합)로 점차 내면화되는 단계.",
+    "classroomExample": "단순히 부모에게 혼나지 않으려 공부하던(외적·부과된 조절) 학생에게 해당 교과의 학습 이유와 자신의 진로 가치를 연결해 주어 스스로 필요성을 느끼는 '동일시 조절'로 이행하도록 돕는다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod5-fc-mastery-performance-goals",
+    "moduleId": "mod5",
+    "termEn": "Mastery Goal vs. Performance-Approach / Performance-Avoidance Goal",
+    "termKo": "숙달목표 vs. 수행접근·수행회피 목표",
+    "definition": "과제 자체의 이해와 어제의 나보다 성장하는 것에 가치를 두는 숙달목표와 달리, 수행접근목표는 타인보다 우월한 성적을 증명하려 하고, 수행회피목표는 무능해 보이거나 실패하는 수치심을 피하는 데 급급해 부적응적 회피를 낳는다.",
+    "classroomExample": "성적순 좌석 배치나 공개 석차 게시를 폐지하고, 학생 각자의 이전 단원 대비 향상도와 오류 수정 과정을 인정하는 숙달목표 중심 학급 구조(TARGET 모형)를 구축한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod5-fc-self-handicapping",
+    "moduleId": "mod5",
+    "termEn": "Self-Worth Theory & Self-Handicapping",
+    "termKo": "자기가치이론과 자기구실 만들기",
+    "definition": "코빙턴(Covington)의 이론으로, 실패했을 때 '능력이 부족한 사람'으로 판명되어 자기가치가 훼손되는 것을 막기 위해 시험 전날 일부러 공부를 안 하거나 미루는 등 실패의 외적 핑곗거리를 스스로 만드는 방어적 전략.",
+    "classroomExample": "시험 전날 밤새 게임을 하고 와서 '어제 공부 하나도 안 해서 망쳤어'라고 말하는 학생의 이면에 있는 무능 노출 공포를 공감하고, 성적과 인간적 자기가치를 분리하는 상담을 진행한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod5-fc-weiner-attribution",
+    "moduleId": "mod5",
+    "termEn": "Weiner's Three-Dimensional Attribution Theory (Locus, Stability, Controllability)",
+    "termKo": "와이너의 3차원 귀인이론 (인과소재·안정성·통제가능성)",
+    "definition": "성공과 실패의 원인을 인과소재(내적/외적), 안정성(안정적/불안정적), 통제가능성(통제 가능/불가능)의 3차원으로 분석하여 후속 정서(자부심·수치심·분노·동정)와 미래 성공 기대, 성취 행동을 설명하는 이론.",
+    "classroomExample": "시험 실패를 '타고난 수학 머리 부족(내적·안정적·통제불가능)'으로 귀인하는 학생에게 '이번 단원의 오답 노트 인출 전략 부족(내적·불안정적·통제가능)'으로 재귀인시켜 미래 성공 기대를 회복시킨다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod5-fc-learned-helplessness",
+    "moduleId": "mod5",
+    "termEn": "Learned Helplessness & Attribution Retraining",
+    "termKo": "학습된 무기력과 재귀인 훈련",
+    "definition": "반복된 실패를 내적·안정적·통제불가능한 능력 부족 탓으로 귀인하여 아무리 노력해도 결과를 바꿀 수 없다고 체념하는 상태가 학습된 무기력이며, 이를 통제 가능한 전략과 노력 귀인으로 교정하는 개입이 재귀인 훈련이다.",
+    "classroomExample": "무기력한 학생에게 무조건 '열심히 노력해'라고 강요하면 재실패 시 능력 부족 귀인이 더 고착되므로, 반드시 달성 가능한 소단계 과제와 구체적 풀이 전략을 함께 제공하며 재귀인 훈련을 실시한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod5-fc-gordon-problem-ownership",
+    "moduleId": "mod5",
+    "termEn": "Gordon's Problem Ownership & Active Listening",
+    "termKo": "고든의 문제 소유권과 적극적 경청",
+    "definition": "갈등이나 고민 상황에서 욕구 좌절을 겪는 주체가 누구인지(학생 소유 vs 교사 소유)를 판별하는 개념으로, 학생이 문제를 소유했을 때는 충고·훈계 같은 의사소통 걸림돌을 멈추고 감정과 의미를 반영하는 적극적 경청을 사용해야 한다.",
+    "classroomExample": "'친구들이 나를 싫어하는 것 같아 학교 오기 싫어요'라고 호소하는 학생(학생 문제 소유)에게 '네가 먼저 다가가 봐(성급한 조언)' 대신 '친구들에게 소외되는 느낌 때문에 외롭고 마음이 많이 힘들었구나(적극적 경청)'라고 반응한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod5-fc-i-message",
+    "moduleId": "mod5",
+    "termEn": "I-Message (Behavior + Concrete Effect + Feeling)",
+    "termKo": "나-전달법 (비평가적 행동 + 구체적 영향 + 교사의 감정)",
+    "definition": "학생의 행동이 교사의 수업권이나 타인의 권리를 침해하여 '교사가 문제를 소유'했을 때, 학생을 비난하는 너-전달법 대신 ① 관찰된 행동의 객관적 기술, ② 구체적·실질적 영향, ③ 교사의 감정을 전달해 자발적 행동 수정을 유도하는 기법.",
+    "classroomExample": "'너는 왜 맨날 떠들어서 수업 방해하니!(너-전달법)' 대신 '모둠 발표 중에 큰 소리로 사담을 나누면(행동) 발표하는 친구의 목소리가 들리지 않아 수업 진행이 어렵고(영향) 선생님도 당황스럽단다(감정)'라고 전달한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod5-fc-restorative-justice",
+    "moduleId": "mod5",
+    "termEn": "Restorative Justice & Peer Mediation",
+    "termKo": "회복적 정의(회복적 생활교육)와 또래조정",
+    "definition": "규칙 위반자 처벌에 집중하는 응보적 정의를 넘어, 갈등으로 인해 발생한 피해와 상처를 규명하고 가해자의 자발적 책임 이행과 공동체 관계 회복에 초점을 맞추는 학급경영 및 학교폭력 개입 패러다임.",
+    "classroomExample": "학급 내 따돌림이나 다툼 발생 시 일방적 징계 대신, 피해 학생의 안전과 욕구를 최우선으로 확인하고 회복적 서클(Restorative Circle)과 또래조정을 통해 구체적인 재발 방지 약속과 관계 회복을 이끈다.",
+    "status": "unseen"
+  }
+]

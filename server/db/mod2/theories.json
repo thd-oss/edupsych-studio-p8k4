@@ -1,0 +1,110 @@
+[
+  {
+    "id": "mod2-theory-chc",
+    "moduleId": "mod2",
+    "titleKo": "지능이론의 재검토: 가드너 다중지능이론의 심리측정적 한계와 CHC·웩슬러(WISC-V) 모형",
+    "titleEn": "Critique of Multiple Intelligences vs. CHC Theory & Wechsler Intelligence Scales",
+    "sourceMapping": "Woolfolk Ch.4 (pp. 122-136) / Seifert & Sutton Ch.4",
+    "tags": [
+      "지능이론",
+      "다중지능이론",
+      "CHC이론",
+      "웩슬러",
+      "WISC-V",
+      "유동성지능",
+      "결정성지능",
+      "작업기억",
+      "처리속도"
+    ],
+    "textbookDefinition": [
+      "스피어만(Spearman)의 일반지능(g 요인: 모든 인지 과제 수행의 기저에 공통적으로 작용하는 정신 에너지)과 카텔-혼(Cattell-Horn)의 유동성·결정성 지능 모형, 캐럴(Carroll)의 3층 이론을 통합한 CHC(Cattell-Horn-Carroll) 3층 위계 모형은 현대 심리측정학의 표준 지능 구조로서 최상위 제3층 일반지능(g), 제2층의 광범위 능력(유동성 지능 Gf, 결정성 지능 Gc, 시공간 처리 Gv, 단기·작업기억 Gsm, 처리속도 Gs 등 10~16개 영역), 제1층의 70여 개 좁은 특수 능력으로 위계화된다.",
+      "웩슬러 아동용 지능검사 5판(K-WISC-V)은 CHC 이론을 정밀하게 반영하여 전체 IQ(FSIQ)와 함께 5대 기본 지표인 언어이해(VCI/Gc), 시공간(VSI/Gv), 유동추론(FRI/Gf), 작업기억(WMI/Gsm), 처리속도(PSI/Gs)를 산출하며, 추가적으로 일반능력지표(GAI: VCI·VSI·FRI 중심)와 인지효율성지표(CPI: WMI·PSI 중심) 간 내적 편차(Discrepancy) 분석을 통해 학업 수행의 인지적 병목(Bottleneck)을 진단한다.",
+      "가드너(Gardner)의 다중지능이론(Multiple Intelligences: 언어, 논리수학, 공간, 신체운동, 음악, 대인관계, 개인내, 자연탐구 등 8~9개 상호 독립적 모듈 가정)과 스턴버그(Sternberg)의 성공지능·삼원지능이론(분석적·창의적·실제적 지능)은 학업적 단일 지능관을 넘어 인간의 다면적 적응 역량을 조명하고자 하였다.",
+      "감각적 학습양식(Learning Styles; 예: 시각·청각·운동감각 VAK 모형)과 적성-처치 상호작용(ATI) 내 맞춤 가설(Meshing Hypothesis)은 학습자가 선호하는 감각 양식에 맞춰 교수 양식을 일치시키면 학습 효과가 극대화된다는 통념을 제시하였다.",
+      "보편적 학습설계(UDL: Universal Design for Learning)는 고정된 학습양식 꼬리표 부여 대신, 모든 학습자에게 다양한 표상(Representation), 다양한 행동과 표현(Action & Expression), 다양한 참여(Engagement) 수단을 제공하여 인지적 접근성을 높이는 신경과학 기반 교수 설계 원리이다."
+    ],
+    "criticalPerspective": "가드너의 다중지능이론(MI)은 학생의 다양한 강점을 존중한다는 교육철학적 은유로는 가치가 있으나, 심리측정학적·인지신경과학적 실증 근거가 매우 취약하다. 첫째, 대규모 요인분석 연구들은 하위 지능 영역 간에 유의미한 정적 상관(Positive Manifold)이 존재하여 상위 일반지능(g 요인)을 부정할 수 없음을 입증하며, 가드너가 분류한 신체운동·음악·대인관계 등은 지능이라기보다 재능(Talent), 기술, 혹은 성격 특성(Big Five)과 혼재되어 있다(Waterhouse, 2006; Visser et al., 2006). 둘째, 다중지능이나 감각적 학습양식(VAK)에 맞춰 교수법을 매칭한다는 '맞춤 가설(Meshing Hypothesis)'은 통제된 무작위 실험 연구에서 학업 성취 증진 효과가 전혀 없음이 반복 검증되었으며, 오히려 특정 감각 양식으로만 학습자를 제한해 고차원적 이중부호화(Dual Coding)와 과제 본질에 맞는 표상 학습을 방해한다(Pashler et al., 2008). 따라서 과학자-실무자 관점의 학교상담교사는 비과학적 유형 라벨링을 지양하고, CHC·WISC-V 프로파일에서 일반능력(GAI: VCI·FRI)은 우수하나 인지효율성(CPI: WMI 작업기억·PSI 처리속도)이 현저히 낮아 발생하는 '인지 처리 병목'을 정밀 판별하여 과제 구조와 인지부하를 재설계해야 한다.",
+    "interviewPoint": "'다중지능이론이나 학습양식(VAK) 검사를 학교상담 및 학습 코칭에 어떻게 활용하겠는가?'라는 질문에 무비판적 수용을 철저히 경계해야 한다. ① 다중지능·학습양식 맞춤 가설(Meshing Hypothesis)의 심리측정적 타당도 결여를 짚어낸 뒤, ② 이를 고정된 학생 분류가 아닌 보편적 학습설계(UDL)의 '다중 표상(시각+언어 이중부호화)' 원리로 재해석하고, ③ 실질적 학습 코칭에서는 경험적 타당도가 확립된 CHC·K-WISC-V 프로파일의 VCI·FRI 대비 작업기억(WMI)·처리속도(PSI) 병목 분석을 통해 시간제한 완화와 외부 시각 보철을 처방하겠다고 답변하여 과학자-실무자 전문성을 입증한다.",
+    "userNote": ""
+  },
+  {
+    "id": "mod2-theory-clt-prosthetics",
+    "moduleId": "mod2",
+    "titleKo": "유동성 지능의 안정성을 보완하는 스키마 자동화·인지부하이론과 신경심리학적 환경적 보철",
+    "titleEn": "Schema Automatization, Cognitive Load Theory (CLT) & Neuropsychological Environmental Prosthetics",
+    "sourceMapping": "Woolfolk Ch.4, 8 / Seifert & Sutton Ch.4, 5",
+    "tags": [
+      "유동성지능",
+      "스키마자동화",
+      "인지부하이론",
+      "외재적인지부하",
+      "본유적인지부하",
+      "환경적보철",
+      "수행시점",
+      "작업기억"
+    ],
+    "textbookDefinition": [
+      "카텔(Cattell)의 유동성 지능(Gf: 신경생리학적 성숙과 전두엽-두정엽 네트워크 효율성에 기반한 비언어적 추론·신규 문제해결력)은 유전적 영향이 크고 비교적 생물학적 안정성을 띠는 반면, 결정성 지능(Gc: 문화적·교육적 경험으로 장기기억에 축적된 어휘·개념 도식·절차 지식)은 체계적 교육을 통해 평생 확장된다.",
+      "스웰러(Sweller)의 인지부하이론(Cognitive Load Theory)은 한 번에 처리할 수 있는 용량(4±1 청크)과 지속시간(15~30초)이 엄격히 제한된 작업기억(Working Memory)의 병목을 용량 제한이 없는 장기기억(Long-Term Memory) 내 스키마 구축과 자동화(Schema Automatization)로 우회하는 인간 인지 건축학(Human Cognitive Architecture) 원리를 규명한다.",
+      "3대 인지부하의 가산적 구조: 내재적 인지부하(Intrinsic Load: 과제 자체의 요소 간 상호작용성 수준과 학습자 사전지식에 의해 결정됨), 외재적 인지부하(Extraneous Load: 모호한 다단계 구두 지시, 주의분산 배치, 순수 발견학습 강요 등 부적절한 교수·환경 설계로 낭비되는 비생산적 부하), 본유적 인지부하(Germane Load: 장기기억 내 스키마의 정교화와 자동화에 직접 투입되는 생산적 정신 노력).",
+      "청킹(Chunking)과 스키마 자동화(Automatization): 반복적이고 구조화된 인출·연습을 통해 하위 기초 기술(해독, 기초 연산, 기본 공식·절차)이 장기기억 내 고도로 통합된 단일 스키마로 자동화되면, 의식적 작업기억 용량을 거의 소모하지 않고 인출되어 고차원적 유동추론과 자기조절에 쓸 작업기억 여유 자원이 극대화된다.",
+      "신경심리학적 환경적 보철(Neuropsychological Environmental Prosthetics): 시력이 낮은 학생에게 안경을 씌워주듯, 작업기억·처리속도·실행기능이 취약한 학습자가 내적 기억 자원에만 의존하지 않도록 실제 행동과 학습이 일어나는 수행 시점(Point of Performance)에 배치하는 외현적 물리·시각 보조 장치(완결된 예제 Worked Examples, 단계별 시각 체크리스트, 그래픽 오거나이저, 시각적 타이머 등)를 뜻한다."
+    ],
+    "criticalPerspective": "유동성 지능(Gf)이나 선천적 작업기억 용량 자체를 컴퓨터 두뇌 게임이나 단순 암기 훈련(Working Memory Brain Training)으로 영구 증진하려는 시도는 훈련 과제와 유사한 근거리 전이(Near Transfer)만 있을 뿐 실제 학업 성취나 일상 문제해결로 이어지는 원거리 전이(Far Transfer) 효과가 전혀 없다는 것이 메타분석의 일관된 결론이다(Melby-Lervåg & Hulme, 2013; Sala & Gobet, 2019). 유동성 지능과 작업기억 용량의 생물학적 한계를 실질적으로 돌파하는 과학적 기제는 오직 두 가지다. 첫째, 기초 연산·음운 해독·핵심 문제해결 절차를 장기기억의 '자동화된 스키마(Automated Schema)'로 구축하여 작업기억 내에서는 단일 정보 덩어리(Chunk)로 무의식적 처리가 일어나게 함으로써 내재적 인지부하를 격감시키는 것이다. 둘째, 복합 구두 지시나 최소 안내 발견학습 같은 외재적 인지부하를 즉각 제거하고, 수행 시점(Point of Performance)에 '신경심리학적 환경적 보철(완결된 예제, 단계별 절차 카드)'을 설치하여 작업기억 부담을 외부 환경으로 외주화(Cognitive Offloading)함으로써 남은 작업기억 자원을 온전히 본유적 인지부하에 집중시키는 것이다.",
+    "interviewPoint": "'지능이나 작업기억이 낮은 학생의 학습부진을 어떻게 도울 것인가?'라는 질문에 '기억력·집중력 두뇌 훈련 프로그램을 시킨다'는 비실증적 답변은 감점 요인이다. 반드시 ① 유동성 지능(Gf)과 작업기억 용량의 생물학적 안정성 및 두뇌 훈련의 원거리 전이 한계를 명시하고, ② 수행 시점(Point of Performance)에 배치하는 신경심리학적 환경적 보철(완결된 예제, 시각적 체크리스트)로 외재적 인지부하를 제거하며, ③ 기초 기능의 스키마 자동화(Chunking)를 통해 제한된 작업기억 자원을 고차원적 본유적 인지부하에 온전히 투입하도록 교실 환경을 재설계하겠다고 답변한다.",
+    "userNote": ""
+  },
+  {
+    "id": "mod2-theory-rti",
+    "moduleId": "mod2",
+    "titleKo": "중재반응모형(RTI / MTSS)과 학습장애(SLD)의 조기 선별·지원 체계",
+    "titleEn": "Response to Intervention (RTI / MTSS) & Specific Learning Disabilities",
+    "sourceMapping": "Woolfolk Ch.4 (pp. 142-151) / Seifert & Sutton Ch.5",
+    "tags": [
+      "RTI",
+      "중재반응모형",
+      "MTSS",
+      "다층적지원체계",
+      "학습장애",
+      "매튜효과",
+      "진전도모니터링"
+    ],
+    "textbookDefinition": [
+      "중재반응모형(RTI: Response to Intervention) 및 다층적 지원체계(MTSS: Multi-Tiered System of Supports)는 모든 학생에게 과학적으로 검증된 교육을 제공하고, 정기적인 보편적 선별과 교육과정 중심 측정(CBM: Curriculum-Based Measurement) 기반의 진전도 모니터링을 통해 중재 반응도에 따라 학업·정서·행동 지원 강도를 3단계로 높이는 예방적 학교 생태계 모형이다.",
+      "Tier 1(보편적 예방 지원, 전체 학생의 약 80%): 전교생을 대상으로 증거기반 고품질 일반 학급 수업(보편적 학습설계 UDL), 학급 차원의 사회정서학습(SEL) 및 긍정적 행동지원(PBS)을 제공하고, 연 2~3회 보편적 선별검사(Universal Screening)를 통해 잠재적 위험군을 조기 발굴한다.",
+      "Tier 2(표적 집단 보충 지원, 약 15%): Tier 1 선별에서 기준 미달로 포착된 학업·정서 위험군 학생에게 진단 확정 전이라도 즉시 주 3~4회 구조화된 소집단(3~5명) 명시적 보충 교수나 표적 집단상담을 투입하고, 1~2주 간격의 CBM 진전도 모니터링(Progress Monitoring)으로 성장 기울기(Slope)를 추적한다.",
+      "Tier 3(집중적 개별화 지원, 약 5%): 충분한 충실도(Fidelity)로 제공된 Tier 2 중재에도 반응이 미흡한 학생에게 1:1 고강도 개별화 중재와 심층 상담을 제공하며, K-WISC-V 등 종합 심리·교육 평가를 실시하여 특정학습장애(SLD) 판별, 개별화교육계획(IEP) 수립 및 전문기관 연계를 수행한다.",
+      "특정학습장애(SLD: Specific Learning Disability)는 전반적인 지적장애나 감각·환경적 결핍이 아님에도 음운처리(Phonological Processing), 작업기억, 처리속도, 수 감각 등 기본 심리과정의 신경생물학적 기능 이상으로 인해 읽기(난독증 Dyslexia), 쓰기, 수학(난산증 Dyscalculia) 영역에서 현저한 학습 곤란을 겪는 상태이다."
+    ],
+    "criticalPerspective": "과거 학습장애 진단의 절대 기준이었던 '지능-성취 불일치 모형(IQ-Achievement Discrepancy Model)'은 아동의 표준화 IQ 점수와 학업성취도 점수 간에 통계적으로 유의미한 격차(통상 1.5~2 표준편차 이상)가 벌어질 때까지 기다려야 했기 때문에, 결정적 신경가소성 시기인 초등 저학년(1~2학년)을 허비하고 고학년이 되어 만성적 실패가 굳어진 뒤에야 개입하는 치명적인 '실패 대기 모형(Wait-to-Fail Model)'이었다. 스타노비치(Stanovich, 1986)가 규명한 '매튜 효과(Matthew Effect)'에 따르면, 초기 음운 해독(Decoding)에 실패한 아동은 텍스트 노출량 자체가 격감하여 어휘력과 배경지식, 나아가 결정성 지능(Gc)까지 연쇄적으로 하락하는 빈익빈 부익부 악순환에 빠지며 심각한 2차적 정서 손상(학업적 학습된 무기력, 우울, 시험불안, 과제 회피성 품행 문제)을 겪게 된다. 따라서 현대 교육심리학은 공식 진단명이 나오기 전이라도 Tier 1·Tier 2 단계에서 음운인식·파닉스·수 감각에 대한 명시적·체계적 교수(Explicit & Systematic Instruction)와 정서적 안전망을 즉각 가동하는 RTI/MTSS 패러다임을 필수 표준으로 삼는다.",
+    "interviewPoint": "학교상담실(Wee클래스) 연간 운영 계획이나 학습부진·정서위기 학생 지원 방안을 질문받았을 때, 의뢰된 소수 학생만 1:1 상담실(Tier 3)에서 만나는 전통적 수동 대기 모델을 지양해야 한다. ① 기존 실패 대기 모형(Wait-to-Fail)과 매튜 효과의 폐해를 지적한 뒤, ② Tier 1(전교생 보편적 선별, 학급 SEL, 담임교사 인지부하·PBS 자문) → ③ Tier 2(조기 포착된 학업·정서 위험군 대상 소집단 명시적 중재 및 CBM 진전도 모니터링) → ④ Tier 3(중재 불응 고위험군 대상 종합심리평가, 1:1 집중 상담, 특수교육·병원 연계)의 다층적 지원체계(MTSS/RTI) 청사진으로 구조화하여 답변한다.",
+    "userNote": ""
+  },
+  {
+    "id": "mod2-theory-adhd",
+    "moduleId": "mod2",
+    "titleKo": "ADHD 및 실행기능(Executive Function) 취약 학생을 위한 과학적 지원",
+    "titleEn": "ADHD, Executive Functioning (Barkley Model) & Multimodal Classroom Interventions",
+    "sourceMapping": "Woolfolk Ch.4 (pp. 152-158) / Seifert & Sutton Ch.5",
+    "tags": [
+      "ADHD",
+      "실행기능",
+      "바클리",
+      "반응억제",
+      "수행의장애",
+      "환경적보철",
+      "일일행동보고카드",
+      "DRC"
+    ],
+    "textbookDefinition": [
+      "주의력결핍 과잉행동장애(ADHD)는 발달 수준에 부적절한 부주의(Inattention), 과잉행동(Hyperactivity), 충동성(Impulsivity) 증상이 12세 이전에 발현되어 가정·학교 등 2개 이상의 생태학적 맥락에서 6개월 이상 지속되며 학업적·사회적 기능에 현저한 손상을 초래하는 신경발달장애이다.",
+      "바클리(Barkley, 1997)의 실행기능 통합 모형에 따르면, ADHD의 일차적 핵심 결함은 단순한 주의 집중력 부족이 아니라 전두엽-선조체(Prefronto-Striatal) 신경회로의 '행동 반응 억제(Behavioral Inhibition: 우세 반응 억제, 진행 중인 부적절 반응 중단, 간섭 통제)' 결함이다.",
+      "일차적 반응 억제 결함은 순차적으로 4대 실행기능(Executive Functions)을 손상시킨다: ① 비언어적 작업기억(과거 사건의 시각적 심상 유지 및 미래 시간 추정에 결함이 생겨 '시간맹 Time Blindness' 발생), ② 언어적 작업기억(비고츠키적 내적 언어·혼잣말의 내면화 지연으로 규칙 준수 곤란), ③ 정서·동기·각성의 자기조절(좌절 감내력 저하 및 내재적 동기 생성 곤란), ④ 행동의 재구성(분석 및 목표지향적 행동 합성 곤란).",
+      "수행의 장애(Disorder of Performance)와 지연 할인(Delayed Discounting): ADHD 아동은 사회적 규칙이나 학업 절차를 머릿속 지식으로 알지 못하는 것이 아니라, 도파민·노르에피네프린 보상 회로의 특성상 지연된 큰 보상보다 눈앞의 즉각적 자극에 강하게 끌려 '아는 것을 필요한 순간에 실행하지 못하는' 특성을 보인다.",
+      "증거기반 다중양식 개입(Multimodal Intervention): 약물치료(전두엽 각성 수준 정상화)에 더해, 학교 현장에서는 수행 시점(Point of Performance)의 환경적 보철 배치, 사전교정(Precorrection), 즉각적 유관 관리, 그리고 가정과 학교를 일일 단위로 연결하는 일일행동보고카드(DRC: Daily Report Card)가 가장 강력한 효과크기를 지닌다."
+    ],
+    "criticalPerspective": "바클리(Barkley)가 통찰했듯 ADHD는 '무엇을 해야 하는지 모르는 지식의 결함(Disorder of Knowing What to Do)'이 아니라 '아는 것을 실제 맥락에서 필요한 순간에 실행하지 못하는 수행의 장애(Disorder of Doing What You Know)'이다. 따라서 교실 밖 상담실에서 일주일에 한 번 만나 '다음 주부터는 수업 시간에 참을성 있게 앉아 있기로 약속하자'고 구두 다짐을 받거나, 사후에 반성문·벌점을 부과하는 전통적 훈육 방식은 전두엽 작업기억 결함과 시간맹(Time Blindness), 급격한 지연 할인(Delayed Discounting) 특성을 지닌 ADHD 학생에게 신경심리학적으로 전혀 작동하지 않는다. 효과적인 개입은 반드시 표적 행동이 일어나는 바로 그 시점과 장소(Point of Performance)에 외적 실행기능을 이식하는 형태여야 한다. 구체적으로 ① 추상적 시간을 물리적으로 시각화하는 타이머(Time Timer)와 10분 단위 마이크로 과제 분할(Chunking) 등 환경적 보철, ② 전환 직전 기대 행동을 환기하는 사전교정(Precorrection)과 합법적 움직임 기회(Movement Breaks) 부여, ③ 수행 직후 주어지는 고빈도 즉각적 피드백과 가정의 특권 보상을 연동하는 일일행동보고카드(DRC)가 유기적으로 결합되어야 한다.",
+    "interviewPoint": "ADHD 의심 또는 진단 학생 지도 및 담임교사 자문 방안을 질문받았을 때, 바클리 모형의 '지식의 결함이 아닌 수행의 장애(Disorder of Performance)' 개념을 핵심 준거로 제시한다. 이어서 ① 수행 시점(Point of Performance)에 배치하는 신경심리학적 환경적 보철(시각적 타이머, 책상 위 3단계 행동 스티커, 과제 세분화), ② 전환 시간 사전교정과 합법적 움직임 기회(교구 배부·출석부 심부름 등) 공식 부여, ③ 가정-학교 일관성을 구축하는 일일행동보고카드(DRC), ④ 만성적 지적과 실패로 손상된 자존감 및 또래 낙인을 회복하는 정서·사회성 상담의 4단계 다중양식 개입을 입체적으로 제시한다.",
+    "userNote": ""
+  }
+]

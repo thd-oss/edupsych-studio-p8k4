@@ -1,0 +1,28 @@
+{
+  "id": "./",
+  "name": "교육심리학 스튜디오 — 학교상담 대학원 면접 대비 아카이브",
+  "short_name": "교육심리 스튜디오",
+  "description": "Anita Woolfolk (13e) × Seifert & Sutton (2e) 통합 학교상담 대학원 면접 대비 교육심리학 학습 및 시뮬레이션 앱",
+  "lang": "ko-KR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f8fafc",
+  "theme_color": "#f8fafc",
+  "categories": ["education", "reference", "productivity"],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

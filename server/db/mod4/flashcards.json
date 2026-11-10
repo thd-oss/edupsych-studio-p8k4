@@ -1,0 +1,92 @@
+[
+  {
+    "id": "mod4-fc-baddeley-wm",
+    "moduleId": "mod4",
+    "termEn": "Baddeley's Multi-component Working Memory (Phonological Loop, Visuospatial Sketchpad, Central Executive)",
+    "termKo": "배들리의 다중요소 작업기억 (음운루프·시공간잡기장·중앙집행기)",
+    "definition": "작업기억을 단일 저장소가 아닌 주의 배분과 전략 통제를 담당하는 중앙집행기, 언어·소리 정보를 유지하는 음운루프, 시각·공간 이미지를 조작하는 시공간잡기장, 장기기억과 정보를 통합하는 일화완충기의 4대 하위 체계로 설명한 모형.",
+    "classroomExample": "교사가 말로만 복잡한 도형 성질을 설명하면 음운루프만 과부하되므로, 칠판에 색깔별 도형 회전 그림(시공간잡기장)을 함께 제시하는 이중부호화 전략으로 작업기억 처리 효율을 극대화한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod4-fc-clt-three-loads",
+    "moduleId": "mod4",
+    "termEn": "Intrinsic, Extraneous, and Germane Cognitive Load",
+    "termKo": "내재적·외재적·본유적 인지부하",
+    "definition": "스웰러(Sweller)의 인지부하이론에서 과제 자체의 요소 간 복잡성에 따른 부하가 내재적 부하, 잘못된 교수 제시나 주의분산으로 낭비되는 부하가 외재적 부하, 스키마 형성과 정교화에 쓰이는 생산적 정신 노력이 본유적 부하이다.",
+    "classroomExample": "활동지 한쪽에 그림을 두고 다른 쪽에 설명문을 두어 시선을 왕복하게 만드는 '주의분산 효과(Split-Attention Effect)'를 수정해 그림 안에 설명 라벨을 통합함으로써 외재적 인지부하를 제거한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod4-fc-schema-chunking",
+    "moduleId": "mod4",
+    "termEn": "Schema Automatization & Chunking",
+    "termKo": "스키마 자동화와 청킹(의미 덩어리 짓기)",
+    "definition": "청킹은 낱개의 정보들을 의미 있는 상위 단위로 묶어 작업기억 용량 한계를 넓히는 전략이며, 스키마 자동화는 장기기억 내 지식·절차 도식을 반복 연습해 의식적 노력이나 작업기억 소모 없이 즉각 인출·실행되게 만드는 과정이다.",
+    "classroomExample": "글자 해독(Decoding)과 구구단 연산이 완전히 스키마 자동화된 학생은 작업기억 용량을 철자·단순 계산에 빼앗기지 않고 문맥 추론과 문장제 해결(본유적 부하)에 온전히 사용할 수 있다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod4-fc-worked-examples",
+    "moduleId": "mod4",
+    "termEn": "Worked Examples & Completion Problems",
+    "termKo": "완결된 예제와 부분 완성 문제",
+    "definition": "초보 학습자의 작업기억 과부하를 막기 위해 문제 해결의 모든 단계가 명시된 '완결된 예제'를 먼저 학습하게 한 뒤, 일부 단계만 빈칸으로 남겨둔 '부분 완성 문제'를 거쳐 독립적 문제 해결로 이행하게 하는 인지부하 축소 기법.",
+    "classroomExample": "방정식을 처음 배우는 학생에게 곧바로 10문제를 풀게 하는 대신, 풀이 과정이 단계별로 적힌 완결된 예제와 빈칸 1~2개만 채우는 부분 완성 문제를 나란히 배치한 학습지를 제공한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod4-fc-metacognition-conditional",
+    "moduleId": "mod4",
+    "termEn": "Metacognition & Conditional Knowledge",
+    "termKo": "초인지(메타인지)와 조건적 지식",
+    "definition": "자신의 인지 과정을 계획·점검·조절하는 상위 인지 능력으로, 특히 어떤 학습 전략이 무엇인지(선언적), 어떻게 쓰는지(절차적)를 넘어 '언제, 왜' 그 전략을 사용해야 하는지 아는 조건적 지식이 전략 전이의 핵심이다.",
+    "classroomExample": "개념 간의 위계를 파악할 때는 마인드맵을 쓰고, 역사적 사건의 선후 관계를 정리할 때는 연대표를 써야 한다는 '상황별 전략 선택 기준(조건적 지식)'을 명시적으로 가르친다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod4-fc-triadic-reciprocal",
+    "moduleId": "mod4",
+    "termEn": "Triadic Reciprocal Determinism",
+    "termKo": "삼원적 상호결정론",
+    "definition": "반두라(Bandura)의 사회인지이론 핵심 원리로, 인간의 학습과 행동은 개인 내적 요인(인지·신념·정서), 행동적 요인(성취 행동·지속성), 환경적 요인(교실 구조·피드백·모델) 3자가 양방향으로 서로 영향을 주고받으며 결정된다는 관점.",
+    "classroomExample": "낮은 자기효능감(개인)이 과제 회피(행동)를 낳고 이것이 교사의 질책(환경)을 불러와 다시 효능감을 깎는 악순환을 끊기 위해, 환경(과제 세분화·성공 피드백)과 행동(작은 착수)을 동시에 개입한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod4-fc-self-efficacy-sources",
+    "moduleId": "mod4",
+    "termEn": "Four Sources of Self-Efficacy & Coping Model",
+    "termKo": "자기효능감의 4대 원천과 대처 모델(Coping Model)",
+    "definition": "자기효능감은 성취경험(가장 강력), 대리경험, 사회적 설득, 생리·정서적 상태 해석으로 형성되며, 특히 대리경험에서는 처음부터 완벽히 해내는 숙달 모델보다 오류를 겪지만 전략으로 극복하는 '대처 모델'이 부진 학생에게 훨씬 효과적이다.",
+    "classroomExample": "발표 불안이 큰 학생에게 처음부터 유창한 우등생 영상을 보여주는 대신, 처음엔 떨리고 실수하지만 메모 카드를 보며 차분히 끝까지 발표해 내는 또래 대처 모델(Coping Model)을 보여준다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod4-fc-meichenbaum-cbm",
+    "moduleId": "mod4",
+    "termEn": "Meichenbaum's Cognitive Behavior Modification (Self-Instructional Training)",
+    "termKo": "마이켄바움의 인지행동수정 (5단계 자기교수법)",
+    "definition": "충동적이거나 과제 착수가 어려운 아동에게 ① 성인의 인지적 모델링(사고 구술) → ② 외현적 외적 안내 → ③ 아동의 외현적 자기안내(큰 소리 혼잣말) → ④ 속삭이는 자기안내(용암) → ⑤ 내현적 자기교수(내적 언어)의 5단계로 자기조절을 훈련하는 기법.",
+    "classroomExample": "문제를 끝까지 읽지 않고 찍어버리는 초등학생에게 '잠깐! 문제에서 구하라는 것에 동그라미부터 치자 → 하나씩 대입해 보자 → 잘했어!'라는 자기대화 카드를 주고 소리 내어 말하며 풀게 한 뒤 점차 속삭임과 속마음 말하기로 내면화시킨다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod4-fc-zimmerman-srl",
+    "moduleId": "mod4",
+    "termEn": "Zimmerman's Cyclical Phases of Self-Regulated Learning",
+    "termKo": "지머만의 순환적 자기조절학습 3단계",
+    "definition": "자기조절학습을 ① 계획 단계(과제 분석, 목표 설정, 자기동기화 신념) → ② 수행 단계(자기통제, 자기교수, 초인지적 자기점검) → ③ 자기성찰 단계(자기평가, 통제 가능한 전략 귀인, 적응적 수정)의 순환 고리로 설명한 모형.",
+    "classroomExample": "시험 실패 원인을 '머리가 나빠서(통제 불가능 능력 귀인)'로 돌리는 학생에게 성찰 단계에서 '인출 연습 없이 눈으로만 읽은 전략 부족(통제 가능 전략 귀인)'으로 재해석하게 하여 다음 계획 단계의 전략 수정을 유도한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod4-fc-casel-sel",
+    "moduleId": "mod4",
+    "termEn": "CASEL 5 Core Competencies of Social-Emotional Learning (SEL)",
+    "termKo": "CASEL 사회정서학습 5대 핵심 역량",
+    "definition": "학업과 삶의 성공을 뒷받침하는 정서·사회적 자기조절 역량으로, 자기인식(Self-Awareness), 자기관리(Self-Management), 사회적 인식(Social Awareness), 관계 기술(Relationship Skills), 책임 있는 의사결정(Responsible Decision-Making)의 5요소로 구성된다.",
+    "classroomExample": "아침 조회 시간 '오늘 나의 감정 온도계 체크하기(자기인식)'와 갈등 상황에서의 '신호등 멈춤-생각-선택 기법(자기관리·책임 있는 의사결정)'을 학급 전체 Tier 1 교육과정에 통합한다.",
+    "status": "unseen"
+  }
+]

@@ -1,0 +1,507 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 60% Ground & Layered Surfaces (Tinted Cool Neutral) */
+    --bg-canvas: #f8f9fb;
+    --bg-surface: #ffffff;
+    --bg-subtle: #f1f4f9;
+    --bg-elevated: #ffffff;
+
+    /* 30% Ink Hierarchy (WCAG AA compliant contrast) */
+    --ink-primary: #0f172a;
+    --ink-secondary: #334155;
+    --ink-tertiary: #64748b;
+
+    /* 1px Hairline Borders & Subtle Tinted Elevation */
+    --border-hairline: rgba(15, 23, 42, 0.08);
+    --border-strong: rgba(15, 23, 42, 0.15);
+    --shadow-subtle: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.025);
+    --shadow-overlay: 0 16px 40px -6px rgba(15, 23, 42, 0.14), 0 4px 10px rgba(15, 23, 42, 0.06);
+
+    /* <= 10% Domain Accent */
+    --accent-solid: #4f46e5;
+    --accent-hover: #4338ca;
+    --accent-subtle: rgba(79, 70, 229, 0.08);
+
+    /* Concentric Radius Scale (outer_radius = inner_radius + padding) */
+    --radius-card: 16px;
+    --radius-inner: 10px;
+    --radius-control: 8px;
+
+    /* Motion Curves */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    background-color: var(--bg-canvas);
+    color: var(--ink-primary);
+  }
+
+  body {
+    background-color: var(--bg-canvas);
+    color: var(--ink-primary);
+    line-height: 1.65;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 한국어 어절 단절 방지 및 헤딩 조판 규율 */
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.025em;
+    line-height: 1.28;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  /* 박스(배경·테두리) 내부 소제목은 우측 불균형 공백 방지를 위해 text-wrap: balance를 적용하지 않음 */
+  h4,
+  h5,
+  h6,
+  .keep-words {
+    letter-spacing: -0.015em;
+    line-height: 1.38;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+  p,
+  blockquote,
+  li,
+  .pretty-text {
+    text-wrap: pretty;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+  /* 키보드 접근성 포커스 링 (WCAG 1.4.11 3:1 대비 충족) */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+  }
+
+  /* 모바일(터치 포인터) 환경에서 16px 미만 입력창 포커스 시 iOS Safari 강제 줌인 방지 */
+  @media (pointer: coarse) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
+
+  button,
+  [role='button'],
+  summary {
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  button:not(:disabled):not(.no-press-scale),
+  .pressable {
+    transition:
+      transform 140ms var(--ease-out),
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease,
+      opacity 150ms ease;
+  }
+
+  button:not(:disabled):not(.no-press-scale):active,
+  .pressable:active {
+    transform: scale(0.97);
+  }
+}
+
+/* 시맨틱 카드 표면 & 헤어라인 보더 유틸리티 */
+.surface-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-subtle);
+}
+
+.surface-subtle {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-inner);
+}
+
+/* 모바일 가로 스와이프 필터/탭 트랙 (modern-web-guidance: natural-interactions) */
+.chip-scroll-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  touch-action: pan-x;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chip-scroll-row::-webkit-scrollbar {
+  display: none;
+}
+
+.chip-scroll-row > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .chip-scroll-row {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
+/* 세그먼트 스위치 GPU 인디케이터 (180ms cubic-bezier(0.23, 1, 0.32, 1)) */
+.mode-switch-pill {
+  transition: transform 180ms var(--ease-out);
+  will-change: transform;
+}
+
+/* Sticky Interactive Stage 교체 전환 (180ms GPU transform/opacity) */
+@keyframes stageSwapIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stage-card-swap {
+    animation: stageSwapIn 180ms var(--ease-out) both;
+  }
+}
+
+/* Scroll-Driven Animation 기반 상단 읽기 진행률 바 (Modern Web Guidance 준수) */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    @keyframes grow-scroll-progress {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+    .scroll-timeline-progress-bar {
+      transform-origin: 0 50%;
+      animation: grow-scroll-progress auto linear;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+
+/* 네이티브 <dialog> Top-Layer 스크롤 체이닝 방지 및 이산(allow-discrete) 진입/퇴장 */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(15, 23, 42, 0);
+  transition-property: background-color, display, overlay;
+  transition-duration: 200ms;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+}
+
+dialog[open]::backdrop {
+  background-color: rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(3px);
+
+  @starting-style {
+    background-color: rgba(15, 23, 42, 0);
+  }
+}
+
+/* 일반 모달 다이얼로그 */
+dialog:not(.instant-dialog):not(.drawer-dialog) {
+  opacity: 0;
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 200ms;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: scale(0.96);
+  }
+}
+
+dialog[open]:not(.instant-dialog):not(.drawer-dialog) {
+  opacity: 1;
+  transform-origin: center;
+
+  @starting-style {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: scale(1);
+
+    @starting-style {
+      transform: scale(0.96);
+    }
+  }
+}
+
+/* 우측 슬라이드오버 네이티브 <dialog class="drawer-dialog"> (240ms --ease-drawer) */
+dialog.drawer-dialog {
+  margin: 0 0 0 auto;
+  max-height: 100dvh;
+  height: 100dvh;
+  opacity: 0;
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 240ms;
+  transition-timing-function: var(--ease-drawer);
+  transition-behavior: allow-discrete;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateX(100%);
+  }
+}
+
+dialog.drawer-dialog[open] {
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateX(0);
+
+    @starting-style {
+      transform: translateX(100%);
+    }
+  }
+}
+
+/* ⌘K 검색 모달은 모션 빈도 규칙(100+/day)에 따라 0ms 즉시 오픈 */
+dialog.instant-dialog[open] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* 상태 알림 토스트 진입 */
+.toast-enter {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* 비대칭 타이밍 Hold-to-Confirm 오버레이 (누를 때 1.4s 선형, 뗄 때 180ms 즉각 복귀) */
+.hold-confirm-overlay {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 180ms var(--ease-out);
+}
+
+.hold-confirm-btn[data-holding='true'] .hold-confirm-overlay {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1400ms linear;
+}
+
+/* 투명도 축소 접근성 대응 */
+@media (prefers-reduced-transparency: reduce) {
+  dialog[open]::backdrop {
+    background-color: rgba(15, 23, 42, 0.82);
+    backdrop-filter: none;
+  }
+
+  .translucent-header {
+    background-color: #0f172a !important;
+    backdrop-filter: none !important;
+  }
+}
+
+/* 모션 축소 접근성 대응: 공간 이동·스케일 제거, 짧은 투명도/색상 전환만 유지 */
+@media (prefers-reduced-motion: reduce) {
+  button:not(:disabled):not(.no-press-scale):active,
+  .pressable:active,
+  dialog:not(.instant-dialog),
+  .stage-card-swap,
+  .mode-switch-pill,
+  .toast-enter {
+    transform: none !important;
+    animation: none !important;
+    transition-duration: 100ms !important;
+  }
+
+  .gpu-progress-bar {
+    transition: none !important;
+  }
+}
+
+/* Responsive Data Table (Screen) */
+@media screen {
+  .table-wrapper {
+    overflow: auto;
+    overscroll-behavior: contain;
+    max-inline-size: 100%;
+    max-block-size: min(620px, 80dvh);
+    container-type: inline-size;
+  }
+
+  .table-wrapper table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .table-wrapper thead {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+  }
+
+  .table-wrapper tbody th {
+    position: sticky;
+    inset-inline-start: 0;
+    background: #ffffff;
+  }
+
+  @container (width < 600px) {
+    .table-wrapper table,
+    .table-wrapper thead,
+    .table-wrapper tbody,
+    .table-wrapper tr,
+    .table-wrapper th,
+    .table-wrapper td {
+      display: block;
+    }
+
+    .table-wrapper thead {
+      display: none;
+    }
+
+    .table-wrapper tr {
+      margin-block-end: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .table-wrapper tbody th {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 2;
+      background: #f1f5f9;
+    }
+
+    .table-wrapper td:nth-child(2)::before {
+      content: var(--label-2) ": ";
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .table-wrapper td:nth-child(3)::before {
+      content: var(--label-3) ": ";
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .table-wrapper td:nth-child(4)::before {
+      content: var(--label-4) ": ";
+      font-weight: 700;
+      color: #334155;
+    }
+  }
+}
+
+/* A4 인쇄 및 PDF 출력 최적화 스타일 */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
+
+  *,
+  *::before,
+  *::after,
+  html,
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+    line-height: 1.45 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-main-container {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .print-break-avoid,
+  .print-card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .print-page-break,
+  .print-page-break-before {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+
+  .table-wrapper {
+    overflow: visible !important;
+    max-block-size: none !important;
+    container-type: normal !important;
+  }
+
+  .table-wrapper table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  .table-wrapper thead {
+    display: table-header-group !important;
+    position: static !important;
+  }
+
+  .table-wrapper tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}

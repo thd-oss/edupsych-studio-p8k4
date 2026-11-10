@@ -1,0 +1,74 @@
+[
+  {
+    "id": "mod1-fc-equilibration",
+    "moduleId": "mod1",
+    "termEn": "Equilibration & Cognitive Disequilibrium",
+    "termKo": "평형화와 인지적 불균형",
+    "definition": "기존의 도식(동화)으로 새로운 경험이 설명되지 않을 때 발생하는 인지적 불편감(불균형)을 해소하기 위해 도식을 수정(조절)하며 고차원적 이해로 나아가는 자기조절 과정.",
+    "classroomExample": "내담 학생이 '친구가 인사하지 않으면 나를 싫어하는 것'이라는 경직된 도식에 머물 때, 상담교사가 반례(친구가 안경을 안 쓰고 온 날)를 탐색하게 하여 적절한 인지적 불균형과 도식 조절을 유도한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod1-fc-neopiagetian",
+    "moduleId": "mod1",
+    "termEn": "Neo-Piagetian Theory",
+    "termKo": "신피아제 이론",
+    "definition": "피아제의 구성주의 틀을 유지하되, 인지발달의 단계적 변화를 작업기억(Working Memory) 용량의 확장, 처리속도 및 실행기능 성숙, 영역특수적 지식의 자동화로 설명하는 정보처리 통합 이론.",
+    "classroomExample": "복잡한 문장제 수학 문제를 못 푸는 초등학생을 '논리적 사고 미발달'로 단정하지 않고, 핵심 조건에 밑줄을 긋고 그림으로 외현화하여 작업기억 부담을 덜어주자 문제를 스스로 해결한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod1-fc-zpd",
+    "moduleId": "mod1",
+    "termEn": "Zone of Proximal Development (ZPD)",
+    "termKo": "근접발달영역",
+    "definition": "아동이 독자적으로 문제를 해결할 수 있는 실제적 발달 수준과, 성인이나 유능한 동료의 체계적 비계설정(Scaffolding)을 통해 도달할 수 있는 잠재적 발달 수준 사이의 영역.",
+    "classroomExample": "갈등 상황에서 스스로 사과문을 쓰기 어려워하는 학생에게 감정 단어 카드와 3단계 문장 틀(나-전달법 템플릿)을 제공하여 자기표현에 성공하게 돕는다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod1-fc-scaffolding",
+    "moduleId": "mod1",
+    "termEn": "Scaffolding & Fading",
+    "termKo": "비계설정과 점진적 소거",
+    "definition": "초기 학습이나 문제해결 시 구조화된 단서·모델링·환경적 지원을 제공하여 외재적 인지부하를 줄여주고, 학습자의 숙달도가 높아짐에 따라 지원을 단계적으로 거두어들이는(Fading) 교수·상담 원리.",
+    "classroomExample": "발표 불안이 높은 학생에게 1주 차에는 대본 전문 읽기, 2주 차에는 키워드 큐카드 보기, 3주 차에는 한 문장 암기 발표로 스캐폴딩을 점진적으로 소거한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod1-fc-privatespeech",
+    "moduleId": "mod1",
+    "termEn": "Private Speech",
+    "termKo": "혼잣말 (사적 언어)",
+    "definition": "비고츠키가 제시한 개념으로, 아동이 자신의 사고와 행동을 계획·안내·억제하기 위해 소리 내어 자신에게 하는 말. 발달에 따라 내적 언어(Inner Speech)로 내면화되어 자기조절의 핵심 기제가 된다.",
+    "classroomExample": "과제 중 쉽게 산만해지는 아동에게 '첫째 문제를 끝까지 읽는다, 둘째 구하는 것에 동그라미 친다'라고 작게 속삭이며 문제를 푸는 자기교수(Self-Instruction) 전략을 훈련한다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod1-fc-mesosystem",
+    "moduleId": "mod1",
+    "termEn": "Mesosystem & Proximal Processes",
+    "termKo": "중간체계와 근접과정",
+    "definition": "중간체계는 아동을 둘러싼 미시체계들(가정-학급-상담실) 간의 연결망이며, 근접과정은 아동이 직접적인 환경 내 타인·대상과 일상적으로 주고받는 지속적·상호적 상호작용 과정이다.",
+    "classroomExample": "위기 학생 상담의 효과를 높이기 위해 상담교사가 담임교사 및 보호자와 일일 긍정 피드백 노트(중간체계 연결)를 공유하여 가정과 교실에서의 일상적 상호작용(근접과정)을 변화시킨다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod1-fc-identitystatus",
+    "moduleId": "mod1",
+    "termEn": "Identity Moratorium vs. Identity Foreclosure",
+    "termKo": "정체성 유예 vs. 정체성 유실",
+    "definition": "마샤의 정체성 지위 이론에서 유예(Moratorium)는 대안을 치열하게 탐색 중이나 아직 최종 전념은 유보한 건강한 탐색기인 반면, 유실(Foreclosure)은 독자적 탐색 없이 부모 등 타인의 가치를 그대로 수용·전념한 상태이다.",
+    "classroomExample": "부모의 강요로 의대 진학만 목표로 삼았다가 성적 하락 후 극심한 우울을 겪는 고등학생(정체성 유실 위기)에게 안전한 심리적 유예(Moratorium) 공간을 제공하여 자기 가치관을 탐색하도록 돕는다.",
+    "status": "unseen"
+  },
+  {
+    "id": "mod1-fc-hostileattribution",
+    "moduleId": "mod1",
+    "termEn": "Hostile Attribution Bias",
+    "termKo": "적대적 귀인 편향",
+    "definition": "닷지(Dodge)의 사회정보처리모형에서 제시된 개념으로, 상대방의 의도가 모호한 사회적 상황(예: 복도에서 어깨가 부딪힘)을 자신을 해치려는 악의적·적대적 의도로 즉각 해석하는 인지 편향.",
+    "classroomExample": "급식 줄에서 친구가 실수로 발을 밟았을 때 '나를 무시해서 일부러 밟았다'며 주먹을 휘두르는 학생과 함께, 한 사건에 대해 가능한 3가지 대안적 이유(실수, 뒤에서 밀림 등)를 찾는 훈련을 실시한다.",
+    "status": "unseen"
+  }
+]

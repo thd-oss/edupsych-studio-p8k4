@@ -1,0 +1,32 @@
+[
+  {
+    "id": "mod2-q-chc-clt",
+    "moduleId": "mod2",
+    "question": "학교 현장에서 흔히 활용되는 가드너(Gardner)의 다중지능이론이나 감각적 학습양식(Learning Styles) 이론의 심리측정적·실증적 한계를 과학자-실무자 관점에서 비평하고, 학습부진 학생을 진단·지원할 때 CHC 지능이론과 인지부하이론(CLT)을 어떻게 대안적으로 적용할지 설명해 보세요.",
+    "followUpQuestion": "만약 K-WISC-V 검사 결과 언어이해(VCI)와 유동추론(FRI)은 평균 이상인데 작업기억(WMI)과 처리속도(PSI)가 경계선 수준으로 나온 학생이 있다면, 유동성 지능의 안정성과 작업기억 한계를 보완하기 위해 어떤 스키마 자동화 및 신경심리학적 환경적 보철(Environmental Prosthetics) 자문을 제공하겠습니까?",
+    "requiredKeywords": [
+      "CHC 지능이론",
+      "작업기억(WMI) 및 처리속도(PSI) 병목",
+      "스키마 자동화(Schema Automatization)",
+      "외재적 인지부하(Extraneous Load)",
+      "환경적 보철(Environmental Prosthetics)",
+      "완결된 예제(Worked Examples)"
+    ],
+    "modelAnswer": "다중지능이론과 학습양식(VAK) 가설은 학생의 다양성을 존중한다는 철학적 의의에도 불구하고, 요인분석상 일반지능(g)과의 높은 상관으로 인해 독립적 지능 모듈이라는 심리측정적 근거가 부족하며, 선호 양식에 교수법을 맞추는 적성-처치 상호작용(ATI) 역시 메타분석에서 학업 성취 향상 효과가 기각되었습니다. 따라서 과학자-실무자인 학교상담교사는 비과학적 유형 분류 대신, 현대 심리측정학의 표준인 CHC 이론과 웩슬러(K-WISC-V) 프로파일을 통해 인지 과정의 병목을 분석해야 합니다. 특히 추론력(FRI)·언어이해(VCI)는 양호하나 작업기억(WMI)과 처리속도(PSI)가 낮은 학생은 개념을 이해할 역량은 충분하지만 정보를 동시에 유지·출력하는 과정에서 작업기억 과부하를 겪습니다. 이 경우 ① 기초 절차 지식을 장기기억의 자동화된 스키마(Schema Automatization)로 구축하여 작업기억 소모를 줄이고, ② 복합 구두 지시나 칠판 베껴 쓰기 같은 외재적 인지부하(Extraneous Load)를 제거하며, ③ 수행 시점(Point of Performance)에 빈칸 채우기형 구조화 노트, 단계별 절차 체크리스트, 완결된 예제(Worked Examples) 등 신경심리학적 환경적 보철(Environmental Prosthetics)을 제공하여 아낀 인지 자원을 본유적 인지부하에 투입하도록 지원하겠습니다."
+  },
+  {
+    "id": "mod2-q-rti-adhd",
+    "moduleId": "mod2",
+    "question": "과거 학습장애 진단에 사용되던 지능-성취 불일치 모형의 한계를 지적하고, 중재반응모형(RTI / MTSS)을 학교상담 및 학습지원 체계에 어떻게 적용할 수 있는지 단계별로 설명해 보세요.",
+    "followUpQuestion": "ADHD로 인해 충동성과 부주의를 보이는 학생에게 상담실에서의 구두 약속이나 사후 벌점제가 작동하지 않는 이유를 바클리(Barkley)의 실행기능 모형으로 설명하고, 교실 내 수행 시점(Point of Performance) 개입 방안을 제시해 보세요.",
+    "requiredKeywords": [
+      "중재반응모형(RTI / MTSS)",
+      "실패 대기 모형(Wait-to-Fail)",
+      "반응 억제(Response Inhibition)",
+      "수행의 장애(Disorder of Performance)",
+      "수행 시점(Point of Performance)",
+      "일일행동보고카드(DRC)"
+    ],
+    "modelAnswer": "전통적인 지능-성취 불일치 모형은 학생이 수년간 학업 실패를 누적해 통계적 격차가 벌어질 때까지 개입을 미루는 실패 대기 모형(Wait-to-Fail)으로, 매튜 효과와 심각한 정서적 2차 손상(열등감, 우울)을 방치하는 한계가 있습니다. 반면 중재반응모형(RTI/MTSS)은 Tier 1(보편적 선별 및 고품질 학급 수업·SEL), Tier 2(위험군 소집단 명시적 중재 및 진전도 모니터링), Tier 3(개별 집중 치료·심리평가 연계)를 통해 조기에 예방적으로 개입합니다. 한편 바클리(Barkley)의 실행기능 모형에 따르면 ADHD는 무엇을 해야 할지 모르는 지식의 결함이 아니라, 전두엽의 반응 억제(Response Inhibition)와 작업기억 손상으로 인해 아는 것을 필요한 순간에 실행하지 못하는 수행의 장애(Disorder of Performance)입니다. 따라서 지연된 사후 벌점이나 상담실 내 구두 다짐은 실제 교실 상황에서 활성화되지 못합니다. 효과적인 지원을 위해서는 행동이 요구되는 바로 그 자리(Point of Performance)에 시각적 타이머, 과제 쪼개기(Chunking), 책상 위 행동 단서 카드 등 환경적 보철을 설치하고, 사전교정(Precorrection) 및 가정-학교 연계 일일행동보고카드(DRC)로 즉각적·빈번한 정적 강화를 제공해야 합니다."
+  }
+]

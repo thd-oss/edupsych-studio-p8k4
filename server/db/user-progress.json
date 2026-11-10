@@ -1,0 +1,24 @@
+{
+  "updatedAt": "2026-11-10T23:17:59.336Z",
+  "flashcardStatus": {},
+  "userNotes": {
+    "mod2-theory-chc": ""
+  },
+  "bookmarks": [],
+  "interviewDrafts": {},
+  "preferredEntryMode": "story",
+  "story": {
+    "visitedBeats": {
+      "mod1-beat-myth": true,
+      "mod1-beat-theory-1": true,
+      "mod1-beat-theory-2": true,
+      "mod1-beat-theory-3": true,
+      "mod1-beat-theory-4": true
+    },
+    "simulationChoices": {
+      "mod1-theory-piaget": 2
+    },
+    "completedModules": [],
+    "lastActiveNodeId": "mod1-theory-piaget"
+  }
+}
