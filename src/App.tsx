@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react';
+import { AppleHomeShowcaseView } from './components/home/AppleHomeShowcaseView';
 import { CommandSearchModal } from './components/shell/CommandSearchModal';
 import { DualModeTopBar } from './components/shell/DualModeTopBar';
 import { FloatingAiTutorChat } from './components/shell/FloatingAiTutorChat';
@@ -49,7 +50,7 @@ function readInitialUrlState(fallbackMobileModule: ModuleId): {
 } {
   if (typeof window === 'undefined') {
     return {
-      mode: 'story',
+      mode: 'home',
       tab: 'graph',
       mod: 'all',
       node: null,
@@ -67,8 +68,15 @@ function readInitialUrlState(fallbackMobileModule: ModuleId): {
     ? fallbackMobileModule
     : 'all';
 
+  const resolvedMode: AppMode =
+    rawMode === 'workspace'
+      ? 'workspace'
+      : rawMode === 'story'
+      ? 'story'
+      : 'home';
+
   return {
-    mode: rawMode === 'workspace' ? 'workspace' : 'story',
+    mode: resolvedMode,
     tab: rawTab && VALID_TABS.includes(rawTab) ? rawTab : 'graph',
     mod: rawMod && VALID_MODS.includes(rawMod) ? rawMod : defaultMod,
     node: rawNode && rawNode.trim().length > 0 ? rawNode.trim() : null,
@@ -86,6 +94,9 @@ export const App: React.FC = () => {
     userProgress,
     curriculumGraph,
     nodeMasteryMap,
+    resumeTarget,
+    moduleSummaries,
+    prioritizedWeakQueue,
     isServerConnected,
     markBeatVisited,
     recordSimulationChoice,
@@ -111,15 +122,7 @@ export const App: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const weakOrReviewCount = useMemo(() => {
-    let count = 0;
-    for (const status of Object.values(nodeMasteryMap)) {
-      if (status === 'weak' || status === 'review') {
-        count += 1;
-      }
-    }
-    return count;
-  }, [nodeMasteryMap]);
+  const weakOrReviewCount = prioritizedWeakQueue.length;
 
   const [mode, setMode] = useState<AppMode>(initialUrl.mode);
   const [activeTab, setActiveTab] = useState<WorkspaceTabId>(initialUrl.tab);
@@ -131,7 +134,9 @@ export const App: React.FC = () => {
   );
   const [storyScrollRequest, setStoryScrollRequest] =
     useState<StoryScrollRequest | null>(() =>
-      initialUrl.node ? { nodeId: initialUrl.node, requestId: 1 } : null
+      initialUrl.node && initialUrl.mode === 'story'
+        ? { nodeId: initialUrl.node, requestId: 1 }
+        : null
     );
   const [drawerNodeId, setDrawerNodeId] = useState<string | null>(null);
   const [weakFocusActive, setWeakFocusActive] = useState<boolean>(
@@ -148,7 +153,7 @@ export const App: React.FC = () => {
     setStoryScrollRequest(null);
   }, []);
 
-  // URL Search Params 실시간 양방향 동기화 (?mode=story|workspace&tab=...&mod=...&node=...&focus=...)
+  // URL Search Params 실시간 양방향 동기화 (?mode=home|story|workspace&tab=...&mod=...&node=...&focus=...)
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams();
@@ -156,14 +161,14 @@ export const App: React.FC = () => {
     if (mode === 'workspace') {
       params.set('tab', activeTab);
     }
-    if (selectedModule !== 'all') {
+    if (mode !== 'home' && selectedModule !== 'all') {
       params.set('mod', selectedModule);
     }
-    const currentNode = drawerNodeId ?? activeNodeId;
+    const currentNode = drawerNodeId ?? (mode !== 'home' ? activeNodeId : null);
     if (currentNode) {
       params.set('node', currentNode);
     }
-    if (weakFocusActive) {
+    if (mode === 'workspace' && weakFocusActive) {
       params.set('focus', 'weak');
     }
     const nextUrl = `${window.location.pathname}?${params.toString()}`;
@@ -202,7 +207,7 @@ export const App: React.FC = () => {
     [setPreferredEntryMode]
   );
 
-  // [스토리 맥락에서 다시 보기] 딥링크 점프 (단발성 스크롤 요청 생성, 모바일은 해당 단일 모듈로 페이징)
+  // [스토리 맥락에서 다시 보기] 딥링크 점프
   const handleJumpToStoryNode = useCallback(
     (moduleId: ModuleId, nodeId: string) => {
       const isMobileViewport =
@@ -213,34 +218,50 @@ export const App: React.FC = () => {
       setStoryScrollRequest({ nodeId, requestId: Date.now() });
       setLastActiveNode(nodeId);
       setMode('story');
+      setPreferredEntryMode('story');
     },
-    [setLastActiveNode]
+    [setLastActiveNode, setPreferredEntryMode]
   );
 
-  // [워크스페이스로 이동] 딥링크 점프
+  // [워크스페이스로 이동] 딥링크 점프 (전체 'all' 또는 단일 ModuleId 지원)
   const handleJumpToWorkspaceNode = useCallback(
-    (tab: WorkspaceTabId, moduleId: ModuleId, nodeId: string) => {
+    (tab: WorkspaceTabId, moduleId: ModuleId | 'all', nodeId: string) => {
       setSelectedModule(tab === 'graph' ? 'all' : moduleId);
       setActiveTab(tab);
       setActiveNodeId(nodeId);
       setLastActiveNode(nodeId);
+      setWeakFocusActive(false);
       setMode('workspace');
-      if (tab === 'graph') {
+      setPreferredEntryMode('workspace');
+      if (tab === 'graph' && moduleId !== 'all') {
         setDrawerNodeId(nodeId);
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-    [setLastActiveNode]
+    [setLastActiveNode, setPreferredEntryMode]
   );
 
-  // 상단 바 [헷갈리는 노드 N개] 배지 클릭 -> 지식 그래프 Weak Subgraph 즉시 하이라이트
+  // 상단 바 [복습 N] 배지 또는 홈 벤토 타일 클릭 -> 지식 그래프 취약 서브그래프 즉시 하이라이트
   const handleJumpToWeakGraph = useCallback(() => {
     setMode('workspace');
+    setPreferredEntryMode('workspace');
     setActiveTab('graph');
     setSelectedModule('all');
     setWeakFocusActive(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [setPreferredEntryMode]);
+
+  // 홈 벤토 타일에 노출할 대표 압박 면접 문항 선정 (미숙련 문항 우선)
+  const featuredQuestionMeta = useMemo(() => {
+    const targetQ =
+      allQuestions.find((q) => nodeMasteryMap[q.id] === 'weak') ??
+      allQuestions.find((q) => nodeMasteryMap[q.id] !== 'mastered') ??
+      allQuestions[0] ??
+      null;
+    const ownerModId: ModuleId =
+      (targetQ && curriculumGraph.nodeMap[targetQ.id]?.moduleId) || 'mod1';
+    return { question: targetQ, moduleId: ownerModId };
+  }, [allQuestions, nodeMasteryMap, curriculumGraph.nodeMap]);
 
   const appShellStyle = useMemo<React.CSSProperties | undefined>(
     () =>
@@ -257,7 +278,7 @@ export const App: React.FC = () => {
       style={appShellStyle}
       className="min-h-[100dvh] bg-[var(--bg-canvas)] text-[var(--ink-primary)] flex flex-col"
     >
-      {/* 상단 고정 글로벌 듀얼 모드 바 */}
+      {/* 상단 고정 48px 애플 프로스티드 글래스 리본 */}
       <DualModeTopBar
         mode={mode}
         onChangeMode={handleChangeMode}
@@ -275,9 +296,37 @@ export const App: React.FC = () => {
         onResetProgress={resetAllProgress}
       />
 
-      {/* 메인 컨텐츠: Stage 1 스토리텔링 vs Stage 2 스터디 워크스페이스 */}
-      <main className="flex-1 pb-36 lg:pb-16">
-        {mode === 'story' ? (
+      {/* 메인 컨텐츠: 홈 쇼케이스 허브 · 풀와이드 스토리 커리큘럼 · 스터디 워크스페이스 */}
+      <main className="flex-1 pb-32 lg:pb-16">
+        {mode === 'home' ? (
+          <AppleHomeShowcaseView
+            moduleSummaries={moduleSummaries}
+            resumeTarget={resumeTarget}
+            prioritizedWeakQueue={prioritizedWeakQueue}
+            masteryMap={nodeMasteryMap}
+            totalNodesCount={curriculumGraph.nodes.length}
+            completedModulesCount={userProgress.story.completedModules.length}
+            featuredQuestion={featuredQuestionMeta.question}
+            featuredQuestionModuleId={featuredQuestionMeta.moduleId}
+            onResumeStudy={handleJumpToStoryNode}
+            onJumpToModuleStory={(modId, leadNodeId) => {
+              setSelectedModule(modId);
+              setActiveNodeId(leadNodeId);
+              setStoryScrollRequest({ nodeId: modId, requestId: Date.now() });
+              setLastActiveNode(leadNodeId);
+              setMode('story');
+              setPreferredEntryMode('story');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onJumpToWorkspace={handleJumpToWorkspaceNode}
+            onJumpToWeakGraph={handleJumpToWeakGraph}
+            onInspectNode={(nodeId) => {
+              setLastActiveNode(nodeId);
+              setDrawerNodeId(nodeId);
+            }}
+            onOpenAiTutor={() => setIsAiTutorOpen(true)}
+          />
+        ) : mode === 'story' ? (
           <ScrollytellingView
             modules={enrichedModules}
             selectedModuleFilter={selectedModule}
@@ -289,6 +338,7 @@ export const App: React.FC = () => {
             storyProgress={userProgress.story}
             bookmarks={userProgress.bookmarks}
             userNotes={userProgress.userNotes}
+            adjacency={curriculumGraph.adjacency}
             nodeMap={curriculumGraph.nodeMap}
             edges={curriculumGraph.edges}
             masteryMap={nodeMasteryMap}
@@ -302,6 +352,7 @@ export const App: React.FC = () => {
               setLastActiveNode(nodeId);
               setDrawerNodeId(nodeId);
             }}
+            onJumpToStoryNode={handleJumpToStoryNode}
             onJumpToWorkspace={handleJumpToWorkspaceNode}
           />
         ) : (
@@ -326,7 +377,9 @@ export const App: React.FC = () => {
             nodes={curriculumGraph.nodes}
             edges={curriculumGraph.edges}
             nodeMap={curriculumGraph.nodeMap}
+            adjacency={curriculumGraph.adjacency}
             masteryMap={nodeMasteryMap}
+            prioritizedWeakQueue={prioritizedWeakQueue}
             bookmarks={userProgress.bookmarks}
             userNotes={userProgress.userNotes}
             interviewDrafts={userProgress.interviewDrafts}
@@ -341,7 +394,7 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* 우측 슬라이드오버 노드 상세 드로어 (스토리 & 워크스페이스 공통) */}
+      {/* 우측 슬라이드오버 노드 상세 드로어 (홈 · 스토리 · 워크스페이스 공통) */}
       <NodeDetailDrawer
         selectedNodeId={drawerNodeId}
         onClose={() => setDrawerNodeId(null)}
@@ -351,6 +404,7 @@ export const App: React.FC = () => {
         }}
         nodeMap={curriculumGraph.nodeMap}
         edges={curriculumGraph.edges}
+        adjacency={curriculumGraph.adjacency}
         masteryMap={nodeMasteryMap}
         allTheories={allTheories}
         allFlashcards={allFlashcards}
@@ -365,7 +419,7 @@ export const App: React.FC = () => {
         onJumpToWorkspaceTab={handleJumpToWorkspaceNode}
       />
 
-      {/* 모바일 전용 하단 엄지 네비게이션 독 (< lg) */}
+      {/* 모바일 전용 하단 애플 글래스 독 (< lg) */}
       <MobileBottomNav
         mode={mode}
         activeTab={activeTab}
@@ -409,7 +463,7 @@ export const App: React.FC = () => {
         }}
       />
 
-      {/* 글로벌 검색 모달 (⌘K, 0ms instant dialog) */}
+      {/* 글로벌 스포트라이트 검색 모달 (⌘K, 0ms instant dialog) */}
       <CommandSearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}

@@ -1,4 +1,6 @@
 import {
+  EdgeRelation,
+  GraphAdjacencyIndex,
   KnowledgeGraphEdge,
   KnowledgeGraphNode,
   MasteryState,
@@ -10,6 +12,24 @@ import { ModulePayload } from '../types/study';
 import { VisualTopologyType } from '../types/visuals';
 import { resolveAssetUrl } from '../utils/assetUrl';
 import { getTheoryVisualBlueprint } from './theoryVisuals';
+
+export const EDGE_SEMANTIC_WEIGHTS: Record<EdgeRelation, number> = {
+  DEFINES_TERM: 1.0,
+  DEFENDS_QUESTION: 0.9,
+  APPLIED_IN_CASE: 0.85,
+  CROSS_MODULE_BRIDGE: 0.75,
+  BELONGS_TO_MODULE: 0.4
+};
+
+export const MASTERY_NUMERIC_WEIGHTS: Record<MasteryState, number> = {
+  mastered: 1.0,
+  review: 0.55,
+  weak: 0.15,
+  unseen: 0.0
+};
+
+export const INTRA_MODULE_EDGE_CURVATURE = 0.06;
+export const CROSS_BRIDGE_EDGE_CURVATURE = 0.16;
 
 export interface TheoryEdgeMapping {
   topology: VisualTopologyType;
@@ -322,6 +342,7 @@ export interface CurriculumGraphData {
   moduleNodes: KnowledgeGraphNode[];
   edges: KnowledgeGraphEdge[];
   nodeMap: Record<string, KnowledgeGraphNode>;
+  adjacency: GraphAdjacencyIndex;
 }
 
 export function buildCurriculumKnowledgeGraph(
@@ -499,7 +520,69 @@ export function buildCurriculumKnowledgeGraph(
     }
   }
 
-  return { nodes, moduleNodes, edges, nodeMap };
+  // O(1) 정규화 인접 인덱스(GraphAdjacencyIndex) 사전 컴파일
+  const outgoingByNode: Record<string, KnowledgeGraphEdge[]> = {};
+  const incomingByNode: Record<string, KnowledgeGraphEdge[]> = {};
+  const mutableNeighbors: Record<string, Set<string>> = {};
+  const nodesByModule: Record<ModuleId, KnowledgeGraphNode[]> = {
+    mod1: [],
+    mod2: [],
+    mod3: [],
+    mod4: [],
+    mod5: []
+  };
+  const crossBridgesByModule: Record<ModuleId, KnowledgeGraphEdge[]> = {
+    mod1: [],
+    mod2: [],
+    mod3: [],
+    mod4: [],
+    mod5: []
+  };
+
+  for (const node of nodes) {
+    outgoingByNode[node.id] = [];
+    incomingByNode[node.id] = [];
+    mutableNeighbors[node.id] = new Set<string>();
+    nodesByModule[node.moduleId].push(node);
+  }
+  for (const modNode of moduleNodes) {
+    outgoingByNode[modNode.id] = [];
+    incomingByNode[modNode.id] = [];
+    mutableNeighbors[modNode.id] = new Set<string>();
+  }
+
+  for (const edge of edges) {
+    if (edge.relation === 'BELONGS_TO_MODULE') {
+      continue;
+    }
+    const srcNode = nodeMap[edge.source];
+    const tgtNode = nodeMap[edge.target];
+    if (!srcNode || !tgtNode) {
+      continue;
+    }
+
+    (outgoingByNode[edge.source] ??= []).push(edge);
+    (incomingByNode[edge.target] ??= []).push(edge);
+    (mutableNeighbors[edge.source] ??= new Set<string>()).add(edge.target);
+    (mutableNeighbors[edge.target] ??= new Set<string>()).add(edge.source);
+
+    if (edge.relation === 'CROSS_MODULE_BRIDGE') {
+      crossBridgesByModule[srcNode.moduleId].push(edge);
+      if (tgtNode.moduleId !== srcNode.moduleId) {
+        crossBridgesByModule[tgtNode.moduleId].push(edge);
+      }
+    }
+  }
+
+  const adjacency: GraphAdjacencyIndex = {
+    outgoingByNode,
+    incomingByNode,
+    neighbors1HopByNode: mutableNeighbors,
+    nodesByModule,
+    crossBridgesByModule
+  };
+
+  return { nodes, moduleNodes, edges, nodeMap, adjacency };
 }
 
 const CLUSTER_CENTERS_ALL: Record<ModuleId, { cx: number; cy: number }> = {
@@ -634,11 +717,34 @@ export interface NodeNeighborResult {
 export function getNodeNeighbors(
   nodeId: string,
   nodeMap: Record<string, KnowledgeGraphNode>,
-  edges: KnowledgeGraphEdge[]
+  edges: KnowledgeGraphEdge[],
+  adjacency?: GraphAdjacencyIndex
 ): NodeNeighborResult {
   const incoming: Array<{ edge: KnowledgeGraphEdge; node: KnowledgeGraphNode }> = [];
   const outgoing: Array<{ edge: KnowledgeGraphEdge; node: KnowledgeGraphNode }> = [];
   const connectedNodeIds = new Set<string>([nodeId]);
+
+  if (adjacency) {
+    const inEdges = adjacency.incomingByNode[nodeId] ?? [];
+    for (const edge of inEdges) {
+      const srcNode = nodeMap[edge.source];
+      if (srcNode) {
+        incoming.push({ edge, node: srcNode });
+        connectedNodeIds.add(edge.source);
+      }
+    }
+
+    const outEdges = adjacency.outgoingByNode[nodeId] ?? [];
+    for (const edge of outEdges) {
+      const tgtNode = nodeMap[edge.target];
+      if (tgtNode) {
+        outgoing.push({ edge, node: tgtNode });
+        connectedNodeIds.add(edge.target);
+      }
+    }
+
+    return { incoming, outgoing, connectedNodeIds };
+  }
 
   for (const edge of edges) {
     if (edge.relation === 'BELONGS_TO_MODULE') continue;
@@ -653,6 +759,29 @@ export function getNodeNeighbors(
   }
 
   return { incoming, outgoing, connectedNodeIds };
+}
+
+export function computeQuadraticEdgePath(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  curvature: number = INTRA_MODULE_EDGE_CURVATURE
+): string {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const dist = Math.hypot(dx, dy);
+  if (dist < 1) {
+    return `M ${x1} ${y1} L ${x2} ${y2}`;
+  }
+  const midX = (x1 + x2) / 2;
+  const midY = (y1 + y2) / 2;
+  const normalX = -dy / dist;
+  const normalY = dx / dist;
+  const offset = dist * curvature;
+  const ctrlX = Math.round((midX + normalX * offset) * 10) / 10;
+  const ctrlY = Math.round((midY + normalY * offset) * 10) / 10;
+  return `M ${x1} ${y1} Q ${ctrlX} ${ctrlY} ${x2} ${y2}`;
 }
 
 export function getWeakSubgraph(

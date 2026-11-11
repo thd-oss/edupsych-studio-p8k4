@@ -1,26 +1,25 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   ArrowRight,
   Bookmark,
   BookOpen,
   Brain,
   CheckCircle2,
-  Compass,
   ExternalLink,
   Layers,
   MessageSquareWarning,
   Network,
   Save,
+  Sparkles,
   Stethoscope
 } from 'lucide-react';
 import {
   buildModuleStoryBeats,
-  CROSS_MODULE_BRIDGES,
-  MODULE_CONCEPT_ANCHORS,
-  THEORY_GRAPH_MAPPING
+  MODULE_CONCEPT_ANCHORS
 } from '../../data/curriculumGraph';
 import { getTheoryVisualBlueprint } from '../../data/theoryVisuals';
 import {
+  GraphAdjacencyIndex,
   KnowledgeGraphNode,
   MasteryState,
   ModuleId,
@@ -32,6 +31,7 @@ import {
   ModulePayload
 } from '../../types/study';
 import { ComparisonCarousel } from '../shared/ComparisonCarousel';
+import { InlineInteractiveStageCard } from './InlineInteractiveStageCard';
 import { InlineTermQuickCheck } from './InlineTermQuickCheck';
 
 interface ModuleStoryChapterProps {
@@ -39,15 +39,17 @@ interface ModuleStoryChapterProps {
   activeBeatId: string | null;
   activeNodeId: string;
   isCompleted: boolean;
+  defaultExpandDisclosures: boolean;
   visitedBeats: Record<string, boolean>;
   simulationChoices: Record<string, number>;
   bookmarks: string[];
   userNotes: Record<string, string>;
+  adjacency: GraphAdjacencyIndex;
   nodeMap: Record<string, KnowledgeGraphNode>;
   masteryMap: Record<string, MasteryState>;
   onFocusNode: (nodeId: string, beatId?: string) => void;
-  onOpenMobileStage?: (nodeId: string, beatId?: string) => void;
   onInspectNode: (nodeId: string) => void;
+  onJumpToStoryNode: (moduleId: ModuleId, nodeId: string) => void;
   onRecordSimulationChoice: (theoryId: string, optionIndex: number) => void;
   onUpdateFlashcardStatus: (cardId: string, status: FlashcardStatus) => void;
   onToggleBookmark: (itemId: string) => void;
@@ -60,9 +62,11 @@ interface ModuleStoryChapterProps {
   ) => void;
 }
 
+const SAVE_TOAST_DURATION_MS = 2000;
+
 const MASTERY_KOR_LABEL: Record<MasteryState, string> = {
-  mastered: '숙련',
-  review: '복습',
+  mastered: '숙련 완료',
+  review: '복습 요망',
   weak: '취약',
   unseen: '미학습'
 };
@@ -105,15 +109,17 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
   activeBeatId,
   activeNodeId,
   isCompleted,
+  defaultExpandDisclosures,
   visitedBeats,
   simulationChoices,
   bookmarks,
   userNotes,
+  adjacency,
   nodeMap,
   masteryMap,
   onFocusNode,
-  onOpenMobileStage,
   onInspectNode,
+  onJumpToStoryNode,
   onRecordSimulationChoice,
   onUpdateFlashcardStatus,
   onToggleBookmark,
@@ -121,10 +127,10 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
   onToggleModuleCompleted,
   onJumpToWorkspace
 }) => {
-  const beats = React.useMemo(() => buildModuleStoryBeats(mod), [mod]);
+  const beats = useMemo(() => buildModuleStoryBeats(mod), [mod]);
   const anchor = MODULE_CONCEPT_ANCHORS[mod.id];
   const leadTheory = mod.theories[0];
-  const leadBlueprint = React.useMemo(
+  const leadBlueprint = useMemo(
     () => (leadTheory ? getTheoryVisualBlueprint(leadTheory) : null),
     [leadTheory]
   );
@@ -149,47 +155,41 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
     ? simulationChoices[leadTheory.id]
     : undefined;
 
-  const moduleBridges = React.useMemo(() => {
-    const modTheoryIds = new Set(mod.theories.map((t) => t.id));
-    return CROSS_MODULE_BRIDGES.filter(
-      (b) => modTheoryIds.has(b.source) || modTheoryIds.has(b.target)
-    );
-  }, [mod.theories]);
+  // O(1) 사전 컴파일된 모듈 간 전이 브릿지 목록
+  const moduleBridgeEdges = adjacency.crossBridgesByModule[mod.id] ?? [];
 
   const handleSaveCaseDraft = (caseItem: ClassroomCase) => {
     const text = caseDraftInputs[caseItem.id] ?? '';
     onUpdateItemNote(caseItem.id, text);
     setSavedCaseToastId(caseItem.id);
-    window.setTimeout(() => setSavedCaseToastId(null), 2000);
+    window.setTimeout(() => setSavedCaseToastId(null), SAVE_TOAST_DURATION_MS);
   };
 
   return (
     <section
       id={`story-chapter-${mod.id}`}
       aria-labelledby={`story-chapter-heading-${mod.id}`}
-      className="space-y-5 pb-10 border-b border-slate-900/[0.08] last:border-b-0"
+      className="space-y-6 sm:space-y-8 pb-12 border-b border-black/[0.07] last:border-b-0"
     >
-      {/* 챕터 헤더 카드 (밝은 서피스 + 상단 모듈 컬러 액센트 바 + 1px 헤어라인) */}
-      <div className="surface-card overflow-hidden">
-        <div
-          className="h-1.5 w-full"
-          style={{ backgroundColor: anchor.accentHex }}
-        />
-        <div className="p-5 sm:p-6 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex flex-wrap items-center gap-1.5">
+      {/* =================================================================== */}
+      {/* CHAPTER HERO CARD (Apple Pure White Editorial Intro)                */}
+      {/* =================================================================== */}
+      <div className="bento-tile-white overflow-hidden">
+        <div className="p-6 sm:p-9 space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-2.5">
+            <div className="flex flex-wrap items-center gap-2">
               <span
-                className="rounded-md px-2.5 py-0.5 text-xs font-bold text-white tabular-nums"
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold text-white tabular-nums"
                 style={{ backgroundColor: anchor.accentHex }}
               >
-                모듈 {mod.number}
+                <span>Module 0{mod.number}</span>
               </span>
-              <span className="rounded-md bg-slate-100 border border-slate-200/80 px-2.5 py-0.5 text-xs font-semibold text-slate-700">
+              <span className="rounded-full bg-[#f5f5f7] px-3 py-1 text-xs font-semibold text-[#424245]">
                 {mod.sourceMapping}
               </span>
               {isCompleted && (
-                <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/12 px-3 py-1 text-xs font-semibold text-emerald-700">
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                   <span>완주 완료</span>
                 </span>
               )}
@@ -204,59 +204,58 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                   mod.theories[0]?.id ?? mod.id
                 )
               }
-              className="inline-flex min-h-[32px] items-center gap-1 rounded-lg bg-slate-100 hover:bg-slate-200/80 border border-slate-200 px-2.5 py-1 text-xs font-bold text-slate-800"
+              className="inline-flex min-h-[34px] items-center gap-1.5 rounded-full bg-[#f5f5f7] hover:bg-black/[0.07] px-3.5 py-1.5 text-xs font-semibold text-[#1d1d1f] transition-colors"
             >
-              <span>모듈 {mod.number} 워크스페이스 열기</span>
+              <span>모듈 {mod.number} 워크스페이스</span>
               <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </button>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-2 max-w-3xl">
             <h2
               id={`story-chapter-heading-${mod.id}`}
-              className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900"
+              className="text-2xl sm:text-3xl font-bold tracking-[-0.025em] text-[#1d1d1f] leading-tight"
             >
               Module {mod.number}. {mod.title}
             </h2>
-            <p className="text-xs sm:text-sm font-semibold text-indigo-700">
+            <p className="text-xs sm:text-sm font-semibold text-[var(--accent-solid)]">
               {mod.subtitle}
             </p>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pt-0.5">
+            <p className="text-sm sm:text-[15px] text-[#424245] leading-relaxed pt-0.5">
               {mod.description}
             </p>
           </div>
 
-          {/* 모듈 간 전이 연결고리 */}
-          {moduleBridges.length > 0 && (
-            <div className="pt-3 border-t border-slate-900/[0.08] space-y-2">
-              <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                <Network className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                <span>타 모듈과 연결되는 전이 브릿지</span>
+          {/* 모듈 간 전이 브릿지 캡슐 */}
+          {moduleBridgeEdges.length > 0 && (
+            <div className="pt-4 border-t border-black/[0.06] space-y-2">
+              <span className="text-xs font-semibold text-[#6e6e73] flex items-center gap-1.5">
+                <Network className="w-3.5 h-3.5 text-[var(--accent-solid)] shrink-0" />
+                <span>타 모듈과 연결되는 전이 브릿지 ({moduleBridgeEdges.length})</span>
               </span>
               <div className="flex flex-wrap gap-1.5">
-                {moduleBridges.map((bridge) => {
-                  const isOutgoing = mod.theories.some(
-                    (t) => t.id === bridge.source
-                  );
-                  const otherNodeId = isOutgoing ? bridge.target : bridge.source;
+                {moduleBridgeEdges.map((edge) => {
+                  const isOutgoing = nodeMap[edge.source]?.moduleId === mod.id;
+                  const otherNodeId = isOutgoing ? edge.target : edge.source;
                   const otherNode = nodeMap[otherNodeId];
+                  if (!otherNode) return null;
                   return (
                     <button
-                      key={`${bridge.source}-${bridge.target}`}
+                      key={edge.id}
                       type="button"
-                      onClick={() => onInspectNode(otherNodeId)}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-amber-50/80 hover:bg-amber-100/80 border border-amber-200 px-2.5 py-1 text-[11px] font-bold text-amber-900 text-left"
-                      title={bridge.rationaleKo}
+                      onClick={() =>
+                        onJumpToStoryNode(otherNode.moduleId, otherNode.id)
+                      }
+                      title={edge.rationaleKo}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#f5f5f7] hover:bg-[var(--accent-subtle)] px-3 py-1.5 text-xs font-semibold text-[#1d1d1f] hover:text-[var(--accent-solid)] text-left transition-colors"
                     >
-                      <span>
-                        {isOutgoing ? '심화 전이:' : '선수 기반:'}{' '}
-                        {bridge.shortLabel}
+                      <span className="text-[11px] font-bold text-[var(--accent-solid)]">
+                        {isOutgoing ? '심화 전이' : '선수 기반'}
                       </span>
-                      {otherNode && (
-                        <span className="rounded bg-amber-200/70 px-1.5 py-0.5 text-[10px] font-bold text-amber-950 uppercase tabular-nums">
-                          {otherNode.moduleId}
-                        </span>
-                      )}
+                      <span>{otherNode.titleKo}</span>
+                      <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-[#6e6e73] uppercase tabular-nums">
+                        {otherNode.moduleId}
+                      </span>
                     </button>
                   );
                 })}
@@ -267,7 +266,7 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
       </div>
 
       {/* =================================================================== */}
-      {/* BEAT 1: 현장 통념 반박 투표 (Myth Hook & Micro-Simulation)           */}
+      {/* BEAT 1: 현장 통념 반박 투표 (Apple Obsidian Dark Spotlight Card)    */}
       {/* =================================================================== */}
       {mythBeat && leadTheory && leadBlueprint && (
         <article
@@ -276,43 +275,40 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
           data-node-id={mod.id}
           data-module-id={mod.id}
           onClick={() => onFocusNode(leadTheory.id, mythBeat.beatId)}
-          className={`surface-card p-5 sm:p-6 space-y-4 cursor-pointer ${
-            activeBeatId === mythBeat.beatId
-              ? 'border-indigo-600 ring-2 ring-indigo-500/15'
-              : 'hover:border-slate-300'
-          }`}
+          className="bento-tile-dark p-6 sm:p-8 space-y-5 apple-scroll-reveal"
         >
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-md bg-amber-50 border border-amber-200 px-2.5 py-1 text-xs font-bold text-amber-900">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/12 px-3 py-1 text-xs font-semibold text-[#66b2ff]">
+              <Sparkles className="w-3.5 h-3.5 shrink-0" />
               <span>{mythBeat.stepLabel}</span>
             </span>
-            <span className="text-[11px] font-semibold text-slate-400 tabular-nums">
-              {visitedBeats[mythBeat.beatId] ? '탐색 완료' : '스크롤 연동 비트'}
+            <span className="text-[11px] font-medium text-white/55 tabular-nums">
+              {visitedBeats[mythBeat.beatId] ? '탐색 완료' : '의사결정 시뮬레이션'}
             </span>
           </div>
 
-          <div className="rounded-xl bg-amber-50/60 border border-amber-200/90 p-4 space-y-1.5">
-            <span className="text-[11px] font-bold text-amber-800 block">
+          <div className="space-y-2">
+            <span className="text-xs font-semibold text-amber-300 block">
               교실 현장의 흔한 통념 (Common Classroom Myth)
             </span>
-            <p className="text-sm sm:text-base font-extrabold text-slate-900 leading-relaxed">
+            <p className="text-lg sm:text-xl font-bold text-white leading-snug tracking-tight">
               {anchor.mythQuestion}
             </p>
           </div>
 
           {/* 마이크로 시뮬레이션 투표 영역 */}
           {leadBlueprint.microSimulation && (
-            <div className="space-y-3">
-              <div className="space-y-1.5">
-                <span className="text-xs font-bold text-indigo-700 block">
-                  교실 의사결정 시뮬레이션 · {leadBlueprint.diagramTitle}
+            <div className="space-y-3.5 pt-1">
+              <div className="rounded-[18px] bg-white/[0.06] border border-white/10 p-4 space-y-1">
+                <span className="text-[11px] font-semibold text-[#66b2ff] block">
+                  임상 의사결정 시나리오 · {leadBlueprint.diagramTitle}
                 </span>
-                <p className="text-xs sm:text-sm font-medium text-slate-800 leading-relaxed surface-subtle p-3.5">
+                <p className="text-xs sm:text-sm text-white/90 leading-relaxed">
                   {leadBlueprint.microSimulation.scenarioPrompt}
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 gap-2">
+              <div className="grid grid-cols-1 gap-2.5">
                 {leadBlueprint.microSimulation.options.map((opt, oIdx) => {
                   const isChosen = selectedSimChoice === oIdx;
                   return (
@@ -324,42 +320,42 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                         onRecordSimulationChoice(leadTheory.id, oIdx);
                         onFocusNode(leadTheory.id, mythBeat.beatId);
                       }}
-                      className={`w-full text-left rounded-xl border p-3.5 space-y-2 ${
+                      className={`w-full text-left rounded-[18px] border p-4 space-y-2.5 transition-colors ${
                         isChosen
                           ? opt.isOptimal
-                            ? 'bg-emerald-50/90 text-slate-900 border-emerald-500'
-                            : 'bg-rose-50/90 text-slate-900 border-rose-400'
-                          : 'bg-white hover:bg-slate-50 text-slate-900 border-slate-200'
+                            ? 'bg-emerald-500/16 text-white border-emerald-400/70'
+                            : 'bg-rose-500/16 text-white border-rose-400/70'
+                          : 'bg-white/[0.06] hover:bg-white/[0.11] text-white border-white/12'
                       }`}
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="text-xs sm:text-sm font-bold leading-snug min-w-0">
+                      <div className="flex items-start justify-between gap-2.5">
+                        <span className="text-xs sm:text-sm font-semibold leading-snug min-w-0">
                           선택 {oIdx + 1}. {opt.label}
                         </span>
                         <span
-                          className={`shrink-0 rounded-md px-2 py-0.5 text-[10px] font-bold border ${
+                          className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10.5px] font-bold ${
                             isChosen
                               ? opt.isOptimal
-                                ? 'bg-emerald-600 text-white border-emerald-600'
-                                : 'bg-rose-600 text-white border-rose-600'
-                              : 'bg-slate-100 text-slate-600 border-slate-200'
+                                ? 'bg-emerald-500 text-white'
+                                : 'bg-rose-500 text-white'
+                              : 'bg-white/12 text-white/75'
                           }`}
                         >
                           {isChosen
                             ? opt.isOptimal
                               ? '과학자-실무자 최적 처방'
-                              : '현장 통념의 역설 (부작용 주의)'
-                            : '처방 결과 확인'}
+                              : '현장 통념의 역설'
+                            : '진단 확인'}
                         </span>
                       </div>
 
                       {isChosen && (
-                        <div className="pt-2 border-t border-slate-900/[0.08] space-y-1.5 text-xs">
-                          <p className="text-slate-700 leading-relaxed">
+                        <div className="pt-2.5 border-t border-white/12 space-y-1.5 text-xs">
+                          <p className="text-white/85 leading-relaxed">
                             {opt.rationale}
                           </p>
-                          <p className="font-bold text-indigo-900">
-                            핵심 결론: {leadBlueprint.keyTakeawayBadge}
+                          <p className="font-semibold text-[#66b2ff]">
+                            핵심 테이크어웨이: {leadBlueprint.keyTakeawayBadge}
                           </p>
                         </div>
                       )}
@@ -373,15 +369,16 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
       )}
 
       {/* =================================================================== */}
-      {/* BEAT 2: 모듈 4대 핵심 이론 도식 조작 & 과학자-실무자 비판적 재해석    */}
+      {/* BEAT 2: 4대 핵심 이론 풀와이드 쇼케이스 (인라인 도식 + [+] 원문 디스클로저) */}
       {/* =================================================================== */}
       {mod.theories.map((theory, idx) => {
         const beatId = `${mod.id}-beat-theory-${idx + 1}`;
-        const mapping = THEORY_GRAPH_MAPPING[theory.id];
+        const blueprint = getTheoryVisualBlueprint(theory);
         const isActive =
           activeBeatId === beatId || activeNodeId === theory.id;
         const isBookmarked = bookmarks.includes(theory.id);
         const mastery = masteryMap[theory.id] ?? 'unseen';
+        const leadProposition = theory.textbookDefinition[0] ?? '';
 
         return (
           <article
@@ -391,30 +388,30 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
             data-node-id={theory.id}
             data-module-id={mod.id}
             onClick={() => onFocusNode(theory.id, beatId)}
-            className={`surface-card p-5 sm:p-6 space-y-4 cursor-pointer ${
+            className={`bento-tile-white p-6 sm:p-8 space-y-5 apple-scroll-reveal transition-shadow ${
               isActive
-                ? 'border-indigo-600 ring-2 ring-indigo-500/15'
-                : 'hover:border-slate-300'
+                ? 'ring-2 ring-[#0071e3]/25'
+                : ''
             }`}
           >
-            {/* 상단 메타 바 */}
+            {/* 상단 아이브로우 & 유틸리티 바 */}
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="rounded-md bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 text-xs font-bold text-indigo-900 tabular-nums">
-                  Step B-{idx + 1} · 이론 {idx + 1}/{mod.theories.length}
+              <div className="flex flex-wrap items-center gap-2 tabular-nums">
+                <span className="rounded-full bg-[var(--accent-subtle)] px-3 py-1 text-xs font-semibold text-[var(--accent-solid)]">
+                  이론 {idx + 1} / {mod.theories.length}
                 </span>
-                <span className="rounded-md bg-slate-100 border border-slate-200 px-2 py-0.5 text-[11px] font-semibold text-slate-600">
+                <span className="rounded-full bg-[#f5f5f7] px-2.5 py-1 text-[11px] font-medium text-[#6e6e73]">
                   {theory.sourceMapping}
                 </span>
                 <span
-                  className={`rounded-md px-2 py-0.5 text-[10px] font-bold border ${
+                  className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
                     mastery === 'mastered'
-                      ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                      ? 'bg-emerald-500/12 text-emerald-700'
                       : mastery === 'review'
-                      ? 'bg-amber-50 text-amber-800 border-amber-200'
+                      ? 'bg-amber-500/15 text-amber-800'
                       : mastery === 'weak'
-                      ? 'bg-rose-50 text-rose-800 border-rose-200'
-                      : 'bg-slate-100 text-slate-600 border-slate-200'
+                      ? 'bg-rose-500/12 text-rose-700'
+                      : 'bg-[#f5f5f7] text-[#6e6e73]'
                   }`}
                 >
                   {MASTERY_KOR_LABEL[mastery]}
@@ -426,29 +423,15 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (onOpenMobileStage) {
-                      onOpenMobileStage(theory.id, beatId);
-                    } else {
-                      onFocusNode(theory.id, beatId);
-                    }
-                  }}
-                  className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 px-2.5 py-1 text-[11px] font-bold text-white"
-                >
-                  <Compass className="w-3 h-3 shrink-0" />
-                  <span className="lg:hidden">하단 도식 올리기</span>
-                  <span className="hidden lg:inline">우측 도식 동기화</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
                     onInspectNode(theory.id);
                   }}
-                  className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 px-2.5 py-1 text-[11px] font-bold text-slate-700"
+                  className="inline-flex min-h-[32px] items-center gap-1.5 rounded-full bg-[#f5f5f7] hover:bg-black/[0.07] px-3 py-1 text-xs font-semibold text-[#1d1d1f] transition-colors"
                 >
-                  <Network className="w-3 h-3 shrink-0" />
-                  <span>연결 노드</span>
+                  <Network
+                    className="w-3.5 h-3.5 text-[var(--accent-solid)] shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span>연결 노드 상세</span>
                 </button>
 
                 <button
@@ -457,179 +440,116 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                     e.stopPropagation();
                     onToggleBookmark(theory.id);
                   }}
-                  aria-label="이론 북마크"
-                  className="inline-flex min-h-[30px] min-w-[30px] items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200"
+                  aria-label={`${theory.titleKo} 북마크`}
+                  className="inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-full bg-[#f5f5f7] hover:bg-black/[0.07] transition-colors"
                 >
                   <Bookmark
                     className={`w-3.5 h-3.5 ${
                       isBookmarked
                         ? 'fill-amber-400 text-amber-500'
-                        : 'text-slate-400'
+                        : 'text-[#6e6e73]'
                     }`}
                   />
                 </button>
               </div>
             </div>
 
-            {/* 이론 타이틀 */}
-            <div className="space-y-1">
-              <h3 className="text-base sm:text-lg font-extrabold text-slate-900 leading-snug">
-                {theory.titleKo}
-              </h3>
-              <p className="text-xs font-medium text-slate-500">
-                {theory.titleEn}
-              </p>
+            {/* 이론 헤딩 (<details> 바깥에 배치하여 스크린 리더 헤딩 탐색 보장) + 핵심 테이크어웨이 리드 */}
+            <div className="space-y-2.5">
+              <div className="space-y-1">
+                <h3 className="text-xl sm:text-2xl font-bold tracking-[-0.02em] text-[#1d1d1f] leading-snug">
+                  {theory.titleKo}
+                </h3>
+                <p className="text-xs sm:text-sm font-medium text-[#6e6e73]">
+                  {theory.titleEn}
+                </p>
+              </div>
+
+              <div className="rounded-[16px] bg-[#f5f5f7] px-4 py-3 space-y-1">
+                <span className="text-[11px] font-semibold text-[var(--accent-solid)] block">
+                  핵심 테이크어웨이 · {blueprint.keyTakeawayBadge}
+                </span>
+                {leadProposition && (
+                  <p className="text-xs sm:text-sm text-[#424245] leading-relaxed">
+                    {leadProposition}
+                  </p>
+                )}
+              </div>
             </div>
 
-            {/* 모바일(< lg): 가로 스와이프 & 세그먼트 탭 비교 캐러셀 */}
-            <ComparisonCarousel
-              ariaLabel={`${theory.titleKo} 3대 학술·임상 관점 비교`}
-              className="lg:hidden"
-              slides={[
-                {
-                  id: `${theory.id}-def`,
-                  tabLabel: '① 교과서 명제',
-                  badge: `${theory.textbookDefinition.length}`,
-                  activeTabClass:
-                    'bg-indigo-600 text-white border-indigo-600 shadow-xs',
-                  content: (
-                    <div className="surface-subtle p-4 space-y-2.5 h-full">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
-                        <BookOpen className="w-4 h-4 text-indigo-600 shrink-0" />
-                        <span>원서·교과서 핵심 명제</span>
-                      </div>
-                      <ul className="space-y-2">
-                        {theory.textbookDefinition.map((line, lIdx) => (
-                          <li
-                            key={lIdx}
-                            className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed"
-                          >
-                            <span className="mt-0.5 w-5 h-5 rounded bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0 tabular-nums">
-                              {lIdx + 1}
-                            </span>
-                            <span className="min-w-0 flex-1">{line}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )
-                },
-                {
-                  id: `${theory.id}-crit`,
-                  tabLabel: '② 비판적 재해석',
-                  activeTabClass:
-                    'bg-slate-900 text-white border-slate-900 shadow-xs',
-                  content: (
-                    <div className="rounded-xl bg-indigo-50/60 border border-indigo-200/80 p-4 space-y-1.5 h-full">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950">
-                        <Stethoscope className="w-4 h-4 text-indigo-600 shrink-0" />
-                        <span>과학자-실무자 비판적 재해석 및 임상 대안</span>
-                      </div>
-                      <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
-                        {theory.criticalPerspective}
-                      </p>
-                    </div>
-                  )
-                },
-                {
-                  id: `${theory.id}-intv`,
-                  tabLabel: '③ 면접 90초',
-                  activeTabClass:
-                    'bg-amber-600 text-white border-amber-600 shadow-xs',
-                  content: (
-                    <div className="rounded-xl bg-amber-50/70 border border-amber-200/90 p-4 space-y-1.5 h-full">
-                      <span className="text-xs font-bold text-amber-950 block">
-                        대학원 면접 90초 구술 핵심 포인트
-                      </span>
-                      <p className="text-xs sm:text-sm font-medium text-amber-950 leading-relaxed">
-                        {theory.interviewPoint}
-                      </p>
-                    </div>
-                  )
-                }
-              ]}
+            {/* 인라인 인터랙티브 개념 도식 & 보철 실험기 + 1-Hop Ego-Subgraph 리본 */}
+            <InlineInteractiveStageCard
+              variant="theory"
+              theory={theory}
+              adjacency={adjacency}
+              nodeMap={nodeMap}
+              masteryMap={masteryMap}
+              onInspectNode={onInspectNode}
+              onJumpToStoryNode={onJumpToStoryNode}
+              onJumpToWorkspace={onJumpToWorkspace}
             />
 
-            {/* 데스크톱(lg+): 기존 상하 비교 레이아웃 유지 */}
-            <div className="hidden lg:block space-y-3">
-              {/* 교과서 핵심 명제 */}
-              <div className="surface-subtle p-4 space-y-2.5">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
-                  <BookOpen className="w-4 h-4 text-indigo-600 shrink-0" />
-                  <span>원서·교과서 핵심 명제</span>
-                </div>
-                <ul className="space-y-2">
-                  {theory.textbookDefinition.map((line, lIdx) => (
-                    <li
-                      key={lIdx}
-                      className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed"
-                    >
-                      <span className="mt-0.5 w-5 h-5 rounded bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0 tabular-nums">
-                        {lIdx + 1}
-                      </span>
-                      <span className="min-w-0 flex-1">{line}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* 과학자-실무자 비판적 재해석 vs 면접 구술 포인트 */}
-              <div className="grid grid-cols-1 gap-3">
-                <div className="rounded-xl bg-indigo-50/60 border border-indigo-200/80 p-4 space-y-1.5">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950">
-                    <Stethoscope className="w-4 h-4 text-indigo-600 shrink-0" />
-                    <span>과학자-실무자 비판적 재해석 및 임상 대안</span>
-                  </div>
-                  <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
-                    {theory.criticalPerspective}
-                  </p>
-                </div>
-
-                <div className="rounded-xl bg-amber-50/70 border border-amber-200/90 p-4 space-y-1.5">
-                  <span className="text-xs font-bold text-amber-950 block">
-                    대학원 면접 90초 구술 핵심 포인트
-                  </span>
-                  <p className="text-xs sm:text-sm font-medium text-amber-950 leading-relaxed">
-                    {theory.interviewPoint}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* 연결된 하위 학술 용어(DEFINES_TERM) 칩 */}
-            {mapping && mapping.flashcards.length > 0 && (
-              <div className="pt-2 border-t border-slate-900/[0.06] flex flex-wrap items-center gap-1.5">
-                <span className="text-[11px] font-bold text-slate-500 mr-1">
-                  파생 학술 용어 ({mapping.flashcards.length}):
+            {/* Apple [+] 프로그레시브 디스클로저: 원서 핵심 명제 전문 · 비판적 재해석 · 90초 면접 구술 스크립트 */}
+            <details
+              open={defaultExpandDisclosures}
+              onClick={(e) => e.stopPropagation()}
+              className="apple-disclosure rounded-[20px] bg-[#f5f5f7] border border-black/[0.05] px-4 sm:px-5"
+            >
+              <summary className="py-3.5 text-xs sm:text-sm font-semibold text-[#1d1d1f]">
+                <span>
+                  교과서 원문 명제 ({theory.textbookDefinition.length}개) · 비판적 재해석 ·
+                  90초 면접 구술 포인트 보기
                 </span>
-                {mapping.flashcards.map((fcId) => {
-                  const fcNode = nodeMap[fcId];
-                  if (!fcNode) return null;
-                  const fcMastery = masteryMap[fcId] ?? 'unseen';
-                  return (
-                    <button
-                      key={fcId}
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onInspectNode(fcId);
-                      }}
-                      className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-[11px] font-bold ${
-                        fcMastery === 'mastered'
-                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                          : fcMastery === 'weak'
-                          ? 'bg-rose-50 text-rose-800 border-rose-200'
-                          : fcMastery === 'review'
-                          ? 'bg-amber-50 text-amber-800 border-amber-200'
-                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-indigo-50'
-                      }`}
-                    >
-                      <span>{fcNode.titleKo}</span>
-                    </button>
-                  );
-                })}
+                <span aria-hidden="true" className="apple-disclosure-plus">
+                  +
+                </span>
+              </summary>
+
+              <div className="pb-5 pt-3 space-y-4 border-t border-black/[0.06]">
+                {/* 1. 원서·교과서 핵심 명제 */}
+                <div className="rounded-[16px] bg-white p-4 sm:p-5 space-y-3 border border-black/[0.04]">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#1d1d1f]">
+                    <BookOpen className="w-4 h-4 text-[var(--accent-solid)] shrink-0" />
+                    <span>원서·교과서 핵심 명제 전문</span>
+                  </div>
+                  <ul className="space-y-2.5">
+                    {theory.textbookDefinition.map((line, lIdx) => (
+                      <li
+                        key={lIdx}
+                        className="flex items-start gap-2.5 text-xs sm:text-sm text-[#424245] leading-relaxed"
+                      >
+                        <span className="mt-0.5 w-5 h-5 rounded-full bg-[#1d1d1f] text-white text-[11px] font-bold flex items-center justify-center shrink-0 tabular-nums">
+                          {lIdx + 1}
+                        </span>
+                        <span className="min-w-0 flex-1">{line}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* 2. 과학자-실무자 비판적 재해석 & 90초 면접 포인트 2열 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                  <div className="rounded-[16px] bg-white p-4 sm:p-5 space-y-2 border border-black/[0.04]">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-[#1d1d1f]">
+                      <Stethoscope className="w-4 h-4 text-[var(--accent-solid)] shrink-0" />
+                      <span>과학자-실무자 비판적 재해석 및 임상 대안</span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-[#424245] leading-relaxed">
+                      {theory.criticalPerspective}
+                    </p>
+                  </div>
+
+                  <div className="rounded-[16px] bg-[var(--accent-subtle)] p-4 sm:p-5 space-y-2 border border-[#0071e3]/15">
+                    <span className="text-xs font-bold text-[var(--accent-solid)] block">
+                      대학원 면접 90초 구술 핵심 포인트
+                    </span>
+                    <p className="text-xs sm:text-sm font-medium text-[#1d1d1f] leading-relaxed">
+                      {theory.interviewPoint}
+                    </p>
+                  </div>
+                </div>
               </div>
-            )}
+            </details>
           </article>
         );
       })}
@@ -643,22 +563,18 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
           data-beat-id={retrievalBeat.beatId}
           data-node-id={retrievalBeat.primaryNodeId}
           data-module-id={mod.id}
-          className={`surface-card p-5 sm:p-6 space-y-4 ${
-            activeBeatId === retrievalBeat.beatId
-              ? 'border-emerald-600 ring-2 ring-emerald-500/15'
-              : ''
-          }`}
+          className="bento-tile-white p-6 sm:p-8 space-y-4 apple-scroll-reveal"
         >
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="space-y-0.5">
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-50 border border-emerald-200 px-2.5 py-1 text-xs font-bold text-emerald-900">
-                <Layers className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="space-y-1">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/12 px-3 py-1 text-xs font-semibold text-emerald-700">
+                <Layers className="w-3.5 h-3.5 shrink-0" />
                 <span>{retrievalBeat.stepLabel}</span>
               </span>
-              <h3 className="text-base sm:text-lg font-extrabold text-slate-900 pt-1">
+              <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#1d1d1f] pt-0.5">
                 {retrievalBeat.titleKo}
               </h3>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs sm:text-sm text-[#6e6e73]">
                 {retrievalBeat.subtitleKo}
               </p>
             </div>
@@ -672,7 +588,7 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                   mod.flashcards[0]?.id ?? mod.id
                 )
               }
-              className="inline-flex min-h-[34px] items-center gap-1 rounded-lg bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 text-xs font-bold text-white"
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-[#1d1d1f] hover:bg-[#2c2c2e] px-4 py-2 text-xs font-semibold text-white transition-colors"
             >
               <span>전체 플래시카드 덱 열기</span>
               <ExternalLink className="w-3.5 h-3.5 shrink-0" />
@@ -690,7 +606,7 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
       )}
 
       {/* =================================================================== */}
-      {/* BEAT 4: 교실 사례 임상 단서 3분할 해부 & 블라인드 처방 브릿지        */}
+      {/* BEAT 4: 교실 임상 사례 3분할 단서 & 인라인 3중 렌즈 스테이지         */}
       {/* =================================================================== */}
       {caseBeat && (
         <article
@@ -699,22 +615,20 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
           data-node-id={caseBeat.primaryNodeId}
           data-module-id={mod.id}
           onClick={() => onFocusNode(caseBeat.primaryNodeId, caseBeat.beatId)}
-          className={`surface-card p-5 sm:p-6 space-y-5 cursor-pointer ${
-            activeBeatId === caseBeat.beatId
-              ? 'border-violet-600 ring-2 ring-violet-500/15'
-              : 'hover:border-slate-300'
-          }`}
+          className="bento-tile-white p-6 sm:p-8 space-y-6 apple-scroll-reveal"
         >
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="space-y-0.5">
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-violet-50 border border-violet-200 px-2.5 py-1 text-xs font-bold text-violet-900">
-                <Brain className="w-3.5 h-3.5 text-violet-700 shrink-0" />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="space-y-1">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-500/12 px-3 py-1 text-xs font-semibold text-violet-700">
+                <Brain className="w-3.5 h-3.5 shrink-0" />
                 <span>{caseBeat.stepLabel}</span>
               </span>
-              <h3 className="text-base sm:text-lg font-extrabold text-slate-900 pt-1">
+              <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#1d1d1f] pt-0.5">
                 {caseBeat.titleKo}
               </h3>
-              <p className="text-xs text-slate-600">{caseBeat.subtitleKo}</p>
+              <p className="text-xs sm:text-sm text-[#6e6e73]">
+                선행맥락 · 외현행동 · 후속반응 3대 단서를 분해하고 곧바로 3중 처방 렌즈를 비교합니다.
+              </p>
             </div>
 
             <button
@@ -723,17 +637,16 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                 e.stopPropagation();
                 onJumpToWorkspace('cases', mod.id, mod.cases[0]?.id ?? mod.id);
               }}
-              className="inline-flex min-h-[34px] items-center gap-1 rounded-lg bg-violet-700 hover:bg-violet-800 px-3 py-1.5 text-xs font-bold text-white"
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-[#f5f5f7] hover:bg-black/[0.07] px-4 py-2 text-xs font-semibold text-[#1d1d1f] transition-colors"
             >
               <span>사례 시뮬레이터 탭 열기</span>
               <ExternalLink className="w-3.5 h-3.5 shrink-0" />
             </button>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-5">
             {mod.cases.map((c, cIdx) => {
               const cues = splitScenarioIntoThreeCues(c.scenario);
-              const isSelectedCase = activeNodeId === c.id;
 
               return (
                 <div
@@ -742,40 +655,17 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                     e.stopPropagation();
                     onFocusNode(c.id, caseBeat.beatId);
                   }}
-                  className={`rounded-xl border p-4 sm:p-5 space-y-3.5 ${
-                    isSelectedCase
-                      ? 'bg-violet-50/40 border-violet-400'
-                      : 'surface-subtle'
-                  }`}
+                  className="rounded-[22px] bg-[#f5f5f7] p-4 sm:p-6 space-y-4 border border-black/[0.04]"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="min-w-0">
-                      <span className="text-[11px] font-bold text-violet-700 block">
+                      <span className="text-xs font-semibold text-[var(--accent-solid)] block">
                         사례 {cIdx + 1} · {c.studentGrade}
                       </span>
-                      <h4 className="text-sm sm:text-base font-extrabold text-slate-900">
+                      <h4 className="text-base sm:text-lg font-bold text-[#1d1d1f]">
                         {c.title}
                       </h4>
                     </div>
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (onOpenMobileStage) {
-                          onOpenMobileStage(c.id, caseBeat.beatId);
-                        } else {
-                          onFocusNode(c.id, caseBeat.beatId);
-                        }
-                      }}
-                      className="inline-flex min-h-[32px] items-center gap-1 rounded-lg bg-violet-600 hover:bg-violet-700 px-3 py-1 text-xs font-bold text-white shrink-0"
-                    >
-                      <span className="lg:hidden">하단 3중 렌즈 올리기</span>
-                      <span className="hidden lg:inline">
-                        우측 스테이지에 3중 렌즈 표시
-                      </span>
-                      <ArrowRight className="w-3.5 h-3.5 shrink-0" />
-                    </button>
                   </div>
 
                   {/* 모바일(< md): 임상 단서 3분할 가로 스와이프 비교 */}
@@ -787,13 +677,13 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                         id: `${c.id}-cue-a`,
                         tabLabel: '① 선행 맥락',
                         activeTabClass:
-                          'bg-amber-600 text-white border-amber-600 shadow-xs',
+                          'bg-[#1d1d1f] text-white border-[#1d1d1f] shadow-xs',
                         content: (
-                          <div className="rounded-lg bg-white border border-amber-200/90 p-3.5 space-y-1.5 h-full">
-                            <span className="inline-block rounded bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] font-bold text-amber-900">
+                          <div className="rounded-[16px] bg-white border border-black/[0.06] p-4 space-y-1.5 h-full">
+                            <span className="inline-block rounded-full bg-amber-500/15 px-2.5 py-0.5 text-[10.5px] font-bold text-amber-900">
                               1. 선행 맥락·과제 단서 (Antecedent)
                             </span>
-                            <p className="text-xs text-slate-700 leading-relaxed">
+                            <p className="text-xs text-[#424245] leading-relaxed">
                               {cues.antecedentCue}
                             </p>
                           </div>
@@ -803,13 +693,13 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                         id: `${c.id}-cue-b`,
                         tabLabel: '② 외현 행동',
                         activeTabClass:
-                          'bg-rose-600 text-white border-rose-600 shadow-xs',
+                          'bg-[#1d1d1f] text-white border-[#1d1d1f] shadow-xs',
                         content: (
-                          <div className="rounded-lg bg-white border border-rose-200/90 p-3.5 space-y-1.5 h-full">
-                            <span className="inline-block rounded bg-rose-50 border border-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-900">
+                          <div className="rounded-[16px] bg-white border border-black/[0.06] p-4 space-y-1.5 h-full">
+                            <span className="inline-block rounded-full bg-rose-500/12 px-2.5 py-0.5 text-[10.5px] font-bold text-rose-800">
                               2. 외현 행동·병목 단서 (Behavior)
                             </span>
-                            <p className="text-xs text-slate-700 leading-relaxed">
+                            <p className="text-xs text-[#424245] leading-relaxed">
                               {cues.behaviorCue}
                             </p>
                           </div>
@@ -819,13 +709,13 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                         id: `${c.id}-cue-c`,
                         tabLabel: '③ 후속 반응',
                         activeTabClass:
-                          'bg-indigo-600 text-white border-indigo-600 shadow-xs',
+                          'bg-[#1d1d1f] text-white border-[#1d1d1f] shadow-xs',
                         content: (
-                          <div className="rounded-lg bg-white border border-indigo-200/90 p-3.5 space-y-1.5 h-full">
-                            <span className="inline-block rounded bg-indigo-50 border border-indigo-200 px-2 py-0.5 text-[10px] font-bold text-indigo-900">
+                          <div className="rounded-[16px] bg-white border border-black/[0.06] p-4 space-y-1.5 h-full">
+                            <span className="inline-block rounded-full bg-[var(--accent-subtle)] px-2.5 py-0.5 text-[10.5px] font-bold text-[var(--accent-solid)]">
                               3. 후속 반응·강화 함정 (Consequence)
                             </span>
-                            <p className="text-xs text-slate-700 leading-relaxed">
+                            <p className="text-xs text-[#424245] leading-relaxed">
                               {cues.consequenceCue}
                             </p>
                           </div>
@@ -835,42 +725,42 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                   />
 
                   {/* 태블릿·데스크톱(md+): 임상 단서 3분할 3열 해부 */}
-                  <div className="hidden md:grid md:grid-cols-3 gap-2.5">
-                    <div className="rounded-lg bg-white border border-amber-200/90 p-3 space-y-1">
-                      <span className="inline-block rounded bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] font-bold text-amber-900">
+                  <div className="hidden md:grid md:grid-cols-3 gap-3">
+                    <div className="rounded-[16px] bg-white border border-black/[0.05] p-4 space-y-1.5">
+                      <span className="inline-block rounded-full bg-amber-500/15 px-2.5 py-0.5 text-[10.5px] font-bold text-amber-900">
                         1. 선행 맥락·과제 단서
                       </span>
-                      <p className="text-xs text-slate-700 leading-relaxed">
+                      <p className="text-xs text-[#424245] leading-relaxed">
                         {cues.antecedentCue}
                       </p>
                     </div>
-                    <div className="rounded-lg bg-white border border-rose-200/90 p-3 space-y-1">
-                      <span className="inline-block rounded bg-rose-50 border border-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-900">
+                    <div className="rounded-[16px] bg-white border border-black/[0.05] p-4 space-y-1.5">
+                      <span className="inline-block rounded-full bg-rose-500/12 px-2.5 py-0.5 text-[10.5px] font-bold text-rose-800">
                         2. 외현 행동·병목 단서
                       </span>
-                      <p className="text-xs text-slate-700 leading-relaxed">
+                      <p className="text-xs text-[#424245] leading-relaxed">
                         {cues.behaviorCue}
                       </p>
                     </div>
-                    <div className="rounded-lg bg-white border border-indigo-200/90 p-3 space-y-1">
-                      <span className="inline-block rounded bg-indigo-50 border border-indigo-200 px-2 py-0.5 text-[10px] font-bold text-indigo-900">
+                    <div className="rounded-[16px] bg-white border border-black/[0.05] p-4 space-y-1.5">
+                      <span className="inline-block rounded-full bg-[var(--accent-subtle)] px-2.5 py-0.5 text-[10.5px] font-bold text-[var(--accent-solid)]">
                         3. 후속 반응·강화 함정
                       </span>
-                      <p className="text-xs text-slate-700 leading-relaxed">
+                      <p className="text-xs text-[#424245] leading-relaxed">
                         {cues.consequenceCue}
                       </p>
                     </div>
                   </div>
 
-                  {/* 인라인 블라인드 처방 초안 입력 (워크스페이스와 실시간 공유) */}
+                  {/* 인라인 블라인드 처방 초안 입력 */}
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="rounded-lg bg-white border border-slate-200 p-3.5 space-y-2"
+                    className="rounded-[18px] bg-white border border-black/[0.06] p-4 space-y-2.5"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <label
                         htmlFor={`story-case-draft-${c.id}`}
-                        className="text-xs font-bold text-slate-800"
+                        className="text-xs font-bold text-[#1d1d1f]"
                       >
                         3중 렌즈(행동·인지·동기) 블라인드 개입안 초안 작성
                       </label>
@@ -891,19 +781,31 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                             [c.id]: e.target.value
                           }))
                         }
-                        placeholder="우측 스테이지의 모범 3중 렌즈와 대조하기 전에 핵심 개입 키워드를 먼저 적어보세요..."
-                        className="flex-1 rounded-lg border border-slate-200 bg-slate-50 p-2.5 text-base sm:text-xs text-slate-900 focus:border-violet-500 focus:bg-white"
+                        placeholder="아래 모범 3중 렌즈와 대조하기 전에 핵심 개입 키워드를 먼저 적어보세요..."
+                        className="flex-1 rounded-[12px] border border-black/[0.1] bg-[#f5f5f7] focus:bg-white p-3 text-base sm:text-xs text-[#1d1d1f] focus:border-[#0071e3] focus:outline-none"
                       />
                       <button
                         type="button"
                         onClick={() => handleSaveCaseDraft(c)}
-                        className="inline-flex min-h-[36px] items-center justify-center gap-1 rounded-lg bg-slate-900 hover:bg-slate-800 px-3.5 py-2 text-xs font-bold text-white shrink-0"
+                        className="inline-flex min-h-[38px] items-center justify-center gap-1.5 rounded-full bg-[#1d1d1f] hover:bg-[#2c2c2e] px-4 py-2 text-xs font-semibold text-white shrink-0 transition-colors"
                       >
                         <Save className="w-3.5 h-3.5 shrink-0" />
                         <span>초안 저장</span>
                       </button>
                     </div>
                   </div>
+
+                  {/* 인라인 3중 처방 렌즈 인터랙티브 매트릭스 (원천 이론 역추적 배지 포함) */}
+                  <InlineInteractiveStageCard
+                    variant="case"
+                    classroomCase={c}
+                    adjacency={adjacency}
+                    nodeMap={nodeMap}
+                    masteryMap={masteryMap}
+                    onInspectNode={onInspectNode}
+                    onJumpToStoryNode={onJumpToStoryNode}
+                    onJumpToWorkspace={onJumpToWorkspace}
+                  />
                 </div>
               );
             })}
@@ -921,31 +823,29 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
           data-node-id={gateBeat.primaryNodeId}
           data-module-id={mod.id}
           onClick={() => onFocusNode(gateBeat.primaryNodeId, gateBeat.beatId)}
-          className={`surface-card p-5 sm:p-6 space-y-5 cursor-pointer ${
-            activeBeatId === gateBeat.beatId
-              ? 'border-rose-600 ring-2 ring-rose-500/15'
-              : 'hover:border-slate-300'
-          }`}
+          className="bento-tile-white p-6 sm:p-8 space-y-5 apple-scroll-reveal"
         >
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-md bg-rose-50 border border-rose-200 px-2.5 py-1 text-xs font-bold text-rose-900">
-              <MessageSquareWarning className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-500/12 px-3 py-1 text-xs font-semibold text-rose-700">
+              <MessageSquareWarning className="w-3.5 h-3.5 shrink-0" />
               <span>{gateBeat.stepLabel}</span>
             </span>
 
-            <span className="text-xs font-semibold text-slate-500 tabular-nums">
+            <span className="text-xs font-medium text-[#6e6e73] tabular-nums">
               실전 압박 면접 문항 {mod.questions.length}개 연결
             </span>
           </div>
 
           <div className="space-y-1">
-            <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+            <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#1d1d1f]">
               {gateBeat.titleKo}
             </h3>
-            <p className="text-xs text-slate-600">{gateBeat.subtitleKo}</p>
+            <p className="text-xs sm:text-sm text-[#6e6e73]">
+              {gateBeat.subtitleKo}
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 gap-3.5">
             {mod.questions.map((q, qIdx) => {
               const qMastery = masteryMap[q.id] ?? 'unseen';
               return (
@@ -955,14 +855,14 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                     e.stopPropagation();
                     onFocusNode(q.id, gateBeat.beatId);
                   }}
-                  className="surface-subtle hover:border-rose-300 p-4 space-y-2.5"
+                  className="rounded-[20px] bg-[#f5f5f7] p-5 space-y-3 border border-black/[0.04]"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-rose-800 tabular-nums">
-                      압박 면접 문항 Q{qIdx + 1} · {q.id}
+                    <span className="text-xs font-bold text-rose-700 tabular-nums">
+                      압박 면접 Q{qIdx + 1} · {q.id}
                     </span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="rounded bg-white border border-slate-200 px-2 py-0.5 text-[10px] font-bold text-slate-600">
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-full bg-white px-2.5 py-0.5 text-[10.5px] font-semibold text-[#424245] border border-black/[0.05]">
                         {MASTERY_KOR_LABEL[qMastery]}
                       </span>
                       <button
@@ -971,7 +871,7 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                           e.stopPropagation();
                           onJumpToWorkspace('interview', mod.id, q.id);
                         }}
-                        className="inline-flex min-h-[28px] items-center gap-1 rounded-md bg-rose-600 hover:bg-rose-700 px-2.5 py-1 text-[11px] font-bold text-white"
+                        className="inline-flex min-h-[30px] items-center gap-1 rounded-full bg-[var(--accent-solid)] hover:bg-[var(--accent-solid-hover)] px-3 py-1 text-[11px] font-semibold text-white transition-colors"
                       >
                         <span>90초 타이머 훈련</span>
                         <ArrowRight className="w-3 h-3 shrink-0" />
@@ -979,19 +879,19 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                     </div>
                   </div>
 
-                  <p className="text-xs sm:text-sm font-bold text-slate-900 leading-relaxed">
+                  <p className="text-sm sm:text-[15px] font-bold text-[#1d1d1f] leading-relaxed">
                     Q. {q.question}
                   </p>
 
-                  <p className="text-xs text-rose-900 font-medium leading-relaxed">
+                  <p className="text-xs sm:text-sm text-rose-800 font-medium leading-relaxed">
                     압박 꼬리질문: “{q.followUpQuestion}”
                   </p>
 
-                  <div className="flex flex-wrap gap-1.5 pt-1">
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
                     {q.requiredKeywords.map((kw) => (
                       <span
                         key={kw}
-                        className="rounded bg-white border border-slate-200 px-2 py-0.5 text-[10px] font-bold text-indigo-800"
+                        className="rounded-full bg-white border border-black/[0.06] px-2.5 py-0.5 text-[11px] font-semibold text-[#1d1d1f]"
                       >
                         {kw}
                       </span>
@@ -1005,15 +905,15 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
           {/* 챕터 완주 체크포인트 & 워크스페이스 브릿지 버튼 */}
           <div
             onClick={(e) => e.stopPropagation()}
-            className="pt-3 border-t border-slate-900/[0.08] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5"
+            className="pt-4 border-t border-black/[0.06] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3"
           >
             <button
               type="button"
               onClick={() => onToggleModuleCompleted(mod.id)}
-              className={`inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg px-4 py-2 text-xs font-bold border ${
+              className={`inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full px-5 py-2 text-xs font-semibold transition-colors ${
                 isCompleted
-                  ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300'
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-[#f5f5f7] hover:bg-black/[0.07] text-[#1d1d1f]'
               }`}
             >
               <CheckCircle2 className="w-4 h-4 shrink-0" />
@@ -1033,7 +933,7 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                   mod.theories[0]?.id ?? mod.id
                 )
               }
-              className="inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 px-4 py-2 text-xs font-bold text-white"
+              className="inline-flex min-h-[42px] items-center justify-center gap-1.5 rounded-full bg-[var(--accent-solid)] hover:bg-[var(--accent-solid-hover)] px-5 py-2 text-xs font-semibold text-white transition-colors"
             >
               <Network className="w-4 h-4 shrink-0" />
               <span>모듈 {mod.number} 워크스페이스에서 실전 훈련</span>

@@ -166,31 +166,31 @@ export const CommandSearchModal: React.FC<CommandSearchModalProps> = ({
           dialogRef.current?.close();
         }
       }}
-      className="instant-dialog w-[min(94vw,760px)] rounded-2xl bg-white text-slate-900 p-0 shadow-2xl border border-slate-900/[0.1] overflow-hidden"
+      className="instant-dialog w-[min(94vw,760px)] rounded-[24px] bg-white text-[#1d1d1f] p-0 shadow-[var(--shadow-overlay)] border border-black/[0.08] overflow-hidden"
     >
-      <div className="p-4 sm:p-5 bg-slate-50/90 border-b border-slate-900/[0.08] space-y-3">
+      <div className="p-4 sm:p-5 bg-[#f5f5f7] border-b border-black/[0.06] space-y-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <Search className="w-4 h-4 text-indigo-600 shrink-0" />
+            <Search className="w-4 h-4 text-[var(--accent-solid)] shrink-0" />
             <h2
               id={headingId}
-              className="text-sm font-bold text-slate-900 truncate"
+              className="text-sm font-bold text-[#1d1d1f] truncate"
             >
-              90-Node 도메인 지식 그래프 즉시 검색 (⌘K)
+              90-Node 스포트라이트 지식 검색 (⌘K)
             </h2>
           </div>
           <button
             type="button"
             onClick={() => dialogRef.current?.close()}
             aria-label="검색 창 닫기"
-            className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-600 shrink-0"
+            className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-full bg-white hover:bg-black/[0.05] border border-black/[0.08] text-[#424245] shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         <div className="relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-[#86868b] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             ref={inputRef}
             type="search"
@@ -198,7 +198,7 @@ export const CommandSearchModal: React.FC<CommandSearchModalProps> = ({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="이론, 한-영 학술 용어, 교실 사례, 면접 필수 키워드 검색 (예: ZPD, CHC, 사전교정, 자기구실)..."
-            className="w-full rounded-xl bg-white border border-slate-300 pl-10 pr-4 py-2.5 text-base sm:text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600"
+            className="w-full rounded-full bg-white border border-black/[0.1] pl-10 pr-4 py-2.5 text-base sm:text-sm text-[#1d1d1f] placeholder:text-[#86868b] focus:border-[#0071e3] focus:outline-none"
           />
         </div>
 
@@ -216,10 +216,10 @@ export const CommandSearchModal: React.FC<CommandSearchModalProps> = ({
               key={item.id}
               type="button"
               onClick={() => setKindFilter(item.id)}
-              className={`min-h-[32px] rounded-lg px-2.5 py-1 text-xs font-bold border ${
+              className={`min-h-[32px] rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
                 kindFilter === item.id
-                  ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                  ? 'bg-[#1d1d1f] text-white'
+                  : 'bg-white text-[#424245] border border-black/[0.06] hover:bg-black/[0.04]'
               }`}
             >
               {item.label}

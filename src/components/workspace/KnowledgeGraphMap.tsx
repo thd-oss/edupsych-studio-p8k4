@@ -14,17 +14,22 @@ import {
 } from 'lucide-react';
 import {
   computeCurriculumGraphLayout,
+  computeQuadraticEdgePath,
+  CROSS_BRIDGE_EDGE_CURVATURE,
   CROSS_MODULE_BRIDGES,
   getNodeNeighbors,
-  getWeakSubgraph
+  getWeakSubgraph,
+  INTRA_MODULE_EDGE_CURVATURE
 } from '../../data/curriculumGraph';
 import {
   EdgeRelation,
+  GraphAdjacencyIndex,
   KnowledgeGraphEdge,
   KnowledgeGraphNode,
   MasteryState,
   ModuleId,
   NodeKind,
+  PrioritizedWeakNodeItem,
   WorkspaceTabId
 } from '../../types/graph';
 
@@ -32,7 +37,9 @@ interface KnowledgeGraphMapProps {
   nodes: KnowledgeGraphNode[];
   edges: KnowledgeGraphEdge[];
   nodeMap: Record<string, KnowledgeGraphNode>;
+  adjacency: GraphAdjacencyIndex;
   masteryMap: Record<string, MasteryState>;
+  prioritizedWeakQueue: PrioritizedWeakNodeItem[];
   selectedModule: ModuleId | 'all';
   onChangeModule: (mod: ModuleId | 'all') => void;
   weakFocusActive: boolean;
@@ -54,34 +61,34 @@ const MASTERY_PALETTE: Record<
   mastered: {
     fill: '#10b981',
     stroke: '#34d399',
-    badgeClass: 'bg-emerald-50 text-emerald-900 border-emerald-200',
+    badgeClass: 'bg-emerald-500/12 text-emerald-800 border-emerald-500/20',
     labelKo: '숙련 완료 (Mastered)'
   },
   review: {
     fill: '#f59e0b',
     stroke: '#fbbf24',
-    badgeClass: 'bg-amber-50 text-amber-900 border-amber-200',
+    badgeClass: 'bg-amber-500/15 text-amber-900 border-amber-500/25',
     labelKo: '복습 요망 (Review)'
   },
   weak: {
     fill: '#f43f5e',
     stroke: '#fb7185',
-    badgeClass: 'bg-rose-50 text-rose-900 border-rose-200',
+    badgeClass: 'bg-rose-500/12 text-rose-800 border-rose-500/20',
     labelKo: '취약 노드 (Weak/Again)'
   },
   unseen: {
-    fill: '#334155',
-    stroke: '#64748b',
-    badgeClass: 'bg-slate-100 text-slate-700 border-slate-200',
+    fill: '#48484a',
+    stroke: '#636366',
+    badgeClass: 'bg-[#f5f5f7] text-[#424245] border-black/[0.06]',
     labelKo: '미학습 (Unseen)'
   }
 };
 
 const EDGE_COLOR: Record<EdgeRelation, string> = {
-  BELONGS_TO_MODULE: '#334155',
-  DEFINES_TERM: '#10b981',
-  APPLIED_IN_CASE: '#8b5cf6',
-  DEFENDS_QUESTION: '#f43f5e',
+  BELONGS_TO_MODULE: '#3a3a3c',
+  DEFINES_TERM: '#34d399',
+  APPLIED_IN_CASE: '#a78bfa',
+  DEFENDS_QUESTION: '#fb7185',
   CROSS_MODULE_BRIDGE: '#fbbf24'
 };
 
@@ -104,7 +111,7 @@ const CLUSTER_META: Array<{
     title: 'Mod 2. 학습자 다양성 (CHC·CLT·보철·RTI·ADHD)',
     cx: 680,
     cy: 215,
-    accent: '#818cf8'
+    accent: '#2997ff'
   },
   {
     id: 'mod3',
@@ -132,12 +139,15 @@ const CLUSTER_META: Array<{
 const ZOOM_MIN = 0.85;
 const ZOOM_MAX = 1.6;
 const ZOOM_STEP = 0.15;
+const MAX_DISPLAY_WEAK_CARDS = 12;
 
 export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
   nodes,
   edges,
   nodeMap,
+  adjacency,
   masteryMap,
+  prioritizedWeakQueue,
   selectedModule,
   onChangeModule,
   weakFocusActive,
@@ -175,8 +185,8 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
   const activeFocusId = hoveredNodeId ?? selectedNodeId;
   const activeFocusNeighbors = useMemo(() => {
     if (!activeFocusId) return null;
-    return getNodeNeighbors(activeFocusId, nodeMap, edges);
-  }, [activeFocusId, nodeMap, edges]);
+    return getNodeNeighbors(activeFocusId, nodeMap, edges, adjacency);
+  }, [activeFocusId, nodeMap, edges, adjacency]);
 
   const visibleEdges = useMemo(() => {
     return edges.filter((edge) => {
@@ -213,32 +223,25 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
     return { mastered, review, weak, unseen };
   }, [nodes, masteryMap]);
 
-  const weakActionNodes = useMemo(() => {
-    return nodes.filter((n) => {
-      const m = masteryMap[n.id] ?? 'unseen';
-      return m === 'weak' || m === 'review';
-    });
-  }, [nodes, masteryMap]);
-
   return (
     <div className="space-y-5">
       {/* 상단 지식 그래프 컨트롤 & 숙련도 요약 바 */}
-      <div className="surface-card p-5 sm:p-6 space-y-4">
+      <div className="bento-tile-white p-5 sm:p-7 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="space-y-1 min-w-0">
-            <div className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-50 border border-indigo-200/80 px-2.5 py-0.5 text-xs font-extrabold text-indigo-900">
-              <Network className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-              <span>90-Node 도메인 지식 그래프</span>
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent-subtle)] px-3 py-1 text-xs font-semibold text-[var(--accent-solid)]">
+              <Network className="w-3.5 h-3.5 shrink-0" />
+              <span>90-Node 도메인 지식 그래프 · 곡률 스플라인 토폴로지</span>
             </div>
-            <h3 className="text-base sm:text-xl font-extrabold text-slate-900">
+            <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#1d1d1f]">
               전 모듈 90개 원자화 학습 노드(이론 20 · 플래시카드 47 · 사례 10 · 압박면접 13) 실시간 연결망
             </h3>
-            <p className="text-xs text-slate-600">
-              노드를 클릭하면 우측 슬라이드오버 드로어가 열리며 정의·처방·꼬리질문 확인 및 <strong>스토리 맥락 복귀</strong>가 가능합니다.
+            <p className="text-xs sm:text-sm text-[#6e6e73]">
+              정점을 클릭하거나 Tab + Enter로 선택하면 상세 드로어가 열리며 정의·처방·꼬리질문 확인 및 <strong>스토리 맥락 복귀</strong>가 가능합니다.
             </p>
           </div>
 
-          {/* 실시간 숙련도 분포 카운터 (tabular-nums) */}
+          {/* 실시간 숙련도 분포 카운터 */}
           <div className="flex flex-wrap items-center gap-2 tabular-nums">
             {(
               [
@@ -252,14 +255,14 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
               return (
                 <div
                   key={item.key}
-                  className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-extrabold ${pal.badgeClass}`}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${pal.badgeClass}`}
                 >
                   <span
-                    className="w-2.5 h-2.5 rounded-full shrink-0"
+                    className="w-2 h-2 rounded-full shrink-0"
                     style={{ backgroundColor: pal.fill }}
                   />
                   <span>
-                    {pal.labelKo.split(' ')[0]}: {item.count}
+                    {pal.labelKo.split(' ')[0]} {item.count}
                   </span>
                 </div>
               );
@@ -268,12 +271,12 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
         </div>
 
         {/* 필터 & 취약 연결고리 하이라이트 스위치 바 */}
-        <div className="pt-3 border-t border-slate-900/[0.06] flex flex-wrap items-center justify-between gap-3">
+        <div className="pt-3 border-t border-black/[0.06] flex flex-wrap items-center justify-between gap-3">
           {/* 좌측: 노드 유형 필터 */}
           <div className="chip-scroll-row flex items-center gap-1.5 tabular-nums min-w-0 max-w-full">
-            <span className="text-xs font-bold text-slate-500 mr-1 flex items-center gap-1 shrink-0">
+            <span className="text-xs font-semibold text-[#6e6e73] mr-1 flex items-center gap-1 shrink-0">
               <Filter className="w-3.5 h-3.5 shrink-0" />
-              <span>노드 유형:</span>
+              <span>유형:</span>
             </span>
             {(
               [
@@ -288,10 +291,10 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                 key={f.id}
                 type="button"
                 onClick={() => setKindFilter(f.id)}
-                className={`min-h-[34px] rounded-lg px-3 py-1 text-xs font-extrabold border shrink-0 transition-colors ${
+                className={`min-h-[34px] rounded-full px-3.5 py-1 text-xs font-semibold shrink-0 transition-colors ${
                   kindFilter === f.id
-                    ? 'bg-indigo-600 text-white border-indigo-600'
-                    : 'bg-slate-50 text-slate-700 border-slate-900/[0.08] hover:bg-slate-100'
+                    ? 'bg-[#1d1d1f] text-white'
+                    : 'bg-[#f5f5f7] text-[#424245] hover:bg-black/[0.07]'
                 }`}
               >
                 {f.label}
@@ -304,10 +307,10 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
             <button
               type="button"
               onClick={() => onToggleWeakFocus(!weakFocusActive)}
-              className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-extrabold border transition-colors ${
+              className={`inline-flex min-h-[34px] items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
                 weakFocusActive
-                  ? 'bg-rose-600 text-white border-rose-600 shadow-xs'
-                  : 'bg-rose-50 text-rose-900 border-rose-200 hover:bg-rose-100'
+                  ? 'bg-rose-600 text-white shadow-xs'
+                  : 'bg-rose-500/12 text-rose-700 hover:bg-rose-500/18'
               }`}
             >
               <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
@@ -321,17 +324,17 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
             <button
               type="button"
               onClick={() => setShowCrossBridges((prev) => !prev)}
-              className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-extrabold border transition-colors ${
+              className={`inline-flex min-h-[34px] items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
                 showCrossBridges
-                  ? 'bg-amber-50 text-amber-950 border-amber-300'
-                  : 'bg-slate-50 text-slate-600 border-slate-900/[0.08]'
+                  ? 'bg-amber-500/15 text-amber-900'
+                  : 'bg-[#f5f5f7] text-[#6e6e73]'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
-              <span>모듈 간 브릿지 간선 ({CROSS_MODULE_BRIDGES.length})</span>
+              <span>모듈 간 브릿지 ({CROSS_MODULE_BRIDGES.length})</span>
             </button>
 
-            <div className="inline-flex items-center rounded-lg bg-slate-100 border border-slate-900/[0.08] p-0.5 tabular-nums">
+            <div className="inline-flex items-center rounded-full bg-[#f5f5f7] p-0.5 tabular-nums">
               <button
                 type="button"
                 onClick={() =>
@@ -340,11 +343,11 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                   )
                 }
                 aria-label="그래프 축소"
-                className="min-h-[32px] min-w-[32px] inline-flex items-center justify-center rounded-md hover:bg-white text-slate-700"
+                className="min-h-[30px] min-w-[30px] inline-flex items-center justify-center rounded-full hover:bg-white text-[#424245]"
               >
                 <ZoomOut className="w-3.5 h-3.5" />
               </button>
-              <span className="px-2 text-[11px] font-bold text-slate-800">
+              <span className="px-2 text-[11px] font-bold text-[#1d1d1f]">
                 {Math.round(zoomScale * 100)}%
               </span>
               <button
@@ -355,7 +358,7 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                   )
                 }
                 aria-label="그래프 확대"
-                className="min-h-[32px] min-w-[32px] inline-flex items-center justify-center rounded-md hover:bg-white text-slate-700"
+                className="min-h-[30px] min-w-[30px] inline-flex items-center justify-center rounded-full hover:bg-white text-[#424245]"
               >
                 <ZoomIn className="w-3.5 h-3.5" />
               </button>
@@ -363,7 +366,7 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                 type="button"
                 onClick={() => setZoomScale(1)}
                 aria-label="배율 초기화"
-                className="min-h-[32px] min-w-[32px] inline-flex items-center justify-center rounded-md hover:bg-white text-slate-500"
+                className="min-h-[30px] min-w-[30px] inline-flex items-center justify-center rounded-full hover:bg-white text-[#6e6e73]"
               >
                 <RotateCcw className="w-3 h-3" />
               </button>
@@ -372,13 +375,13 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
         </div>
       </div>
 
-      {/* 메인 인터랙티브 SVG 90-Node 지식 그래프 캔버스 */}
-      <div className="rounded-2xl bg-slate-950 border border-slate-800 shadow-lg overflow-hidden relative">
+      {/* 메인 인터랙티브 SVG 90-Node 지식 그래프 캔버스 (Apple Obsidian #141416 + 2차 베지어 곡선 스플라인) */}
+      <div className="rounded-[28px] bg-[#141416] border border-white/10 shadow-[var(--shadow-elevated)] overflow-hidden relative">
         <div className="overflow-x-auto">
           <svg
             viewBox="0 0 1360 820"
             className="w-full min-w-[860px] h-auto select-none block"
-            role="img"
+            role="group"
             aria-label="교육심리학 90개 학습 노드 도메인 지식 그래프"
           >
             <defs>
@@ -387,8 +390,8 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                 <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
               </radialGradient>
               <radialGradient id="clusterGlowMod2" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.22" />
-                <stop offset="100%" stopColor="#4f46e5" stopOpacity="0" />
+                <stop offset="0%" stopColor="#0071e3" stopOpacity="0.24" />
+                <stop offset="100%" stopColor="#0071e3" stopOpacity="0" />
               </radialGradient>
               <radialGradient id="clusterGlowMod3" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stopColor="#059669" stopOpacity="0.22" />
@@ -402,6 +405,19 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                 <stop offset="0%" stopColor="#d97706" stopOpacity="0.22" />
                 <stop offset="100%" stopColor="#d97706" stopOpacity="0" />
               </radialGradient>
+
+              {/* 모듈 간 거시 브릿지 방향 화살표 마커 */}
+              <marker
+                id="arrowBridge"
+                viewBox="0 0 10 10"
+                refX="16"
+                refY="5"
+                markerWidth="5.5"
+                markerHeight="5.5"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#fbbf24" />
+              </marker>
             </defs>
 
             <g
@@ -410,7 +426,7 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                 transformOrigin: '680px 410px'
               }}
             >
-              {/* 1. 클러스터 배경 링 (전체 모듈 보기 vs 단일 모듈 집중 보기) */}
+              {/* 1. 클러스터 배경 링 */}
               {selectedModule === 'all' ? (
                 CLUSTER_META.map((cluster, idx) => (
                   <g
@@ -424,28 +440,28 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                       r={195}
                       fill={`url(#clusterGlowMod${idx + 1})`}
                       stroke={cluster.accent}
-                      strokeOpacity={0.28}
-                      strokeWidth={1.5}
+                      strokeOpacity={0.26}
+                      strokeWidth={1.4}
                       strokeDasharray="6 6"
                     />
                     <rect
-                      x={cluster.cx - 140}
+                      x={cluster.cx - 142}
                       y={cluster.cy - 196}
-                      width={280}
+                      width={284}
                       height={24}
                       rx={12}
-                      fill="#0f172a"
+                      fill="#1d1d1f"
                       stroke={cluster.accent}
-                      strokeOpacity={0.6}
-                      strokeWidth={1.2}
+                      strokeOpacity={0.55}
+                      strokeWidth={1.1}
                     />
                     <text
                       x={cluster.cx}
                       y={cluster.cy - 180}
                       textAnchor="middle"
-                      fill="#f8fafc"
+                      fill="#f5f5f7"
                       fontSize="11"
-                      fontWeight="800"
+                      fontWeight="700"
                     >
                       {cluster.title}
                     </text>
@@ -458,25 +474,25 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                     cy={410}
                     r={365}
                     fill="url(#clusterGlowMod2)"
-                    stroke="#6366f1"
+                    stroke="#2997ff"
                     strokeOpacity={0.35}
-                    strokeWidth={1.8}
+                    strokeWidth={1.6}
                     strokeDasharray="8 6"
                   />
                   <text
                     x={680}
                     y={38}
                     textAnchor="middle"
-                    fill="#e2e8f0"
+                    fill="#f5f5f7"
                     fontSize="14"
-                    fontWeight="800"
+                    fontWeight="700"
                   >
                     {selectedModule.toUpperCase()} 집중 클러스터 + 모듈 간 전이 브릿지(Cross-Module Bridges)
                   </text>
                 </g>
               )}
 
-              {/* 2. 방향성 엣지(간선) 렌더링 */}
+              {/* 2. 2차 베지어 곡선 스플라인 간선(Quadratic Bézier Spline Edges) 렌더링 */}
               {visibleEdges.map((edge) => {
                 const src = positionedMap[edge.source];
                 const tgt = positionedMap[edge.target];
@@ -490,8 +506,8 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                   (edge.source === activeFocusId ||
                     edge.target === activeFocusId);
 
-                let strokeOpacity = isCrossBridge ? 0.55 : 0.32;
-                let strokeWidth = isCrossBridge ? 2.2 : 1.3;
+                let strokeOpacity = isCrossBridge ? 0.62 : 0.34;
+                let strokeWidth = isCrossBridge ? 2.2 : 1.35;
 
                 if (weakFocusActive) {
                   if (isWeakHighlighted) {
@@ -505,17 +521,25 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                     strokeOpacity = 0.95;
                     strokeWidth = 2.6;
                   } else {
-                    strokeOpacity = 0.08;
+                    strokeOpacity = 0.07;
                   }
                 }
 
+                const dPath = computeQuadraticEdgePath(
+                  src.x,
+                  src.y,
+                  tgt.x,
+                  tgt.y,
+                  isCrossBridge
+                    ? CROSS_BRIDGE_EDGE_CURVATURE
+                    : INTRA_MODULE_EDGE_CURVATURE
+                );
+
                 return (
-                  <line
+                  <path
                     key={edge.id}
-                    x1={src.x}
-                    y1={src.y}
-                    x2={tgt.x}
-                    y2={tgt.y}
+                    d={dPath}
+                    fill="none"
                     stroke={
                       isWeakHighlighted
                         ? '#fb7185'
@@ -524,11 +548,16 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                     strokeWidth={strokeWidth}
                     strokeOpacity={strokeOpacity}
                     strokeDasharray={isCrossBridge ? '7 5' : undefined}
+                    markerEnd={
+                      isCrossBridge && strokeOpacity > 0.2
+                        ? 'url(#arrowBridge)'
+                        : undefined
+                    }
                   />
                 );
               })}
 
-              {/* 3. 90개 노드 렌더링 */}
+              {/* 3. 90개 키보드·포인터 접근 가능 노드 렌더링 */}
               {positionedNodes.map((node) => {
                 if (kindFilter !== 'all' && node.kind !== kindFilter) {
                   return null;
@@ -553,7 +582,7 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                   activeFocusId &&
                   !isNeighbor
                 ) {
-                  nodeOpacity = 0.22;
+                  nodeOpacity = 0.2;
                 }
 
                 const radius =
@@ -584,10 +613,21 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                 return (
                   <g
                     key={node.id}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`${node.moduleId.toUpperCase()} ${node.titleKo} (${palette.labelKo})`}
                     onClick={() => onSelectNode(node.id)}
+                    onFocus={() => setHoveredNodeId(node.id)}
+                    onBlur={() => setHoveredNodeId(null)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onSelectNode(node.id);
+                      }
+                    }}
                     onMouseEnter={() => setHoveredNodeId(node.id)}
                     onMouseLeave={() => setHoveredNodeId(null)}
-                    className="cursor-pointer"
+                    className="cursor-pointer focus:outline-none"
                     style={{ opacity: nodeOpacity }}
                   >
                     {/* 선택/취약 외곽 링 */}
@@ -601,9 +641,9 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                         r={radius + 6}
                         fill="none"
                         stroke={
-                          isSelected || isHovered ? '#ffffff' : '#fb7185'
+                          isSelected || isHovered ? '#2997ff' : '#fb7185'
                         }
-                        strokeWidth={2}
+                        strokeWidth={2.2}
                       />
                     )}
 
@@ -617,7 +657,7 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                         isSelected
                           ? '#ffffff'
                           : node.kind === 'theory'
-                          ? '#f8fafc'
+                          ? '#f5f5f7'
                           : palette.stroke
                       }
                       strokeWidth={node.kind === 'theory' ? 2.4 : 1.5}
@@ -650,18 +690,18 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                           x={node.x - 58}
                           y={node.y + radius + 4}
                           width={116}
-                          height={17}
-                          rx={5}
-                          fill="#0f172a"
-                          fillOpacity={0.92}
-                          stroke={isSelected ? '#818cf8' : '#334155'}
+                          height={18}
+                          rx={6}
+                          fill="#1d1d1f"
+                          fillOpacity={0.94}
+                          stroke={isSelected ? '#2997ff' : 'rgba(255,255,255,0.16)'}
                           strokeWidth={1}
                         />
                         <text
                           x={node.x}
-                          y={node.y + radius + 15.5}
+                          y={node.y + radius + 16}
                           textAnchor="middle"
-                          fill="#f1f5f9"
+                          fill="#f5f5f7"
                           fontSize="9"
                           fontWeight="700"
                         >
@@ -677,63 +717,63 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
         </div>
 
         {/* 캔버스 하단 범례 바 */}
-        <div className="bg-slate-900/95 border-t border-slate-800 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-300">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="font-extrabold text-white">간선(Edge) 범례:</span>
-            <span className="inline-flex items-center gap-1">
+        <div className="bg-[#1d1d1f] border-t border-white/10 px-5 py-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-white/75">
+          <div className="flex flex-wrap items-center gap-3.5">
+            <span className="font-bold text-white">간선(Edge) 범례:</span>
+            <span className="inline-flex items-center gap-1.5">
               <span className="w-3 h-0.5 bg-emerald-400 inline-block" />
               <span>DEFINES_TERM (용어 정의)</span>
             </span>
-            <span className="inline-flex items-center gap-1">
+            <span className="inline-flex items-center gap-1.5">
               <span className="w-3 h-0.5 bg-violet-400 inline-block" />
               <span>APPLIED_IN_CASE (사례 처방)</span>
             </span>
-            <span className="inline-flex items-center gap-1">
+            <span className="inline-flex items-center gap-1.5">
               <span className="w-3 h-0.5 bg-rose-400 inline-block" />
               <span>DEFENDS_QUESTION (면접 방어)</span>
             </span>
-            <span className="inline-flex items-center gap-1">
+            <span className="inline-flex items-center gap-1.5">
               <span className="w-3 h-0.5 bg-amber-400 inline-block" />
-              <span>CROSS_MODULE_BRIDGE (모듈 간 전이)</span>
+              <span>CROSS_MODULE_BRIDGE (모듈 간 방향 전이)</span>
             </span>
           </div>
 
-          <span className="text-indigo-300 font-semibold">
-            Tip: 노드를 클릭하면 상세 드로어가 열리고 연결된 선수 이론·사례·면접 문항을 즉시 탐색합니다.
+          <span className="text-[#66b2ff] font-medium">
+            Tip: 정점을 클릭하거나 Tab으로 이동해 Enter를 누르면 1-Hop 연결망 드로어가 열립니다.
           </span>
         </div>
       </div>
 
-      {/* 하단: 취약 노드 & 복습 표적 우선순위 큐 (Weak Subgraph Action Queue) */}
-      <div className="surface-card p-5 sm:p-6 space-y-4">
+      {/* 하단: 위상 파급도(Topological Impact) 우선순위 복습 큐 */}
+      <div className="bento-tile-white p-5 sm:p-7 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="space-y-0.5 min-w-0">
-            <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-rose-700">
-              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
               <span>
-                취약 노드 &amp; 선수 이론 표적 복습 큐
+                위상 파급도 기반 우선순위 복습 큐 (Topological Impact Queue)
               </span>
             </span>
-            <p className="text-xs text-slate-500">
-              스토리 인라인 체크나 워크스페이스에서 <strong>모름(Again)·애매함(Review)</strong>으로 표시되었거나 면접 키워드 커버리지가 부족한 노드들입니다.
+            <p className="text-xs text-[#6e6e73]">
+              심각도(Again/Review), 의미 연결 차수, 모듈 간 브릿지 허브 여부를 합산하여 가장 파급력이 큰 취약 정점부터 정렬합니다.
             </p>
           </div>
 
-          <span className="rounded-lg bg-slate-100 border border-slate-900/[0.08] px-3 py-1 text-xs font-extrabold text-slate-700 tabular-nums shrink-0">
-            현재 표적 복습 노드: {weakActionNodes.length}개
+          <span className="rounded-full bg-[#f5f5f7] px-3.5 py-1 text-xs font-semibold text-[#1d1d1f] tabular-nums shrink-0">
+            표적 복습 대기: {prioritizedWeakQueue.length}개
           </span>
         </div>
 
-        {weakActionNodes.length === 0 ? (
-          <div className="rounded-xl bg-emerald-50/70 border border-emerald-200 p-4 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 min-w-0">
+        {prioritizedWeakQueue.length === 0 ? (
+          <div className="rounded-[20px] bg-[#f5f5f7] p-5 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs sm:text-sm font-extrabold text-emerald-950">
-                  현재 취약(Weak/Again) 또는 복습 요망(Review)으로 분류된 노드가 없습니다.
+                <p className="text-xs sm:text-sm font-bold text-[#1d1d1f]">
+                  현재 취약(Weak/Again) 또는 복습 요망(Review)으로 분류된 정점이 없습니다.
                 </p>
-                <p className="text-xs text-emerald-800">
-                  플래시카드 탭에서 헷갈리는 용어에 Again/Review를 표시하거나 압박 면접 초안을 작성하면 이곳에 표적 복습 경로가 자동 생성됩니다.
+                <p className="text-xs text-[#6e6e73]">
+                  플래시카드에서 헷갈리는 용어에 Again/Review를 표시하거나 압박 면접 초안을 작성하면 위상 파급도 순 복습 큐가 생성됩니다.
                 </p>
               </div>
             </div>
@@ -746,86 +786,100 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                   'mod1-fc-zpd'
                 )
               }
-              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 px-3.5 py-1.5 text-xs font-extrabold text-white shrink-0"
+              className="inline-flex min-h-[38px] items-center gap-1.5 rounded-full bg-[var(--accent-solid)] hover:bg-[var(--accent-solid-hover)] px-4 py-2 text-xs font-semibold text-white shrink-0 transition-colors"
             >
-              <span>플래시카드 진단 시작하기</span>
+              <span>플래시카드 진단 시작</span>
               <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-            {weakActionNodes.slice(0, 12).map((node) => {
-              const mState = masteryMap[node.id] ?? 'unseen';
-              const targetTab: WorkspaceTabId =
-                node.kind === 'theory'
-                  ? 'theories'
-                  : node.kind === 'flashcard'
-                  ? 'flashcards'
-                  : node.kind === 'case'
-                  ? 'cases'
-                  : 'interview';
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5">
+            {prioritizedWeakQueue
+              .slice(0, MAX_DISPLAY_WEAK_CARDS)
+              .map((item) => {
+                const { node, mastery: mState } = item;
+                const targetTab: WorkspaceTabId =
+                  node.kind === 'theory'
+                    ? 'theories'
+                    : node.kind === 'flashcard'
+                    ? 'flashcards'
+                    : node.kind === 'case'
+                    ? 'cases'
+                    : 'interview';
 
-              return (
-                <div
-                  key={node.id}
-                  className="surface-subtle p-3.5 flex flex-col justify-between gap-3"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between gap-1.5">
-                      <span className="rounded bg-slate-900 px-2 py-0.5 text-[10px] font-extrabold text-white uppercase tabular-nums">
-                        {node.moduleId.toUpperCase()} · {node.kind}
-                      </span>
-                      <span
-                        className={`rounded border px-2 py-0.5 text-[10px] font-extrabold ${
-                          mState === 'weak'
-                            ? 'bg-rose-100 text-rose-800 border-rose-300'
-                            : 'bg-amber-100 text-amber-800 border-amber-300'
-                        }`}
-                      >
-                        {mState === 'weak' ? 'Weak / Again' : 'Review'}
-                      </span>
+                return (
+                  <div
+                    key={node.id}
+                    className="rounded-[20px] bg-[#f5f5f7] p-4 flex flex-col justify-between gap-3 border border-black/[0.04] tabular-nums"
+                  >
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between gap-1.5">
+                        <span className="rounded-full bg-[#1d1d1f] px-2.5 py-0.5 text-[10px] font-bold text-white uppercase">
+                          {node.moduleId.toUpperCase()} · 차수 {item.semanticDegree}
+                          {item.isBridgeHub ? ' · 브릿지' : ''}
+                        </span>
+                        <span
+                          className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                            mState === 'weak'
+                              ? 'bg-rose-500/15 text-rose-800'
+                              : 'bg-amber-500/18 text-amber-900'
+                          }`}
+                        >
+                          파급도 {item.priorityScore.toFixed(1)}
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-[#1d1d1f] [overflow-wrap:anywhere]">
+                        {node.titleKo}
+                      </p>
+                      {item.prerequisiteTheoryNode ? (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            onSelectNode(item.prerequisiteTheoryNode!.id)
+                          }
+                          className="text-[11px] font-semibold text-[var(--accent-solid)] hover:underline text-left truncate max-w-full block"
+                        >
+                          선수 이론: {item.prerequisiteTheoryNode.titleKo}
+                        </button>
+                      ) : (
+                        <p className="text-[11px] text-[#6e6e73] line-clamp-1">
+                          {node.titleEn}
+                        </p>
+                      )}
                     </div>
-                    <p className="text-xs sm:text-sm font-extrabold text-slate-900 [overflow-wrap:anywhere]">
-                      {node.titleKo}
-                    </p>
-                    <p className="text-[11px] text-slate-500 line-clamp-1 [overflow-wrap:anywhere]">
-                      {node.titleEn}
-                    </p>
+
+                    <div className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-black/[0.06]">
+                      <button
+                        type="button"
+                        onClick={() => onSelectNode(node.id)}
+                        className="inline-flex min-h-[30px] items-center gap-1 rounded-full bg-white hover:bg-black/[0.04] border border-black/[0.07] px-3 py-1 text-[11px] font-semibold text-[#1d1d1f]"
+                      >
+                        <span>상세 보기</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => onJumpToStory(node.moduleId, node.id)}
+                        className="inline-flex min-h-[30px] items-center gap-1 rounded-full bg-[var(--accent-subtle)] hover:bg-[#0071e3]/16 px-3 py-1 text-[11px] font-semibold text-[var(--accent-solid)]"
+                      >
+                        <Compass className="w-3 h-3 shrink-0" />
+                        <span>스토리 복습</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onJumpToWorkspaceTab(targetTab, node.moduleId, node.id)
+                        }
+                        className="inline-flex min-h-[30px] items-center gap-1 rounded-full bg-[#1d1d1f] hover:bg-[#2c2c2e] px-3 py-1 text-[11px] font-semibold text-white"
+                      >
+                        <span>훈련 이동</span>
+                        <ExternalLink className="w-3 h-3 shrink-0" />
+                      </button>
+                    </div>
                   </div>
-
-                  <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200/80">
-                    <button
-                      type="button"
-                      onClick={() => onSelectNode(node.id)}
-                      className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 px-2.5 py-1 text-[11px] font-extrabold text-slate-800"
-                    >
-                      <Network className="w-3 h-3 text-indigo-600 shrink-0" />
-                      <span>노드 상세</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => onJumpToStory(node.moduleId, node.id)}
-                      className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-2.5 py-1 text-[11px] font-extrabold text-indigo-800"
-                    >
-                      <Compass className="w-3 h-3 shrink-0" />
-                      <span>스토리 맥락</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        onJumpToWorkspaceTab(targetTab, node.moduleId, node.id)
-                      }
-                      className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-slate-900 hover:bg-slate-800 px-2.5 py-1 text-[11px] font-extrabold text-white"
-                    >
-                      <span>훈련 탭 이동</span>
-                      <ExternalLink className="w-3 h-3 shrink-0" />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         )}
       </div>

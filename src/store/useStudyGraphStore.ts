@@ -1,8 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   buildCurriculumKnowledgeGraph,
+  EDGE_SEMANTIC_WEIGHTS,
+  MASTERY_NUMERIC_WEIGHTS,
   THEORY_GRAPH_MAPPING
 } from '../data/curriculumGraph';
+import {
+  computeModuleSubgraphSummaries,
+  computePrioritizedWeakQueue,
+  resolveOptimalResumeTarget
+} from '../data/graphIntelligence';
 import {
   AppMode,
   MasteryState,
@@ -61,6 +68,8 @@ const STORAGE_DEBOUNCE_MS = 250;
 const HIGH_COVERAGE_THRESHOLD = 80;
 const MEDIUM_COVERAGE_THRESHOLD = 50;
 const CASE_NOTE_MASTERED_MIN_LEN = 20;
+const THEORY_MASTERY_CHILD_RATIO = 0.7;
+const WEAK_QUEUE_FULL_LIMIT = 90;
 
 const DEFAULT_STORY_PROGRESS: StoryProgressState = {
   visitedBeats: {},
@@ -206,7 +215,11 @@ function normalizeProgress(
   return {
     updatedAt: base.updatedAt ?? new Date().toISOString(),
     preferredEntryMode:
-      base.preferredEntryMode === 'workspace' ? 'workspace' : 'story',
+      base.preferredEntryMode === 'workspace'
+        ? 'workspace'
+        : base.preferredEntryMode === 'story'
+        ? 'story'
+        : 'home',
     story: {
       visitedBeats: rawStory.visitedBeats ?? {},
       simulationChoices: rawStory.simulationChoices ?? {},
@@ -391,9 +404,10 @@ export function useStudyGraphStore() {
     [enrichedModules]
   );
 
-  // 명세서 섹션 3.3 노드 숙련도 파생 연산 (computeNodeMastery)
-  const nodeMasteryMap = useMemo(() => {
+  // 상향식 숙련도 상태(MasteryState) 및 연속 스칼라 점수(nodeMasteryScoreMap) 동시 전파
+  const { nodeMasteryMap, nodeMasteryScoreMap } = useMemo(() => {
     const map: Record<string, MasteryState> = {};
+    const scoreMap: Record<string, number> = {};
 
     // 1. 플래시카드 노드 직접 매핑
     for (const fc of allFlashcards) {
@@ -401,6 +415,7 @@ export function useStudyGraphStore() {
       else if (fc.status === 'review') map[fc.id] = 'review';
       else if (fc.status === 'again') map[fc.id] = 'weak';
       else map[fc.id] = 'unseen';
+      scoreMap[fc.id] = MASTERY_NUMERIC_WEIGHTS[map[fc.id]];
     }
 
     // 2. 면접 문항 노드 매핑 (coveragePercent 기준)
@@ -415,6 +430,7 @@ export function useStudyGraphStore() {
       } else {
         map[q.id] = 'weak';
       }
+      scoreMap[q.id] = MASTERY_NUMERIC_WEIGHTS[map[q.id]];
     }
 
     // 3. 교실 사례 노드 매핑 (블라인드 개입안 작성 길이 기준)
@@ -427,15 +443,15 @@ export function useStudyGraphStore() {
       } else {
         map[c.id] = 'unseen';
       }
+      scoreMap[c.id] = MASTERY_NUMERIC_WEIGHTS[map[c.id]];
     }
 
-    // 4. 이론 노드 매핑 (연결된 하위 DEFINES_TERM 플래시카드들과 DEFENDS_QUESTION 문항 숙련도 + 스토리 비트 결합)
+    // 4. 이론 노드 상향식 집계 (DEFINES_TERM + DEFENDS_QUESTION 가중 전파)
     for (const t of allTheories) {
       const mapping = THEORY_GRAPH_MAPPING[t.id];
-      const childIds = [
-        ...(mapping?.flashcards ?? []),
-        ...(mapping?.questions ?? [])
-      ];
+      const fcChildren = mapping?.flashcards ?? [];
+      const qChildren = mapping?.questions ?? [];
+      const childIds = [...fcChildren, ...qChildren];
       const states = childIds.map((id) => map[id] ?? 'unseen');
       const hasWeak = states.includes('weak');
       const masteredCount = states.filter((s) => s === 'mastered').length;
@@ -447,7 +463,7 @@ export function useStudyGraphStore() {
         map[t.id] = 'weak';
       } else if (
         childIds.length > 0 &&
-        masteredCount >= Math.ceil(childIds.length * 0.7)
+        masteredCount >= Math.ceil(childIds.length * THEORY_MASTERY_CHILD_RATIO)
       ) {
         map[t.id] = 'mastered';
       } else if (masteredCount > 0 || reviewCount > 0 || hasNote || hasSim) {
@@ -455,9 +471,27 @@ export function useStudyGraphStore() {
       } else {
         map[t.id] = 'unseen';
       }
+
+      let weightedSum = 0;
+      let weightTotal = 0;
+      for (const fcId of fcChildren) {
+        const w = EDGE_SEMANTIC_WEIGHTS.DEFINES_TERM;
+        weightedSum += w * (scoreMap[fcId] ?? 0);
+        weightTotal += w;
+      }
+      for (const qId of qChildren) {
+        const w = EDGE_SEMANTIC_WEIGHTS.DEFENDS_QUESTION;
+        weightedSum += w * (scoreMap[qId] ?? 0);
+        weightTotal += w;
+      }
+
+      scoreMap[t.id] =
+        weightTotal > 0
+          ? weightedSum / weightTotal
+          : MASTERY_NUMERIC_WEIGHTS[map[t.id]];
     }
 
-    return map;
+    return { nodeMasteryMap: map, nodeMasteryScoreMap: scoreMap };
   }, [
     allFlashcards,
     allQuestions,
@@ -467,6 +501,45 @@ export function useStudyGraphStore() {
     userProgress.userNotes,
     userProgress.story.simulationChoices
   ]);
+
+  const resumeTarget = useMemo(
+    () =>
+      resolveOptimalResumeTarget(
+        enrichedModules,
+        curriculumGraph,
+        userProgress,
+        nodeMasteryMap
+      ),
+    [enrichedModules, curriculumGraph, userProgress, nodeMasteryMap]
+  );
+
+  const moduleSummaries = useMemo(
+    () =>
+      computeModuleSubgraphSummaries(
+        enrichedModules,
+        curriculumGraph,
+        nodeMasteryMap,
+        nodeMasteryScoreMap,
+        userProgress.story.completedModules
+      ),
+    [
+      enrichedModules,
+      curriculumGraph,
+      nodeMasteryMap,
+      nodeMasteryScoreMap,
+      userProgress.story.completedModules
+    ]
+  );
+
+  const prioritizedWeakQueue = useMemo(
+    () =>
+      computePrioritizedWeakQueue(
+        curriculumGraph,
+        nodeMasteryMap,
+        WEAK_QUEUE_FULL_LIMIT
+      ),
+    [curriculumGraph, nodeMasteryMap]
+  );
 
   const computeNodeMastery = useCallback(
     (nodeId: string): MasteryState => {
@@ -861,7 +934,7 @@ export function useStudyGraphStore() {
   const resetAllProgress = useCallback(async () => {
     const emptyProgress: UnifiedProgressGraph = {
       updatedAt: new Date().toISOString(),
-      preferredEntryMode: 'story',
+      preferredEntryMode: 'home',
       story: DEFAULT_STORY_PROGRESS,
       flashcardStatus: {},
       userNotes: {},
@@ -891,6 +964,10 @@ export function useStudyGraphStore() {
     allQuestions,
     curriculumGraph,
     nodeMasteryMap,
+    nodeMasteryScoreMap,
+    resumeTarget,
+    moduleSummaries,
+    prioritizedWeakQueue,
     computeNodeMastery,
     userProgress,
     isServerConnected,

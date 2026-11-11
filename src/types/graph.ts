@@ -7,7 +7,7 @@ import { VisualTopologyType } from './visuals';
 
 export type { ModuleId };
 
-export type AppMode = 'story' | 'workspace';
+export type AppMode = 'home' | 'story' | 'workspace';
 
 export type WorkspaceTabId =
   | 'graph'
@@ -92,4 +92,47 @@ export interface StoryBeatDescriptor {
 export interface StoryScrollRequest {
   nodeId: string;
   requestId: number;
+}
+
+export interface GraphAdjacencyIndex {
+  outgoingByNode: Record<string, KnowledgeGraphEdge[]>;
+  incomingByNode: Record<string, KnowledgeGraphEdge[]>;
+  neighbors1HopByNode: Record<string, ReadonlySet<string>>;
+  nodesByModule: Record<ModuleId, KnowledgeGraphNode[]>;
+  crossBridgesByModule: Record<ModuleId, KnowledgeGraphEdge[]>;
+}
+
+export interface ModuleSubgraphSummary {
+  moduleId: ModuleId;
+  moduleNumber: number;
+  titleKo: string;
+  subtitleEn: string;
+  sourceMapping: string;
+  totalNodes: number;
+  masteredCount: number;
+  reviewCount: number;
+  weakCount: number;
+  unseenCount: number;
+  masteryPercent: number;
+  crossBridgeCount: number;
+  isCompleted: boolean;
+  leadTheoryId: string;
+}
+
+export interface PrioritizedWeakNodeItem {
+  node: KnowledgeGraphNode;
+  mastery: 'weak' | 'review';
+  priorityScore: number;
+  semanticDegree: number;
+  isBridgeHub: boolean;
+  prerequisiteTheoryNode: KnowledgeGraphNode | null;
+}
+
+export interface ResumeStudyTarget {
+  nodeId: string;
+  moduleId: ModuleId;
+  moduleNumber: number;
+  nodeTitleKo: string;
+  moduleTitleKo: string;
+  reason: 'last-active' | 'bridge-next' | 'starter';
 }

@@ -1,3 +1,4 @@
+import { EDGE_SEMANTIC_WEIGHTS } from '../data/curriculumGraph';
 import {
   TextbookCitationItem,
   TextbookPassage,
@@ -16,7 +17,8 @@ const SCORE_TAG_MATCH = 14;
 const SCORE_DEFINITION_TOKEN_MATCH = 6;
 const SCORE_RELATION_TOKEN_MATCH = 4;
 const SCORE_ACTIVE_NODE_BOOST = 18;
-const SCORE_ACTIVE_NEIGHBOR_BOOST = 7;
+const SCORE_ONE_HOP_BASE_SCALE = 12;
+const SCORE_TWO_HOP_BASE_SCALE = 6;
 const SCORE_DEICTIC_ACTIVE_NODE_BOOST = 48;
 
 const KOREAN_PARTICLE_SUFFIX_REGEX =
@@ -293,12 +295,48 @@ export function retrieveTextbookPassages(params: {
   const rawLower = query.trim().toLowerCase();
   const deicticQuery = isDeicticContextQuery(query);
 
-  const neighborNodeIds = new Set<string>();
+  // 1-Hop 의미 가중치 및 2-Hop 연쇄 감쇠 확산(Graph Diffusion) 맵 구성
+  const oneHopWeights = new Map<string, number>();
+  const twoHopWeights = new Map<string, number>();
+
   if (activeNodeId) {
+    const incidentMap = new Map<string, Array<{ neighborId: string; weight: number }>>();
     for (const edge of edges) {
       if (edge.relation === 'BELONGS_TO_MODULE') continue;
-      if (edge.source === activeNodeId) neighborNodeIds.add(edge.target);
-      if (edge.target === activeNodeId) neighborNodeIds.add(edge.source);
+      const weight = EDGE_SEMANTIC_WEIGHTS[edge.relation] ?? 0.5;
+      const srcList = incidentMap.get(edge.source) ?? [];
+      srcList.push({ neighborId: edge.target, weight });
+      incidentMap.set(edge.source, srcList);
+
+      const tgtList = incidentMap.get(edge.target) ?? [];
+      tgtList.push({ neighborId: edge.source, weight });
+      incidentMap.set(edge.target, tgtList);
+    }
+
+    const firstHopList = incidentMap.get(activeNodeId) ?? [];
+    for (const hop1 of firstHopList) {
+      if (hop1.neighborId === activeNodeId) continue;
+      const prev1 = oneHopWeights.get(hop1.neighborId) ?? 0;
+      if (hop1.weight > prev1) {
+        oneHopWeights.set(hop1.neighborId, hop1.weight);
+      }
+    }
+
+    for (const [midId, w1] of oneHopWeights.entries()) {
+      const secondHopList = incidentMap.get(midId) ?? [];
+      for (const hop2 of secondHopList) {
+        if (
+          hop2.neighborId === activeNodeId ||
+          oneHopWeights.has(hop2.neighborId)
+        ) {
+          continue;
+        }
+        const pathWeight = w1 * hop2.weight;
+        const prev2 = twoHopWeights.get(hop2.neighborId) ?? 0;
+        if (pathWeight > prev2) {
+          twoHopWeights.set(hop2.neighborId, pathWeight);
+        }
+      }
     }
   }
 
@@ -335,10 +373,20 @@ export function retrieveTextbookPassages(params: {
           : 0;
     } else if (
       activeNodeId &&
-      neighborNodeIds.has(doc.nodeId) &&
+      oneHopWeights.has(doc.nodeId) &&
       (deicticQuery || lexicalScore > 0)
     ) {
-      contextBoost += SCORE_ACTIVE_NEIGHBOR_BOOST;
+      contextBoost += Math.round(
+        SCORE_ONE_HOP_BASE_SCALE * (oneHopWeights.get(doc.nodeId) ?? 0)
+      );
+    } else if (
+      activeNodeId &&
+      twoHopWeights.has(doc.nodeId) &&
+      (deicticQuery || lexicalScore > 0)
+    ) {
+      contextBoost += Math.round(
+        SCORE_TWO_HOP_BASE_SCALE * (twoHopWeights.get(doc.nodeId) ?? 0)
+      );
     }
 
     const totalScore = lexicalScore + contextBoost;
@@ -368,9 +416,18 @@ export function retrieveTextbookPassages(params: {
     scored.length > 0 ? scored[0].relevanceScore : 0;
 
   if (selectedPassages.length === 0 && activeNodeId) {
-    const activeDocs = corpusIndex.filter(
-      (doc) => doc.nodeId === activeNodeId || neighborNodeIds.has(doc.nodeId)
-    );
+    const activeDocs = corpusIndex
+      .filter(
+        (doc) =>
+          doc.nodeId === activeNodeId ||
+          oneHopWeights.has(doc.nodeId) ||
+          twoHopWeights.has(doc.nodeId)
+      )
+      .sort((a, b) => {
+        const rank = (id: string) =>
+          id === activeNodeId ? 3 : oneHopWeights.has(id) ? 2 : 1;
+        return rank(b.nodeId) - rank(a.nodeId);
+      });
     selectedPassages = activeDocs
       .slice(0, CONTEXT_FALLBACK_PASSAGE_LIMIT)
       .map((doc) => ({

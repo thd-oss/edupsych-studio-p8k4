@@ -10,10 +10,12 @@ import {
 } from 'lucide-react';
 import { MODULE_CONCEPT_ANCHORS } from '../../data/curriculumGraph';
 import {
+  GraphAdjacencyIndex,
   KnowledgeGraphEdge,
   KnowledgeGraphNode,
   MasteryState,
   ModuleId,
+  PrioritizedWeakNodeItem,
   WorkspaceTabId
 } from '../../types/graph';
 import {
@@ -51,7 +53,9 @@ interface StudyWorkspaceViewProps {
   nodes: KnowledgeGraphNode[];
   edges: KnowledgeGraphEdge[];
   nodeMap: Record<string, KnowledgeGraphNode>;
+  adjacency: GraphAdjacencyIndex;
   masteryMap: Record<string, MasteryState>;
+  prioritizedWeakQueue: PrioritizedWeakNodeItem[];
   bookmarks: string[];
   userNotes: Record<string, string>;
   interviewDrafts: Record<string, InterviewDraftRecord>;
@@ -84,37 +88,37 @@ const WORKSPACE_TABS: Array<{
 }> = [
   {
     id: 'graph',
-    labelKo: '① 지식 그래프 맵',
-    countBadge: '90 Nodes',
+    labelKo: '지식 그래프 맵',
+    countBadge: '90',
     icon: <Network className="w-4 h-4 shrink-0" />
   },
   {
     id: 'theories',
-    labelKo: '② 핵심 이론 비교',
+    labelKo: '핵심 이론 비교',
     countBadge: '20',
     icon: <BookOpen className="w-4 h-4 shrink-0" />
   },
   {
     id: 'flashcards',
-    labelKo: '③ 한-영 플래시카드',
+    labelKo: '한-영 플래시카드',
     countBadge: '47',
     icon: <Layers className="w-4 h-4 shrink-0" />
   },
   {
     id: 'cases',
-    labelKo: '④ 교실 사례 3중 렌즈',
+    labelKo: '교실 사례 3중 렌즈',
     countBadge: '10',
     icon: <Brain className="w-4 h-4 shrink-0" />
   },
   {
     id: 'interview',
-    labelKo: '⑤ 압박 면접 디펜스',
+    labelKo: '압박 면접 디펜스',
     countBadge: '13',
     icon: <MessageSquareWarning className="w-4 h-4 shrink-0" />
   },
   {
     id: 'cheatsheet',
-    labelKo: '⑥ A4 요약 시트 인쇄',
+    labelKo: 'A4 요약 시트 인쇄',
     countBadge: 'PDF',
     icon: <Printer className="w-4 h-4 shrink-0" />
   }
@@ -137,7 +141,9 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   nodes,
   edges,
   nodeMap,
+  adjacency,
   masteryMap,
+  prioritizedWeakQueue,
   bookmarks,
   userNotes,
   interviewDrafts,
@@ -150,10 +156,10 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   onJumpToStory
 }) => {
   return (
-    <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-3 sm:py-5 space-y-4 sm:space-y-5">
-      {/* 워크스페이스 상단 탭 & 모듈 필터 바 (모바일은 6대 탭이 하단 엄지 독으로 이동하여 1줄 모듈 필터만 표시) */}
-      <section className="no-print print:hidden surface-card p-3 sm:p-4 space-y-3">
-        {/* 데스크톱(lg+) 6대 워크스페이스 탭 (0ms 즉시 교체) */}
+    <div className="max-w-[1440px] mx-auto px-3.5 sm:px-6 py-4 sm:py-6 space-y-5">
+      {/* 워크스페이스 상단 탭 & 모듈 필터 바 (비고정 인라인 카드) */}
+      <section className="no-print print:hidden bento-tile-white p-4 sm:p-5 space-y-3.5">
+        {/* 데스크톱(lg+) 6대 워크스페이스 탭 */}
         <div
           role="tablist"
           aria-label="스터디 워크스페이스 도구 탭"
@@ -168,10 +174,10 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                 type="button"
                 aria-selected={isActive}
                 onClick={() => onChangeTab(tab.id)}
-                className={`no-press-scale min-h-[42px] rounded-xl px-3.5 py-2 text-xs font-extrabold border flex items-center justify-between gap-2 transition-colors ${
+                className={`no-press-scale min-h-[42px] rounded-[14px] px-3.5 py-2 text-xs font-semibold flex items-center justify-between gap-2 transition-colors ${
                   isActive
-                    ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
-                    : 'bg-slate-50 text-slate-700 border-slate-900/[0.08] hover:bg-slate-100'
+                    ? 'bg-[#1d1d1f] text-white shadow-xs'
+                    : 'bg-[#f5f5f7] text-[#424245] hover:bg-black/[0.07] hover:text-[#1d1d1f]'
                 }`}
               >
                 <span className="flex items-center gap-1.5 min-w-0 truncate">
@@ -179,10 +185,10 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                   <span className="truncate">{tab.labelKo}</span>
                 </span>
                 <span
-                  className={`rounded-md px-2 py-0.5 text-[10px] font-extrabold tabular-nums shrink-0 ${
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums shrink-0 ${
                     isActive
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-200/80 text-slate-700'
+                      ? 'bg-[var(--accent-solid)] text-white'
+                      : 'bg-white text-[#6e6e73]'
                   }`}
                 >
                   {tab.countBadge}
@@ -193,18 +199,18 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
         </div>
 
         {/* 모듈 공통 필터 바 & 스토리 모드 복귀 브릿지 */}
-        <div className="lg:pt-2.5 lg:border-t lg:border-slate-900/[0.06] flex flex-wrap items-center justify-between gap-2 tabular-nums">
+        <div className="lg:pt-3 lg:border-t lg:border-black/[0.06] flex flex-wrap items-center justify-between gap-2 tabular-nums">
           <div className="mobile-strip-scroll sm:flex-wrap flex items-center gap-1.5 min-w-0 max-w-full">
-            <span className="text-xs font-extrabold text-slate-500 mr-0.5 shrink-0">
+            <span className="text-xs font-semibold text-[#6e6e73] mr-0.5 shrink-0">
               모듈:
             </span>
             <button
               type="button"
               onClick={() => onChangeModule('all')}
-              className={`min-h-[34px] rounded-lg px-2.5 py-1 text-xs font-extrabold border shrink-0 transition-colors ${
+              className={`min-h-[34px] rounded-full px-3.5 py-1 text-xs font-semibold shrink-0 transition-colors ${
                 selectedModule === 'all'
-                  ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'bg-white text-slate-700 border-slate-900/[0.08] hover:bg-slate-50'
+                  ? 'bg-[var(--accent-solid)] text-white'
+                  : 'bg-[#f5f5f7] text-[#424245] hover:bg-black/[0.07]'
               }`}
             >
               전체(M1~5)
@@ -218,10 +224,10 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                   key={m.id}
                   type="button"
                   onClick={() => onChangeModule(m.id)}
-                  className={`min-h-[34px] rounded-lg px-2.5 py-1 text-xs font-extrabold border flex items-center gap-1.5 shrink-0 transition-colors ${
+                  className={`min-h-[34px] rounded-full px-3.5 py-1 text-xs font-semibold flex items-center gap-1.5 shrink-0 transition-colors ${
                     isSelected
-                      ? 'bg-slate-900 text-white border-slate-900'
-                      : 'bg-white text-slate-700 border-slate-900/[0.08] hover:bg-slate-50'
+                      ? 'bg-[#1d1d1f] text-white'
+                      : 'bg-[#f5f5f7] text-[#424245] hover:bg-black/[0.07]'
                   }`}
                 >
                   <span
@@ -244,21 +250,23 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                 selectedNodeId ?? 'mod1-theory-piaget'
               )
             }
-            className="hidden lg:inline-flex min-h-[34px] items-center gap-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-1 text-xs font-extrabold text-indigo-900 shrink-0 transition-colors"
+            className="hidden lg:inline-flex min-h-[34px] items-center gap-1.5 rounded-full bg-[var(--accent-subtle)] hover:bg-[#0071e3]/15 px-3.5 py-1 text-xs font-semibold text-[var(--accent-solid)] shrink-0 transition-colors"
           >
-            <Compass className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-            <span>스토리 가이드 모드로 이동</span>
+            <Compass className="w-3.5 h-3.5 shrink-0" />
+            <span>스토리 커리큘럼에서 보기</span>
           </button>
         </div>
       </section>
 
-      {/* 활성 탭 컨텐츠 (0ms 즉시 교체) */}
+      {/* 활성 탭 컨텐츠 */}
       {activeTab === 'graph' && (
         <KnowledgeGraphMap
           nodes={nodes}
           edges={edges}
           nodeMap={nodeMap}
+          adjacency={adjacency}
           masteryMap={masteryMap}
+          prioritizedWeakQueue={prioritizedWeakQueue}
           selectedModule={selectedModule}
           onChangeModule={onChangeModule}
           weakFocusActive={weakFocusActive}

@@ -4,12 +4,12 @@ import {
   BookOpenCheck,
   Brain,
   CheckCircle2,
+  Home,
   Layers,
   MessageCircleQuestion,
   MessageSquareWarning,
   Network,
   Printer,
-  Search,
   Sparkles
 } from 'lucide-react';
 import { MODULE_CONCEPT_ANCHORS } from '../../data/curriculumGraph';
@@ -22,14 +22,14 @@ interface MobileBottomNavProps {
   selectedModule: ModuleId | 'all';
   completedModules: ModuleId[];
   modules: ModulePayload[];
-  weakOrReviewCount: number;
+  weakOrReviewCount?: number;
   isAiTutorOpen: boolean;
   aiButtonRef: React.RefObject<HTMLButtonElement>;
   onMeasuredHeightChange: (heightPx: number) => void;
   onChangeMode: (next: AppMode) => void;
   onChangeTab: (tab: WorkspaceTabId) => void;
   onChangeModule: (mod: ModuleId | 'all') => void;
-  onOpenSearch: () => void;
+  onOpenSearch?: () => void;
   onToggleAiTutor: () => void;
 }
 
@@ -40,34 +40,34 @@ const MOBILE_WORKSPACE_TOOLS: Array<{
 }> = [
   {
     id: 'graph',
-    shortLabel: '① 그래프',
+    shortLabel: '그래프',
     icon: <Network className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
   },
   {
     id: 'theories',
-    shortLabel: '② 이론비교',
+    shortLabel: '이론비교',
     icon: <BookOpen className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
   },
   {
     id: 'flashcards',
-    shortLabel: '③ 카드암기',
+    shortLabel: '카드암기',
     icon: <Layers className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
   },
   {
     id: 'cases',
-    shortLabel: '④ 사례렌즈',
+    shortLabel: '사례렌즈',
     icon: <Brain className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
   },
   {
     id: 'interview',
-    shortLabel: '⑤ 압박면접',
+    shortLabel: '압박면접',
     icon: (
       <MessageSquareWarning className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
     )
   },
   {
     id: 'cheatsheet',
-    shortLabel: '⑥ 요약인쇄',
+    shortLabel: '요약인쇄',
     icon: <Printer className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
   }
 ];
@@ -78,14 +78,12 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   selectedModule,
   completedModules,
   modules,
-  weakOrReviewCount,
   isAiTutorOpen,
   aiButtonRef,
   onMeasuredHeightChange,
   onChangeMode,
   onChangeTab,
   onChangeModule,
-  onOpenSearch,
   onToggleAiTutor
 }) => {
   const navRef = useRef<HTMLElement | null>(null);
@@ -121,21 +119,25 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   const handleSelectModule = (mod: ModuleId | 'all') => {
     onChangeModule(mod);
     setIsModulePickerOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (mode === 'home') {
+      onChangeMode('story');
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
     <nav
       ref={navRef}
       aria-label="모바일 하단 학습 탐색 독"
-      className="no-print print:hidden lg:hidden fixed inset-x-0 bottom-0 z-40 bg-slate-950/95 translucent-header backdrop-blur-md text-white border-t border-white/10 safe-bottom-bar pt-1.5 space-y-1.5"
+      className="no-print print:hidden lg:hidden fixed inset-x-0 bottom-0 z-40 apple-glass-dark text-white border-t border-white/12 safe-bottom-bar pt-1.5 space-y-1.5"
     >
       {/* 상단 컨텍스트 스트립: 모듈 빠른 점프 피커 또는 워크스페이스 6대 도구 스와이프 바 */}
       {isModulePickerOpen ? (
         <div
           role="region"
           aria-label="모듈 즉시 이동 선택기"
-          className="mobile-strip-scroll px-1 pb-1 border-b border-white/10"
+          className="mobile-strip-scroll px-1.5 pb-1.5 border-b border-white/10"
         >
           {modules.map((m) => {
             const isSelected = selectedModule === m.id;
@@ -147,10 +149,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                 key={m.id}
                 type="button"
                 onClick={() => handleSelectModule(m.id)}
-                className={`min-h-[36px] rounded-lg px-2.5 py-1 text-xs font-extrabold border flex items-center gap-1.5 ${
+                className={`min-h-[36px] rounded-full px-3 py-1 text-xs font-semibold border flex items-center gap-1.5 transition-colors ${
                   isSelected
-                    ? 'bg-indigo-600 text-white border-indigo-500'
-                    : 'bg-white/[0.06] text-slate-200 border-white/10'
+                    ? 'bg-[var(--accent-solid)] text-white border-transparent'
+                    : 'bg-white/[0.08] text-white/90 border-white/10 hover:bg-white/[0.14]'
                 }`}
               >
                 <span
@@ -174,10 +176,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           <button
             type="button"
             onClick={() => handleSelectModule('all')}
-            className={`min-h-[36px] rounded-lg px-2.5 py-1 text-xs font-extrabold border ${
+            className={`min-h-[36px] rounded-full px-3 py-1 text-xs font-semibold border transition-colors ${
               selectedModule === 'all'
-                ? 'bg-indigo-600 text-white border-indigo-500'
-                : 'bg-white/[0.06] text-slate-300 border-white/10'
+                ? 'bg-[var(--accent-solid)] text-white border-transparent'
+                : 'bg-white/[0.08] text-white/85 border-white/10'
             }`}
           >
             전체 연속(M1~5)
@@ -187,7 +189,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         <div
           role="tablist"
           aria-label="워크스페이스 6대 학습 도구 전환"
-          className="mobile-strip-scroll px-1 pb-1 border-b border-white/10"
+          className="mobile-strip-scroll px-1.5 pb-1.5 border-b border-white/10"
         >
           {MOBILE_WORKSPACE_TOOLS.map((tool) => {
             const isActive = activeTab === tool.id;
@@ -201,10 +203,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                   onChangeTab(tool.id);
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className={`no-press-scale min-h-[36px] rounded-lg px-2.5 py-1 text-xs font-extrabold border flex items-center gap-1.5 transition-colors ${
+                className={`no-press-scale min-h-[34px] rounded-full px-3 py-1 text-xs font-semibold border flex items-center gap-1.5 transition-colors ${
                   isActive
-                    ? 'bg-indigo-600 text-white border-indigo-500 shadow-xs'
-                    : 'bg-white/[0.05] text-slate-300 border-white/10 hover:text-white'
+                    ? 'bg-white text-[#1d1d1f] border-transparent shadow-xs'
+                    : 'bg-white/[0.07] text-white/80 border-white/10 hover:text-white'
                 }`}
               >
                 {tool.icon}
@@ -215,9 +217,26 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         </div>
       ) : null}
 
-      {/* 하단 바: [좌측 4개 페이지 탐색 탭 그룹] | 세로 구분선 | [우측 독립형 AI 말풍선 런처 캡슐] */}
+      {/* 하단 바: [좌측 4개 페이지 탐색 탭 그룹: 홈 · 스토리 · 워크스페이스 · 모듈] | 세로 구분선 | [우측 독립형 AI 질문 캡슐] */}
       <div className="flex items-center gap-1.5 px-1 tabular-nums">
         <div className="flex-1 grid grid-cols-4 gap-1 min-w-0">
+          <button
+            type="button"
+            aria-current={mode === 'home' ? 'page' : undefined}
+            onClick={() => {
+              setIsModulePickerOpen(false);
+              onChangeMode('home');
+            }}
+            className={`no-press-scale min-h-[44px] rounded-[14px] px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-semibold transition-colors ${
+              mode === 'home' && !isModulePickerOpen
+                ? 'bg-white/16 text-white'
+                : 'text-white/68 hover:bg-white/[0.07] hover:text-white'
+            }`}
+          >
+            <Home className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <span>홈</span>
+          </button>
+
           <button
             type="button"
             aria-current={mode === 'story' ? 'page' : undefined}
@@ -225,10 +244,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               setIsModulePickerOpen(false);
               onChangeMode('story');
             }}
-            className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
+            className={`no-press-scale min-h-[44px] rounded-[14px] px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-semibold transition-colors ${
               mode === 'story' && !isModulePickerOpen
-                ? 'bg-indigo-600 text-white'
-                : 'text-slate-300 hover:bg-white/[0.06]'
+                ? 'bg-white/16 text-white'
+                : 'text-white/68 hover:bg-white/[0.07] hover:text-white'
             }`}
           >
             <BookOpenCheck className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -242,10 +261,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               setIsModulePickerOpen(false);
               onChangeMode('workspace');
             }}
-            className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
+            className={`no-press-scale min-h-[44px] rounded-[14px] px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-semibold transition-colors ${
               mode === 'workspace' && !isModulePickerOpen
-                ? 'bg-indigo-600 text-white'
-                : 'text-slate-300 hover:bg-white/[0.06]'
+                ? 'bg-white/16 text-white'
+                : 'text-white/68 hover:bg-white/[0.07] hover:text-white'
             }`}
           >
             <Network className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -256,34 +275,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             type="button"
             aria-expanded={isModulePickerOpen}
             onClick={() => setIsModulePickerOpen((prev) => !prev)}
-            className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
+            className={`no-press-scale min-h-[44px] rounded-[14px] px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-semibold transition-colors ${
               isModulePickerOpen
-                ? 'bg-slate-800 text-indigo-300 border border-indigo-500/40'
-                : 'text-slate-300 hover:bg-white/[0.06]'
+                ? 'bg-white/20 text-[#66b2ff]'
+                : 'text-white/68 hover:bg-white/[0.07] hover:text-white'
             }`}
           >
             <Layers className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>모듈·{selectedModBadge}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setIsModulePickerOpen(false);
-              onOpenSearch();
-            }}
-            className="no-press-scale relative min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold text-slate-300 hover:bg-white/[0.06] transition-colors"
-          >
-            <div className="relative">
-              <Search className="w-4 h-4 shrink-0" aria-hidden="true" />
-              {weakOrReviewCount > 0 && (
-                <span
-                  aria-hidden="true"
-                  className="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-rose-500"
-                />
-              )}
-            </div>
-            <span>검색</span>
           </button>
         </div>
 
@@ -303,17 +302,17 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             setIsModulePickerOpen(false);
             onToggleAiTutor();
           }}
-          className={`shrink-0 min-h-[44px] rounded-2xl px-3 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold border transition-all active:scale-95 ${
+          className={`shrink-0 min-h-[44px] rounded-[16px] px-3 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-bold border transition-all active:scale-95 ${
             isAiTutorOpen
-              ? 'bg-white text-indigo-950 border-indigo-200 shadow-[0_0_0_3px_rgba(129,140,248,0.45)]'
-              : 'bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 text-white border-indigo-300/45 shadow-[0_3px_12px_rgba(99,102,241,0.45)]'
+              ? 'bg-white text-[#1d1d1f] border-white shadow-[0_0_0_3px_rgba(0,113,227,0.45)]'
+              : 'bg-[var(--accent-solid)] text-white border-white/20 shadow-[0_4px_14px_rgba(0,113,227,0.45)]'
           }`}
         >
           <div className="relative flex items-center justify-center">
             <MessageCircleQuestion className="w-4 h-4 shrink-0" aria-hidden="true" />
             <Sparkles
               className={`w-2.5 h-2.5 -ml-0.5 -mt-1.5 shrink-0 ${
-                isAiTutorOpen ? 'text-indigo-600' : 'text-amber-200'
+                isAiTutorOpen ? 'text-[var(--accent-solid)]' : 'text-sky-100'
               }`}
               aria-hidden="true"
             />

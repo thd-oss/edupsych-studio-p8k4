@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import {
   AlertTriangle,
   BookOpenCheck,
-  CheckCircle2,
   Download,
+  Ellipsis,
   GraduationCap,
+  Home,
   Network,
   RotateCcw,
   Search,
@@ -31,6 +32,7 @@ interface DualModeTopBarProps {
 }
 
 const HOLD_RESET_DURATION_MS = 1400;
+const TOAST_AUTO_DISMISS_MS = 2600;
 const TOTAL_MODULES_DEFAULT = 5;
 
 export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
@@ -49,14 +51,18 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
   onImportBackup,
   onResetProgress
 }) => {
+  const menuPanelId = useId();
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const holdTimerRef = useRef<number | null>(null);
+  const menuWrapperRef = useRef<HTMLDivElement | null>(null);
+  const menuTriggerRef = useRef<HTMLButtonElement | null>(null);
 
+  const [isManageOpen, setIsManageOpen] = useState(false);
   const [isHoldingReset, setIsHoldingReset] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
-  // Scroll-Driven Animation 미지원 브라우저용 rAF + style.transform 직접 쓰기 폴백 (리렌더링 0회)
+  // Scroll-Driven Animation 미지원 브라우저용 rAF + style.transform 폴백
   useEffect(() => {
     const supportsScrollTimeline =
       typeof CSS !== 'undefined' &&
@@ -94,6 +100,33 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
     };
   }, [mode]);
 
+  // 스튜디오 관리 드롭다운 외부 클릭 및 Escape 닫기
+  useEffect(() => {
+    if (!isManageOpen) return;
+
+    const onPointerDown = (e: PointerEvent) => {
+      const wrap = menuWrapperRef.current;
+      if (wrap && !wrap.contains(e.target as Node)) {
+        setIsManageOpen(false);
+      }
+    };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        setIsManageOpen(false);
+        menuTriggerRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isManageOpen]);
+
   const counts = React.useMemo(() => {
     let mastered = 0;
     let weakOrReview = 0;
@@ -106,13 +139,14 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
-    window.setTimeout(() => setToastMsg(null), 2600);
+    window.setTimeout(() => setToastMsg(null), TOAST_AUTO_DISMISS_MS);
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const result = await onImportBackup(file);
+    setIsManageOpen(false);
     showToast(result.message);
     e.target.value = '';
   };
@@ -126,6 +160,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
       setIsHoldingReset(false);
       holdTimerRef.current = null;
       await onResetProgress();
+      setIsManageOpen(false);
       showToast('모든 스토리·워크스페이스 진행 상태가 초기화되었습니다.');
     }, HOLD_RESET_DURATION_MS);
   };
@@ -139,248 +174,264 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
   };
 
   const completedCount = completedModules.length;
-  const ringCircumference = 2 * Math.PI * 12;
-  const ringOffset =
-    ringCircumference *
-    (1 - Math.min(1, completedCount / Math.max(1, totalModulesCount)));
 
   return (
-    <header className="no-print print:hidden sticky top-0 z-40 bg-slate-950/95 translucent-header backdrop-blur-md text-white border-b border-white/[0.08] pt-[env(safe-area-inset-top)]">
-      {/* 상단 스크롤 진행률 인디케이터 (단일 도메인 액센트 + GPU scaleX 전용) */}
+    <header className="no-print print:hidden sticky top-0 z-40 apple-glass-light text-[#1d1d1f] border-b border-black/[0.07] pt-[env(safe-area-inset-top)]">
+      {/* 상단 2px Apple Blue 스크롤 진행률 인디케이터 */}
       <div
         aria-hidden="true"
-        className="h-0.5 w-full bg-slate-900 overflow-hidden"
+        className="h-[2px] w-full bg-black/[0.04] overflow-hidden"
       >
         <div
           ref={progressBarRef}
-          className="scroll-timeline-progress-bar gpu-progress-bar h-full w-full origin-left bg-indigo-500"
+          className="scroll-timeline-progress-bar gpu-progress-bar h-full w-full origin-left bg-[var(--accent-solid)]"
         />
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-1.5 lg:py-2.5 min-h-[3rem] flex flex-nowrap lg:flex-wrap items-center justify-between gap-2">
-        {/* 좌측: 프로젝트 타이틀 + 모듈 진행률 링 (tabular-nums) */}
-        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-indigo-600 border border-indigo-400/30 flex items-center justify-center shrink-0">
-              <GraduationCap className="w-4 h-4 text-white" aria-hidden="true" />
-            </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <h1 className="text-xs sm:text-[15px] font-bold tracking-tight text-white whitespace-nowrap">
-                  <span className="sm:hidden">교육심리 스튜디오</span>
-                  <span className="hidden sm:inline">
-                    EduPsych Interactive Studio
-                  </span>
-                </h1>
-                <span
-                  className={`hidden xl:inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-semibold border shrink-0 ${
-                    isServerConnected
-                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                      : 'bg-white/[0.06] text-slate-300 border-white/[0.08]'
-                  }`}
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                      isServerConnected ? 'bg-emerald-400' : 'bg-amber-400'
-                    }`}
-                  />
-                  <span>{isServerConnected ? '로컬 DB 연동' : '브라우저 저장소'}</span>
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 truncate hidden lg:block">
-                Woolfolk 13판 · Seifert &amp; Sutton · 90개 학습 노드 지식 그래프
-              </p>
-            </div>
-          </div>
-
-          {/* 진행률 링 & 카운터 */}
-          <div className="hidden md:flex items-center gap-2 rounded-xl bg-white/[0.04] border border-white/[0.08] px-3 py-1.5 text-xs tabular-nums shrink-0">
-            <svg className="w-6 h-6 -rotate-90 shrink-0" viewBox="0 0 32 32">
-              <circle
-                cx="16"
-                cy="16"
-                r="12"
-                fill="none"
-                stroke="#1e293b"
-                strokeWidth="3.5"
-              />
-              <circle
-                cx="16"
-                cy="16"
-                r="12"
-                fill="none"
-                stroke="#34d399"
-                strokeWidth="3.5"
-                strokeDasharray={ringCircumference}
-                strokeDashoffset={ringOffset}
-                strokeLinecap="round"
-              />
-            </svg>
-            <div className="leading-tight">
-              <div className="font-bold text-white text-[11px]">
-                모듈 완주 {completedCount}/{totalModulesCount}
-              </div>
-              <div className="text-[10px] text-emerald-300 font-semibold">
-                숙련 {counts.mastered}/{totalNodesCount} 노드
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 데스크톱(lg+) 중앙 세그먼트 스위치 (모바일은 하단 엄지 독 MobileBottomNav가 담당) */}
-        <div
-          role="group"
-          aria-label="듀얼 학습 모드 전환"
-          className="hidden lg:grid relative grid-cols-2 rounded-xl bg-slate-900 p-1 border border-white/[0.08] min-w-[380px]"
+      {/* 단일 48px 컴팩트 프로스티드 글래스 리본 (content-first-noise-reduction: 뷰포트 12% 미만 단일 행 유지) */}
+      <div className="max-w-[1280px] mx-auto px-3.5 sm:px-6 h-12 flex items-center justify-between gap-2">
+        {/* 좌측: 애플 스타일 미니멀 워드마크 (홈 쇼케이스 이동) */}
+        <button
+          type="button"
+          onClick={() => onChangeMode('home')}
+          className="inline-flex items-center gap-2 rounded-full py-1 pr-2.5 text-left group min-w-0"
+          title="EduPsych Studio 홈 쇼케이스로 이동"
         >
-          <div
-            aria-hidden="true"
-            className="mode-switch-pill pointer-events-none absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-lg bg-indigo-600"
-            style={{
-              transform:
-                mode === 'story' ? 'translateX(0%)' : 'translateX(100%)'
-            }}
-          />
-          <button
-            type="button"
-            onClick={() => onChangeMode('story')}
-            className={`relative z-10 min-h-[36px] px-4 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 ${
-              mode === 'story'
-                ? 'text-white'
-                : 'text-slate-300 hover:text-white'
-            }`}
-          >
-            <BookOpenCheck className="w-3.5 h-3.5 shrink-0" />
-            <span>스토리 가이드 학습</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => onChangeMode('workspace')}
-            className={`relative z-10 min-h-[36px] px-4 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 ${
-              mode === 'workspace'
-                ? 'text-white'
-                : 'text-slate-300 hover:text-white'
-            }`}
-          >
-            <Network className="w-3.5 h-3.5 shrink-0" />
-            <span>스터디 워크스페이스</span>
-          </button>
-        </div>
+          <span className="w-7 h-7 rounded-full bg-[#1d1d1f] text-white flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
+            <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" />
+          </span>
+          <span className="text-[14px] sm:text-[15px] font-semibold tracking-tight text-[#1d1d1f] whitespace-nowrap">
+            EduPsych <span className="font-normal text-[#6e6e73] hidden sm:inline">Studio</span>
+          </span>
+        </button>
 
-        {/* 우측: 글로벌 검색(⌘K) + 취약 항목 배지 + 백업/복원/초기화 */}
-        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 tabular-nums">
+        {/* 중앙(lg+): [홈 · 스토리 · 워크스페이스] 3-모드 애플 세그먼트 피커 */}
+        <nav
+          aria-label="주요 학습 모드"
+          className="hidden lg:inline-flex apple-segmented-track"
+        >
+          {(
+            [
+              {
+                id: 'home',
+                label: '홈',
+                icon: <Home className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              },
+              {
+                id: 'story',
+                label: '스토리 커리큘럼',
+                icon: (
+                  <BookOpenCheck className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                )
+              },
+              {
+                id: 'workspace',
+                label: '스터디 워크스페이스',
+                icon: <Network className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              }
+            ] as const
+          ).map((item) => {
+            const isActive = mode === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                data-active={isActive ? 'true' : 'false'}
+                aria-current={isActive ? 'page' : undefined}
+                onClick={() => onChangeMode(item.id)}
+                className={`apple-segmented-pill no-press-scale min-h-[32px] px-4 py-1 text-xs flex items-center gap-1.5 ${
+                  isActive
+                    ? 'text-[#1d1d1f]'
+                    : 'text-[#424245] hover:text-[#1d1d1f]'
+                }`}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* 우측: 글로벌 스포트라이트 검색 + 복습 표적 + 데스크톱 AI 질문 + [⋯] 스튜디오 관리 팝오버 */}
+        <div className="flex items-center gap-1.5 shrink-0 tabular-nums">
           <button
             type="button"
-            aria-label="90개 노드 즉시 검색 열기"
+            aria-label="90개 노드 스포트라이트 검색 열기"
             onClick={onOpenSearch}
-            className="hidden sm:inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] px-2.5 py-1.5 text-xs font-semibold text-slate-200"
-            title="90개 노드 즉시 검색 및 이동 (⌘K)"
+            className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center gap-1.5 rounded-full bg-black/[0.05] hover:bg-black/[0.09] px-2.5 sm:px-3 py-1 text-xs font-semibold text-[#1d1d1f]"
+            title="90개 학습 노드 즉시 검색 (⌘K)"
           >
-            <Search className="w-3.5 h-3.5 text-indigo-400 shrink-0" aria-hidden="true" />
-            <span>노드 검색</span>
-            <kbd className="hidden lg:inline rounded bg-white/[0.08] border border-white/[0.1] px-1.5 py-0.5 text-[10px] font-mono text-slate-300">
+            <Search className="w-3.5 h-3.5 text-[#424245] shrink-0" aria-hidden="true" />
+            <span className="hidden sm:inline">검색</span>
+            <kbd className="hidden xl:inline rounded-full bg-white/80 px-1.5 py-0.5 text-[10px] font-medium text-[#6e6e73] border border-black/[0.06]">
               ⌘K
             </kbd>
           </button>
 
-          {/* 데스크톱 전용 상단 AI 질문 버튼 (모바일은 하단 독의 독립형 AI 말풍선 런처가 전담) */}
-          <button
-            type="button"
-            aria-expanded={isAiTutorOpen}
-            aria-label="교재 우선 탐색 AI 질문창 열기"
-            onClick={onToggleAiTutor}
-            className={`hidden lg:inline-flex min-h-[36px] items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-extrabold border transition-colors ${
-              isAiTutorOpen
-                ? 'bg-indigo-600 text-white border-indigo-400'
-                : 'bg-indigo-500/20 text-indigo-200 border-indigo-400/35 hover:bg-indigo-500/30'
-            }`}
-            title="교재 우선 탐색 AI 용어·개념 질문창 (⌘J)"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-indigo-300 shrink-0" aria-hidden="true" />
-            <span>AI 질문</span>
-          </button>
-
+          {/* 복습 표적 서브그래프 바로가기 */}
           <button
             type="button"
             onClick={onJumpToWeakGraph}
-            className={`inline-flex min-h-[36px] items-center gap-1 rounded-lg px-2 sm:px-2.5 py-1.5 text-xs font-bold border ${
+            className={`inline-flex min-h-[34px] items-center gap-1 rounded-full px-2.5 sm:px-3 py-1 text-xs font-semibold transition-colors ${
               counts.weakOrReview > 0
-                ? 'bg-rose-500/15 text-rose-200 border-rose-500/35 hover:bg-rose-500/25'
-                : 'bg-white/[0.05] text-slate-300 border-white/[0.08] hover:bg-white/[0.1]'
+                ? 'bg-rose-500/12 text-rose-700 hover:bg-rose-500/18'
+                : 'bg-black/[0.05] text-[#424245] hover:bg-black/[0.09]'
             }`}
-            title="지식 그래프에서 복습 필요 노드만 하이라이트"
+            title="위상 파급도 기준 복습 필요 서브그래프 열기"
           >
             <AlertTriangle
               aria-hidden="true"
               className={`w-3.5 h-3.5 shrink-0 ${
-                counts.weakOrReview > 0 ? 'text-rose-400' : 'text-slate-400'
+                counts.weakOrReview > 0 ? 'text-rose-600' : 'text-[#6e6e73]'
               }`}
             />
-            <span className="sm:hidden">복습 {counts.weakOrReview}</span>
-            <span className="hidden sm:inline">
-              복습 표적 {counts.weakOrReview}개
-            </span>
+            <span>복습 {counts.weakOrReview}</span>
           </button>
 
-          {/* 백업/복원 */}
+          {/* 데스크톱 전용 AI 질문 캡슐 (모바일은 하단 글래스 독 우측 런처가 담당) */}
           <button
             type="button"
-            aria-label="학습 진행도 JSON 백업 저장"
-            onClick={onExportBackup}
-            className="inline-flex min-h-[36px] min-w-[36px] items-center justify-center gap-1 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-slate-300"
-            title="학습 진행도 JSON 파일 다운로드"
+            aria-expanded={isAiTutorOpen}
+            aria-label="교재 우선 탐색 AI 질문 말풍선 열기"
+            onClick={onToggleAiTutor}
+            className={`hidden lg:inline-flex min-h-[34px] items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-semibold transition-colors ${
+              isAiTutorOpen
+                ? 'bg-[var(--accent-solid)] text-white shadow-sm'
+                : 'bg-[var(--accent-subtle)] text-[var(--accent-solid)] hover:bg-[#0071e3]/15'
+            }`}
+            title="2-Hop 지식 그래프 기반 교재 우선 AI 튜터 (⌘J)"
           >
-            <Download className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-            <span className="hidden xl:inline">백업 저장</span>
+            <Sparkles className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+            <span>AI 질문</span>
           </button>
 
-          <button
-            type="button"
-            aria-label="학습 진행도 JSON 백업 복원"
-            onClick={() => fileInputRef.current?.click()}
-            className="inline-flex min-h-[36px] min-w-[36px] items-center justify-center gap-1 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-slate-300"
-            title="백업 JSON 파일 불러오기"
-          >
-            <Upload className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-            <span className="hidden xl:inline">백업 복원</span>
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="application/json"
-            onChange={handleFileChange}
-            className="hidden"
-          />
+          {/* [⋯] 스튜디오 관리(백업·복원·진도 요약·초기화) 드롭다운 */}
+          <div ref={menuWrapperRef} className="relative">
+            <button
+              ref={menuTriggerRef}
+              type="button"
+              aria-label="스튜디오 데이터 및 백업 관리 메뉴"
+              aria-expanded={isManageOpen}
+              aria-controls={menuPanelId}
+              onClick={() => setIsManageOpen((prev) => !prev)}
+              className={`inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-full transition-colors ${
+                isManageOpen
+                  ? 'bg-[#1d1d1f] text-white'
+                  : 'bg-black/[0.05] hover:bg-black/[0.09] text-[#1d1d1f]'
+              }`}
+              title="진도 요약 · JSON 백업 · 복원 · 초기화"
+            >
+              <Ellipsis className="w-4 h-4" aria-hidden="true" />
+            </button>
 
-          {/* 1.4s Hold-to-Confirm 진도 초기화 버튼 */}
-          <button
-            type="button"
-            aria-label="1.4초 길게 눌러 전체 진도 초기화"
-            data-holding={isHoldingReset ? 'true' : 'false'}
-            onMouseDown={startHoldReset}
-            onMouseUp={cancelHoldReset}
-            onMouseLeave={cancelHoldReset}
-            onTouchStart={startHoldReset}
-            onTouchEnd={cancelHoldReset}
-            className="hold-confirm-btn relative overflow-hidden inline-flex min-h-[36px] min-w-[36px] items-center justify-center gap-1 rounded-lg bg-white/[0.05] border border-white/[0.08] px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-slate-400 hover:text-rose-300"
-            title="1.4초 동안 길게 누르면 전체 진도를 초기화합니다"
-          >
-            <span
-              aria-hidden="true"
-              className="hold-confirm-overlay pointer-events-none absolute inset-0 bg-rose-600/40"
-            />
-            <RotateCcw className="w-3.5 h-3.5 relative z-10 shrink-0" aria-hidden="true" />
-            <span className="hidden 2xl:inline relative z-10">
-              {isHoldingReset ? '유지 중...' : '진도 초기화'}
-            </span>
-          </button>
+            {isManageOpen && (
+              <div
+                id={menuPanelId}
+                role="region"
+                aria-label="스튜디오 학습 데이터 관리"
+                className="absolute right-0 top-[calc(100%+0.55rem)] w-[min(19.5rem,calc(100vw-1.5rem))] rounded-[22px] bg-white/95 backdrop-blur-xl border border-black/[0.08] shadow-[var(--shadow-overlay)] p-3.5 space-y-3 text-[#1d1d1f] z-50"
+              >
+                <div className="rounded-[14px] bg-[#f5f5f7] p-3 space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[11px] font-semibold text-[#6e6e73]">
+                      학습 그래프 텔레메트리
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-[#424245] border border-black/[0.05]">
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          isServerConnected ? 'bg-emerald-500' : 'bg-[#0071e3]'
+                        }`}
+                      />
+                      <span>{isServerConnected ? '로컬 DB' : '브라우저 저장소'}</span>
+                    </span>
+                  </div>
+                  <div className="flex items-baseline justify-between pt-0.5">
+                    <span className="text-xs font-bold text-[#1d1d1f]">
+                      모듈 완주 {completedCount}/{totalModulesCount}
+                    </span>
+                    <span className="text-xs font-bold text-[var(--accent-solid)]">
+                      숙련 {counts.mastered}/{totalNodesCount} 노드
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onExportBackup();
+                      setIsManageOpen(false);
+                      showToast('학습 진행도 JSON 백업 파일을 저장했습니다.');
+                    }}
+                    className="w-full min-h-[38px] rounded-[12px] bg-[#f5f5f7] hover:bg-black/[0.07] px-3 py-2 text-xs font-semibold text-[#1d1d1f] flex items-center justify-between gap-2"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Download className="w-3.5 h-3.5 text-[#0071e3] shrink-0" />
+                      <span>진행도 JSON 백업 다운로드</span>
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full min-h-[38px] rounded-[12px] bg-[#f5f5f7] hover:bg-black/[0.07] px-3 py-2 text-xs font-semibold text-[#1d1d1f] flex items-center justify-between gap-2"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Upload className="w-3.5 h-3.5 text-[#0071e3] shrink-0" />
+                      <span>백업 JSON 파일에서 복원</span>
+                    </span>
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="application/json"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </div>
+
+                <div className="pt-2 border-t border-black/[0.06]">
+                  <button
+                    type="button"
+                    data-holding={isHoldingReset ? 'true' : 'false'}
+                    onPointerDown={startHoldReset}
+                    onPointerUp={cancelHoldReset}
+                    onPointerLeave={cancelHoldReset}
+                    onPointerCancel={cancelHoldReset}
+                    onKeyDown={(e) => {
+                      if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) {
+                        startHoldReset();
+                      }
+                    }}
+                    onKeyUp={cancelHoldReset}
+                    className="hold-confirm-btn relative overflow-hidden w-full min-h-[38px] rounded-[12px] bg-rose-50 hover:bg-rose-100/80 px-3 py-2 text-xs font-semibold text-rose-700 flex items-center justify-center gap-1.5"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="hold-confirm-overlay pointer-events-none absolute inset-0 bg-rose-600/20"
+                    />
+                    <RotateCcw className="w-3.5 h-3.5 relative z-10 shrink-0" />
+                    <span className="relative z-10">
+                      {isHoldingReset
+                        ? '계속 누르면 초기화됩니다...'
+                        : '1.4초 길게 눌러 진도 초기화'}
+                    </span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
+      {/* 토스트 알림 */}
       {toastMsg && (
-        <div className="toast-enter bg-emerald-950 border-t border-emerald-700/60 px-4 py-1.5 text-center text-xs font-bold text-emerald-200 flex items-center justify-center gap-1.5">
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-          <span>{toastMsg}</span>
+        <div
+          role="status"
+          aria-live="polite"
+          className="toast-enter fixed top-16 right-4 z-50 rounded-full bg-[#1d1d1f] text-white px-4 py-2.5 text-xs font-semibold shadow-xl border border-white/10"
+        >
+          {toastMsg}
         </div>
       )}
     </header>

@@ -526,23 +526,23 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
         onClick={onToggleOpen}
         aria-expanded={isOpen}
         aria-label="교재 우선 탐색 AI 용어·개념 질문 말풍선 열기 (⌘J)"
-        title="교재 우선 탐색 AI 질문 말풍선 (⌘J / Ctrl+J)"
-        className={`no-print print:hidden hidden lg:inline-flex fixed bottom-5 right-6 z-40 min-h-[48px] items-center gap-2.5 rounded-full px-4 py-2.5 text-sm font-extrabold shadow-lg border transition-all active:scale-95 ${
+        title="2-Hop 지식 그래프 기반 교재 우선 AI 질문 말풍선 (⌘J / Ctrl+J)"
+        className={`no-print print:hidden hidden lg:inline-flex fixed bottom-5 right-6 z-40 min-h-[48px] items-center gap-2.5 rounded-full px-4.5 py-2.5 text-sm font-semibold shadow-[var(--shadow-elevated)] border transition-all active:scale-95 ${
           isOpen
-            ? 'bg-white text-indigo-950 border-indigo-200 shadow-[0_0_0_3px_rgba(99,102,241,0.35)]'
-            : 'bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 text-white border-indigo-400/40 hover:brightness-105'
+            ? 'bg-white text-[#1d1d1f] border-black/10 shadow-[0_0_0_3px_rgba(0,113,227,0.32)]'
+            : 'bg-[#1d1d1f] hover:bg-[#2c2c2e] text-white border-white/12'
         }`}
       >
         {isOpen ? (
           <>
-            <X className="w-4 h-4 shrink-0 text-indigo-700" aria-hidden="true" />
+            <X className="w-4 h-4 shrink-0 text-[var(--accent-solid)]" aria-hidden="true" />
             <span>AI 말풍선 접기</span>
           </>
         ) : (
           <>
-            <Sparkles className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <Sparkles className="w-4 h-4 shrink-0 text-[#66b2ff]" aria-hidden="true" />
             <span>교재 AI 질문</span>
-            <kbd className="rounded-md bg-white/15 border border-white/20 px-1.5 py-0.5 text-[10px] font-mono text-indigo-100">
+            <kbd className="rounded-full bg-white/12 border border-white/15 px-2 py-0.5 text-[10px] font-mono text-white/80">
               ⌘J
             </kbd>
           </>
@@ -561,13 +561,13 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
         }}
         className="ai-tutor-dialog no-print print:hidden"
       >
-        <div className="ai-tutor-bubble relative flex flex-col w-full h-full rounded-[22px] bg-white border border-indigo-200/95 shadow-[0_22px_54px_-10px_rgba(15,23,42,0.32),0_4px_16px_rgba(79,70,229,0.14)]">
-          <div className="flex flex-col w-full h-full rounded-[21px] overflow-hidden bg-white text-slate-900">
+        <div className="ai-tutor-bubble relative flex flex-col w-full h-full rounded-[24px] bg-white border border-black/[0.1] shadow-[var(--shadow-overlay)]">
+          <div className="flex flex-col w-full h-full rounded-[23px] overflow-hidden bg-white text-[#1d1d1f]">
             {/* 상단 헤더 */}
-            <div className="bg-slate-950 text-white px-3.5 py-2.5 border-b border-white/10 shrink-0">
+            <div className="bg-[#1d1d1f] text-white px-4 py-3 border-b border-white/10 shrink-0">
               <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 border border-indigo-400/40 flex items-center justify-center shrink-0">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-7 h-7 rounded-full bg-[var(--accent-solid)] flex items-center justify-center shrink-0">
                     <MessageCircleQuestion
                       className="w-4 h-4 text-white"
                       aria-hidden="true"
@@ -577,16 +577,16 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
                     <div className="flex items-center gap-1.5">
                       <h2
                         id={headingId}
-                        className="text-xs sm:text-sm font-extrabold tracking-tight text-white truncate"
+                        className="text-xs sm:text-sm font-bold tracking-tight text-white truncate"
                       >
                         교재 우선 AI 질문
                       </h2>
-                      <span className="shrink-0 rounded-full bg-indigo-500/25 border border-indigo-400/35 px-1.5 py-0.5 text-[9.5px] font-bold text-indigo-200">
-                        현재 페이지 유지
+                      <span className="shrink-0 rounded-full bg-white/12 px-2 py-0.5 text-[9.5px] font-semibold text-[#66b2ff]">
+                        2-Hop Graph-RAG
                       </span>
                     </div>
-                    <p className="text-[10.5px] text-slate-300 truncate">
-                      1차 수록 교재 90노드 탐색 → 불가피 시 학술 검색 보충
+                    <p className="text-[10.5px] text-white/65 truncate">
+                      90노드 수록 교재 1차 탐색 → 불가피 시 학술 검색 보충
                     </p>
                   </div>
                 </div>
@@ -1036,7 +1036,7 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
                 type="submit"
                 disabled={isSubmitting || !questionInput.trim()}
                 aria-label="질문 전송"
-                className="min-h-[42px] min-w-[44px] shrink-0 inline-flex items-center justify-center gap-1 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-300 text-white px-3 py-2 text-xs font-extrabold transition-colors"
+                className="min-h-[42px] min-w-[44px] shrink-0 inline-flex items-center justify-center gap-1 rounded-full bg-[var(--accent-solid)] hover:bg-[var(--accent-solid-hover)] disabled:bg-slate-300 text-white px-3.5 py-2 text-xs font-bold transition-colors"
               >
                 {isSubmitting ? (
                   <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
@@ -1057,7 +1057,7 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
             style={{
               left: 'var(--ai-tail-x, calc(100% - 2.25rem))'
             }}
-            className="pointer-events-none absolute -bottom-[11px] -translate-x-1/2 z-20 drop-shadow-[0_4px_5px_rgba(15,23,42,0.10)]"
+            className="pointer-events-none absolute -bottom-[11px] -translate-x-1/2 z-20 drop-shadow-[0_4px_5px_rgba(0,0,0,0.10)]"
           >
             <path
               d="M 0 0 L 26 0 L 26 1 C 22 1 19.5 3 16.2 8.2 Q 13 12.2 9.8 8.2 C 6.5 3 4 1 0 1 Z"
@@ -1066,8 +1066,8 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
             <path
               d="M 0 1 C 4 1 6.5 3 9.8 8.2 Q 13 12.2 16.2 8.2 C 19.5 3 22 1 26 1"
               fill="none"
-              stroke="rgba(199, 210, 254, 0.95)"
-              strokeWidth="1.25"
+              stroke="rgba(0, 0, 0, 0.1)"
+              strokeWidth="1.15"
               strokeLinecap="round"
             />
           </svg>

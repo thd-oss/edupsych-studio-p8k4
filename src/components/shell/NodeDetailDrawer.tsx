@@ -16,6 +16,7 @@ import {
 import { getNodeNeighbors } from '../../data/curriculumGraph';
 import {
   EdgeRelation,
+  GraphAdjacencyIndex,
   KnowledgeGraphEdge,
   KnowledgeGraphNode,
   MasteryState,
@@ -36,6 +37,7 @@ interface NodeDetailDrawerProps {
   onSelectNode: (nodeId: string) => void;
   nodeMap: Record<string, KnowledgeGraphNode>;
   edges: KnowledgeGraphEdge[];
+  adjacency?: GraphAdjacencyIndex;
   masteryMap: Record<string, MasteryState>;
   allTheories: TheoryConcept[];
   allFlashcards: Flashcard[];
@@ -116,6 +118,7 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
   onSelectNode,
   nodeMap,
   edges,
+  adjacency,
   masteryMap,
   allTheories,
   allFlashcards,
@@ -159,8 +162,8 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
     if (!selectedNodeId) {
       return { incoming: [], outgoing: [], connectedNodeIds: new Set<string>() };
     }
-    return getNodeNeighbors(selectedNodeId, nodeMap, edges);
-  }, [selectedNodeId, nodeMap, edges]);
+    return getNodeNeighbors(selectedNodeId, nodeMap, edges, adjacency);
+  }, [selectedNodeId, nodeMap, edges, adjacency]);
 
   const isOutsideDialog = (e: React.PointerEvent<HTMLDialogElement>) => {
     const dialog = dialogRef.current;
@@ -299,7 +302,7 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
                   onJumpToStory(node.moduleId, node.id);
                   dialogRef.current?.close();
                 }}
-                className="inline-flex min-h-[38px] items-center justify-center gap-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 px-3 py-2 text-xs font-bold text-white"
+                className="inline-flex min-h-[38px] items-center justify-center gap-1.5 rounded-full bg-[var(--accent-solid)] hover:bg-[var(--accent-solid-hover)] px-4 py-2 text-xs font-semibold text-white transition-colors"
               >
                 <Compass className="w-3.5 h-3.5 shrink-0" />
                 <span>스토리 맥락에서 보기</span>
@@ -311,7 +314,7 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
                   onJumpToWorkspaceTab(targetTab, node.moduleId, node.id);
                   dialogRef.current?.close();
                 }}
-                className="inline-flex min-h-[38px] items-center justify-center gap-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 px-3 py-2 text-xs font-bold text-slate-800"
+                className="inline-flex min-h-[38px] items-center justify-center gap-1.5 rounded-full bg-white hover:bg-black/[0.04] border border-black/[0.08] px-4 py-2 text-xs font-semibold text-[#1d1d1f] transition-colors"
               >
                 <ExternalLink className="w-3.5 h-3.5 shrink-0" />
                 <span>전용 훈련 탭 열기</span>

@@ -4,44 +4,69 @@
 
 @layer base {
   :root {
-    /* 60% Ground & Layered Surfaces (Tinted Cool Neutral) */
-    --bg-canvas: #f8f9fb;
+    /* Apple Standard Hybrid Optical Palette */
+    --bg-canvas: #f5f5f7;
     --bg-surface: #ffffff;
-    --bg-subtle: #f1f4f9;
+    --bg-subtle: #f5f5f7;
     --bg-elevated: #ffffff;
+    --bg-spotlight-dark: #1d1d1f;
+    --bg-spotlight-obsidian: #141416;
 
-    /* 30% Ink Hierarchy (WCAG AA compliant contrast) */
-    --ink-primary: #0f172a;
-    --ink-secondary: #334155;
-    --ink-tertiary: #64748b;
+    /* Apple Ink Hierarchy (WCAG AA/AAA compliant) */
+    --ink-primary: #1d1d1f;
+    --ink-secondary: #424245;
+    --ink-tertiary: #6e6e73;
 
-    /* 1px Hairline Borders & Subtle Tinted Elevation */
-    --border-hairline: rgba(15, 23, 42, 0.08);
-    --border-strong: rgba(15, 23, 42, 0.15);
-    --shadow-subtle: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.025);
-    --shadow-overlay: 0 16px 40px -6px rgba(15, 23, 42, 0.14), 0 4px 10px rgba(15, 23, 42, 0.06);
+    /* Optical Hairlines & Multi-Layer Realistic Shadows (visual-effects) */
+    --border-hairline: rgba(0, 0, 0, 0.05);
+    --border-strong: rgba(0, 0, 0, 0.11);
+    --shadow-subtle:
+      0 2px 8px rgba(0, 0, 0, 0.032),
+      0 10px 28px rgba(0, 0, 0, 0.042);
+    --shadow-bento:
+      0 2px 10px rgba(0, 0, 0, 0.04),
+      0 18px 42px rgba(0, 0, 0, 0.065);
+    --shadow-overlay:
+      0 24px 56px -10px rgba(0, 0, 0, 0.22),
+      0 6px 18px rgba(0, 0, 0, 0.08);
 
-    /* <= 10% Domain Accent */
-    --accent-solid: #4f46e5;
-    --accent-hover: #4338ca;
-    --accent-subtle: rgba(79, 70, 229, 0.08);
+    /* Apple Blue Accent (sRGB fallback + Display-P3 override below) */
+    --accent-solid: #0071e3;
+    --accent-hover: #0077ed;
+    --accent-subtle: rgba(0, 113, 227, 0.08);
 
-    /* Concentric Radius Scale (outer_radius = inner_radius + padding) */
-    --radius-card: 16px;
-    --radius-inner: 10px;
-    --radius-control: 8px;
+    /* Safe Gradient Color Space Token (modern-web-guidance: visual-effects) */
+    --in-oklab: ;
+
+    /* Concentric Apple HIG Radius Scale */
+    --radius-bento: 28px;
+    --radius-card: 22px;
+    --radius-inner: 14px;
+    --radius-control: 9999px;
 
     /* Mobile Layout & Safe-Area Ergonomic Tokens */
-    --mobile-topbar-h: 3.125rem;
+    --mobile-topbar-h: 3rem;
     --measured-bottom-nav-h: calc(
       3.125rem + max(0.5rem, env(safe-area-inset-bottom, 0px))
     );
-    --mobile-sheet-collapsed-h: 3.75rem;
 
     /* Motion Curves */
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
     --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  @media (color-gamut: p3) {
+    :root {
+      --accent-solid: color(display-p3 0 0.443 0.89);
+      --accent-hover: color(display-p3 0.02 0.47 0.93);
+    }
+  }
+
+  @supports (background: linear-gradient(in oklab, white, black)) {
+    :root {
+      --in-oklab: in oklab;
+    }
   }
 
   html {
@@ -54,29 +79,33 @@
   body {
     background-color: var(--bg-canvas);
     color: var(--ink-primary);
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+      'Pretendard Variable', 'Apple SD Gothic Neo', system-ui, sans-serif;
     line-height: 1.65;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* 한국어 어절 단절 방지 및 헤딩 조판 규율 */
+  /* 한국어 어절 단절 방지 및 애플 디스플레이 조판 규율 */
   h1,
   h2,
   h3 {
-    letter-spacing: -0.025em;
-    line-height: 1.28;
+    letter-spacing: -0.028em;
+    line-height: 1.22;
     word-break: keep-all;
     overflow-wrap: anywhere;
     text-wrap: balance;
   }
 
-  /* 박스(배경·테두리) 내부 소제목은 우측 불균형 공백 방지를 위해 text-wrap: balance를 적용하지 않음 */
+  /* 박스 내부 소제목은 우측 불균형 공백 방지를 위해 text-wrap: balance 미적용 */
   h4,
   h5,
   h6,
   .keep-words {
-    letter-spacing: -0.015em;
-    line-height: 1.38;
+    letter-spacing: -0.018em;
+    line-height: 1.36;
     word-break: keep-all;
     overflow-wrap: anywhere;
   }
@@ -90,9 +119,9 @@
     overflow-wrap: anywhere;
   }
 
-  /* 키보드 접근성 포커스 링 (WCAG 1.4.11 3:1 대비 충족) */
+  /* 키보드 접근성 포커스 링 (Apple Blue 3:1 대비 충족) */
   :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-    outline: 2px solid #4f46e5;
+    outline: 2px solid var(--accent-solid);
     outline-offset: 2px;
   }
 
@@ -121,30 +150,148 @@
       background-color 150ms ease,
       border-color 150ms ease,
       color 150ms ease,
-      opacity 150ms ease;
+      opacity 150ms ease,
+      box-shadow 150ms ease;
   }
 
   button:not(:disabled):not(.no-press-scale):active,
   .pressable:active {
-    transform: scale(0.97);
+    transform: scale(0.975);
   }
 }
 
-/* 시맨틱 카드 표면 & 헤어라인 보더 유틸리티 */
-.surface-card {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-hairline);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-subtle);
+@layer components {
+  /* Apple Optical Frosted Glass Materials */
+  .apple-glass-light {
+    background-color: rgba(251, 251, 253, 0.82);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  .apple-glass-dark {
+    background-color: rgba(22, 22, 23, 0.86);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  /* 시맨틱 카드 표면 & 애플 벤토 타일 유틸리티 (면 대비 우선, 미세 광학 림) */
+  .surface-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .surface-subtle {
+    background-color: var(--bg-subtle);
+    border: 1px solid rgba(0, 0, 0, 0.035);
+    border-radius: var(--radius-inner);
+  }
+
+  .bento-tile-white {
+    background-color: #ffffff;
+    border-radius: var(--radius-bento);
+    box-shadow: var(--shadow-bento);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .bento-tile-gray {
+    background-color: #f5f5f7;
+    border-radius: var(--radius-bento);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .bento-tile-dark {
+    background: linear-gradient(
+      160deg var(--in-oklab),
+      #1d1d1f 0%,
+      #121214 100%
+    );
+    color: #f5f5f7;
+    border-radius: var(--radius-bento);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.14),
+      0 20px 44px rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .bento-tile-blue-spotlight {
+    background: linear-gradient(
+      145deg var(--in-oklab),
+      #f4f9ff 0%,
+      #e6f2ff 58%,
+      #d8ebff 100%
+    );
+    color: #1d1d1f;
+    border-radius: var(--radius-bento);
+    box-shadow: var(--shadow-bento);
+    border: 1px solid rgba(0, 113, 227, 0.14);
+  }
+
+  /* Apple Segmented Control Track & Pill */
+  .apple-segmented-track {
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border-radius: 9999px;
+    background-color: rgba(118, 118, 128, 0.12);
+  }
+
+  .apple-segmented-pill {
+    border-radius: 9999px;
+    font-weight: 600;
+    transition:
+      background-color 180ms var(--ease-out),
+      color 180ms var(--ease-out),
+      box-shadow 180ms var(--ease-out);
+  }
+
+  .apple-segmented-pill[data-active='true'] {
+    background-color: #ffffff;
+    color: #1d1d1f;
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.08),
+      0 3px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Apple Flagship Product Lineup Horizontal Snap Reel (modern-web-guidance: carousel) */
+  .apple-flagship-reel-track {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    touch-action: manipulation;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-block: 0.75rem 1.25rem;
+  }
+
+  .apple-flagship-reel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .apple-flagship-reel-track {
+      scroll-behavior: smooth;
+    }
+  }
+
+  .apple-flagship-reel-slide {
+    flex: 0 0 min(86vw, 400px);
+    min-inline-size: 0;
+    scroll-snap-align: center;
+  }
+
+  @media (min-width: 1024px) {
+    .apple-flagship-reel-slide {
+      flex: 0 0 420px;
+      scroll-snap-align: start;
+    }
+  }
 }
 
-.surface-subtle {
-  background-color: var(--bg-subtle);
-  border: 1px solid var(--border-hairline);
-  border-radius: var(--radius-inner);
-}
-
-/* 모바일 가로 스와이프 필터/탭 트랙 (modern-web-guidance: natural-interactions) */
+/* 모바일 가로 스와이프 필터/탭 트랙 */
 .chip-scroll-row {
   display: flex;
   align-items: center;
@@ -195,7 +342,7 @@
   flex-shrink: 0;
 }
 
-/* 모바일 다중 관점 가로 비교 캐러셀 트랙 (modern-web-guidance: carousel) */
+/* 모바일 다중 관점 가로 비교 캐러셀 트랙 */
 .comparison-carousel-track {
   display: flex;
   gap: 0.75rem;
@@ -223,7 +370,7 @@
   scroll-snap-align: center;
 }
 
-/* 노치·홈 인디케이터 Safe-Area 패딩 유틸리티 (modern-web-guidance: form-factor-adaptation) */
+/* 노치·홈 인디케이터 Safe-Area 패딩 유틸리티 */
 .safe-top-header {
   padding-top: env(safe-area-inset-top, 0px);
 }
@@ -234,38 +381,17 @@
   padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
 }
 
-/* 모바일 3단 바텀시트 그립 핸들 및 GPU 디텐트 시트 (modern-web-guidance: drag) */
-.sheet-drag-handle {
-  cursor: grab;
-  touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.sheet-drag-handle.dragging {
-  cursor: grabbing;
-}
-
-.mobile-detent-sheet {
-  will-change: transform;
-  transition: transform 280ms var(--ease-drawer);
-}
-
-.mobile-detent-sheet.dragging {
-  transition: none !important;
-}
-
-/* 세그먼트 스위치 GPU 인디케이터 (180ms cubic-bezier(0.23, 1, 0.32, 1)) */
+/* 세그먼트 스위치 GPU 인디케이터 */
 .mode-switch-pill {
   transition: transform 180ms var(--ease-out);
   will-change: transform;
 }
 
-/* Sticky Interactive Stage 교체 전환 (180ms GPU transform/opacity) */
+/* 인라인 인터랙티브 도식 탭 교체 전환 */
 @keyframes stageSwapIn {
   from {
     opacity: 0;
-    transform: translateY(4px) scale(0.99);
+    transform: translateY(4px) scale(0.992);
   }
   to {
     opacity: 1;
@@ -279,7 +405,7 @@
   }
 }
 
-/* Scroll-Driven Animation 기반 상단 읽기 진행률 바 (Modern Web Guidance 준수) */
+/* Scroll-Driven Animation 기반 상단 읽기 진행률 바 */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: scroll()) {
     @keyframes grow-scroll-progress {
@@ -299,6 +425,101 @@
   }
 }
 
+/* Scroll-Driven Entry Reveal (modern-web-guidance: scroll-entry-exit-effects)
+   animation-timeline & animation-range MUST be declared AFTER animation shorthand */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes apple-bento-entry {
+      from {
+        opacity: 0.22;
+        transform: translate3d(0, 20px, 0) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+
+    .apple-scroll-reveal {
+      animation: apple-bento-entry auto linear backwards;
+      animation-timeline: view(block);
+      animation-range: entry 0% entry 52%;
+    }
+  }
+}
+
+/* Apple Circular [+] Searchable Progressive Disclosure (modern-web-guidance: accordion) */
+details.apple-disclosure {
+  border-radius: 18px;
+  background-color: #f5f5f7;
+  border: 1px solid rgba(0, 0, 0, 0.045);
+  overflow: clip;
+}
+
+details.apple-disclosure > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1.15rem;
+  cursor: pointer;
+  font-weight: 700;
+  color: #1d1d1f;
+}
+
+details.apple-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.apple-disclosure > summary:hover {
+  background-color: rgba(0, 0, 0, 0.025);
+}
+
+.apple-disclosure-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  background-color: #1d1d1f;
+  color: #ffffff;
+  flex-shrink: 0;
+  rotate: 0deg;
+}
+
+details.apple-disclosure[open] > summary .apple-disclosure-plus {
+  background-color: var(--accent-solid);
+  rotate: 45deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .apple-disclosure-plus {
+    transition:
+      rotate 220ms var(--ease-drawer),
+      background-color 180ms ease;
+  }
+}
+
+details.apple-disclosure::details-content {
+  interpolate-size: allow-keywords;
+  overflow: clip;
+  contain: layout;
+}
+
+details.apple-disclosure:not([open])::details-content {
+  block-size: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  details.apple-disclosure::details-content {
+    transition: block-size, content-visibility, display;
+    transition-duration: 280ms;
+    transition-timing-function: var(--ease-drawer);
+    transition-behavior: allow-discrete;
+  }
+}
+
 /* 네이티브 <dialog> Top-Layer 스크롤 체이닝 방지 및 이산(allow-discrete) 진입/퇴장 */
 dialog:modal {
   overscroll-behavior: contain;
@@ -307,7 +528,7 @@ dialog:modal {
 dialog::backdrop {
   overflow: hidden;
   overscroll-behavior: contain;
-  background-color: rgba(15, 23, 42, 0);
+  background-color: rgba(0, 0, 0, 0);
   transition-property: background-color, display, overlay;
   transition-duration: 200ms;
   transition-timing-function: var(--ease-out);
@@ -315,11 +536,12 @@ dialog::backdrop {
 }
 
 dialog[open]::backdrop {
-  background-color: rgba(15, 23, 42, 0.48);
-  backdrop-filter: blur(3px);
+  background-color: rgba(0, 0, 0, 0.38);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 
   @starting-style {
-    background-color: rgba(15, 23, 42, 0);
+    background-color: rgba(0, 0, 0, 0);
   }
 }
 
@@ -389,7 +611,7 @@ dialog.bottom-sheet-dialog[open] {
   }
 }
 
-/* 우측 슬라이드오버 네이티브 <dialog class="drawer-dialog"> (240ms --ease-drawer) */
+/* 우측 슬라이드오버 네이티브 <dialog class="drawer-dialog"> */
 dialog.drawer-dialog {
   margin: 0 0 0 auto;
   max-height: 100dvh;
@@ -456,12 +678,21 @@ dialog.instant-dialog[open] {
 /* 투명도 축소 접근성 대응 */
 @media (prefers-reduced-transparency: reduce) {
   dialog[open]::backdrop {
-    background-color: rgba(15, 23, 42, 0.82);
+    background-color: rgba(0, 0, 0, 0.78);
+    -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 
+  .apple-glass-light {
+    background-color: #fbfbfd !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .apple-glass-dark,
   .translucent-header {
-    background-color: #0f172a !important;
+    background-color: #161617 !important;
+    -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
 }
@@ -474,15 +705,15 @@ dialog.instant-dialog[open] {
   .ai-tutor-bubble,
   .stage-card-swap,
   .mode-switch-pill,
-  .toast-enter {
+  .toast-enter,
+  .apple-scroll-reveal {
     transform: none !important;
     animation: none !important;
     transition-duration: 100ms !important;
     transition-delay: 0ms !important;
   }
 
-  .gpu-progress-bar,
-  .mobile-detent-sheet {
+  .gpu-progress-bar {
     transition: none !important;
   }
 }
@@ -530,8 +761,8 @@ dialog.instant-dialog[open] {
 
     .table-wrapper tr {
       margin-block-end: 1rem;
-      border: 1px solid #cbd5e1;
-      border-radius: 0.5rem;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 0.75rem;
       overflow: hidden;
     }
 
@@ -539,37 +770,27 @@ dialog.instant-dialog[open] {
       position: sticky;
       inset-block-start: 0;
       z-index: 2;
-      background: #f1f5f9;
+      background: #f5f5f7;
     }
 
     .table-wrapper td:nth-child(2)::before {
       content: var(--label-2) ": ";
       font-weight: 700;
-      color: #334155;
+      color: #424245;
     }
 
     .table-wrapper td:nth-child(3)::before {
       content: var(--label-3) ": ";
       font-weight: 700;
-      color: #334155;
+      color: #424245;
     }
 
     .table-wrapper td:nth-child(4)::before {
       content: var(--label-4) ": ";
       font-weight: 700;
-      color: #334155;
+      color: #424245;
     }
   }
-}
-
-/* 모달 <dialog> 배경 스크롤 체이닝 원천 차단 (Modern Web Guidance) */
-dialog:modal {
-  overscroll-behavior: contain;
-}
-
-dialog::backdrop {
-  overflow: hidden;
-  overscroll-behavior: contain;
 }
 
 /* AI 튜터 말풍선 플로팅 <dialog> — 버튼 원점(Trigger-Origin) 애플 스프링 등장·수축 애니메이션 */
@@ -589,7 +810,6 @@ dialog.ai-tutor-dialog[open] {
   flex-direction: column;
 }
 
-/* 실제 스케일·오퍼시티 모션은 내부 말풍선 표면에 적용하여 <dialog> 레이아웃 좌표 왜곡을 원천 차단 */
 .ai-tutor-bubble {
   opacity: 0;
   will-change: transform, opacity;
@@ -663,7 +883,7 @@ dialog.ai-tutor-dialog[open]:where(:not([data-closing])) .ai-tutor-bubble {
     height: min(28rem, 64dvh);
     max-height: calc(
       100dvh - var(--measured-bottom-nav-h) -
-        var(--mobile-topbar-h, 3.125rem) - 1.5rem
+        var(--mobile-topbar-h, 3rem) - 1.5rem
     );
     z-index: 50;
   }
@@ -681,7 +901,7 @@ dialog.ai-tutor-dialog[open]:where(:not([data-closing])) .ai-tutor-bubble {
   }
 }
 
-/* 채팅 입력창 콘텐츠 자동 높이 확장 (점진적 향상) */
+/* 채팅 입력창 콘텐츠 자동 높이 확장 */
 textarea.ai-tutor-textarea {
   field-sizing: content;
   height: auto;
