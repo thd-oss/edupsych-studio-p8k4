@@ -34,7 +34,7 @@
     /* Mobile Layout & Safe-Area Ergonomic Tokens */
     --mobile-topbar-h: 3.125rem;
     --mobile-bottom-nav-h: 3.75rem;
-    --mobile-split-stage-max-h: 40dvh;
+    --mobile-sheet-collapsed-h: 3.875rem;
 
     /* Motion Curves */
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -232,10 +232,25 @@
   padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
 }
 
-.safe-floating-hud {
-  bottom: calc(var(--mobile-bottom-nav-h) + max(0.625rem, env(safe-area-inset-bottom, 0px)));
-  left: max(0.75rem, env(safe-area-inset-left, 0px));
-  right: max(0.75rem, env(safe-area-inset-right, 0px));
+/* 모바일 3단 바텀시트 그립 핸들 및 GPU 디텐트 시트 (modern-web-guidance: drag) */
+.sheet-drag-handle {
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.sheet-drag-handle.dragging {
+  cursor: grabbing;
+}
+
+.mobile-detent-sheet {
+  will-change: transform;
+  transition: transform 280ms var(--ease-drawer);
+}
+
+.mobile-detent-sheet.dragging {
+  transition: none !important;
 }
 
 /* 세그먼트 스위치 GPU 인디케이터 (180ms cubic-bezier(0.23, 1, 0.32, 1)) */
@@ -462,7 +477,8 @@ dialog.instant-dialog[open] {
     transition-duration: 100ms !important;
   }
 
-  .gpu-progress-bar {
+  .gpu-progress-bar,
+  .mobile-detent-sheet {
     transition: none !important;
   }
 }

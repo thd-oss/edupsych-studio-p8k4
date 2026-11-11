@@ -38,7 +38,7 @@ import {
 } from '../visuals/CaseLensVisualRenderer';
 import { TheoryVisualRenderer } from '../visuals/TheoryVisualRenderer';
 
-export type StageDensityMode = 'desktop' | 'split' | 'sheet';
+export type StageDensityMode = 'desktop' | 'dock';
 
 interface StickyVisualStageProps {
   activeModule: ModulePayload;
@@ -206,27 +206,24 @@ export const StickyVisualStage: React.FC<StickyVisualStageProps> = ({
   const currentBeatKind = activeBeat?.kind ?? 'theory-topology';
   const stageSwapKey = `${stageMode}-${currentBeatKind}-${activeNodeId}`;
 
-  const isCompactSplit = density === 'split';
-  const isSheet = density === 'sheet';
-  const bodyScrollClass = isCompactSplit
-    ? 'stage-card-swap p-3 space-y-3 max-h-[calc(var(--mobile-split-stage-max-h)-5.5rem)] overflow-y-auto overscroll-contain'
-    : isSheet
-    ? 'stage-card-swap p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain'
+  const isDock = density === 'dock';
+  const bodyScrollClass = isDock
+    ? 'stage-card-swap p-3.5 sm:p-4 space-y-3.5 flex-1 min-h-0 overflow-y-auto overscroll-contain'
     : 'stage-card-swap p-4 sm:p-5 space-y-4 max-h-[calc(100dvh-11rem)] overflow-y-auto';
 
   return (
     <div
       className={`overflow-hidden flex flex-col ${
-        isSheet ? 'h-full bg-white' : 'surface-card'
+        isDock ? 'h-full bg-white' : 'surface-card'
       }`}
     >
       {/* 상단 스테이지 컨트롤 바 */}
       <div
         className={`bg-slate-950 text-white border-b border-white/[0.08] ${
-          isCompactSplit ? 'px-3 py-2 space-y-1.5' : 'px-4 sm:px-5 py-3.5 space-y-3'
+          isDock ? 'px-3 py-2 space-y-1.5 shrink-0' : 'px-4 sm:px-5 py-3.5 space-y-3'
         }`}
       >
-        {!isCompactSplit && (
+        {!isDock && (
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
               <span
@@ -277,7 +274,7 @@ export const StickyVisualStage: React.FC<StickyVisualStageProps> = ({
           >
             <Layers className="w-3.5 h-3.5 shrink-0" />
             <span className="truncate">
-              {isCompactSplit ? '도식·처방' : '비트 연동 도식·처방'}
+              {isDock ? '도식·처방' : '비트 연동 도식·처방'}
             </span>
           </button>
 
@@ -292,7 +289,7 @@ export const StickyVisualStage: React.FC<StickyVisualStageProps> = ({
           >
             <Sliders className="w-3.5 h-3.5 shrink-0" />
             <span className="truncate">
-              {isCompactSplit ? '보철 실험기' : '작업기억·보철 실험기'}
+              {isDock ? '보철 실험기' : '작업기억·보철 실험기'}
             </span>
           </button>
 
@@ -307,7 +304,7 @@ export const StickyVisualStage: React.FC<StickyVisualStageProps> = ({
           >
             <Network className="w-3.5 h-3.5 shrink-0" />
             <span className="truncate">
-              {isCompactSplit ? '서브그래프' : '서브그래프·기준 도해'}
+              {isDock ? '서브그래프' : '서브그래프·기준 도해'}
             </span>
           </button>
         </div>

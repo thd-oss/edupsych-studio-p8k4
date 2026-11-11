@@ -22,7 +22,7 @@ import {
   WorkspaceTabId
 } from '../../types/graph';
 import { FlashcardStatus, ModulePayload } from '../../types/study';
-import { MobileStageDock, MobileStageViewMode } from './MobileStageDock';
+import { MobileStageDetent, MobileStageDock } from './MobileStageDock';
 import { ModuleStoryChapter } from './ModuleStoryChapter';
 import { StickyVisualStage } from './StickyVisualStage';
 
@@ -56,8 +56,8 @@ interface ScrollytellingViewProps {
 
 const SCROLL_JUMP_DELAY_MS = 60;
 const MOBILE_MEDIA_QUERY = '(max-width: 1023px)';
-const OBSERVER_MARGIN_STANDARD = '-28% 0px -48% 0px';
-const OBSERVER_MARGIN_SPLIT_STAGE = '-46% 0px -28% 0px';
+const OBSERVER_MARGIN_STANDARD = '-24% 0px -48% 0px';
+const OBSERVER_MARGIN_HALF_SHEET = '-10% 0px -52% 0px';
 
 export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
   modules,
@@ -119,8 +119,8 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
   const [activeBeatId, setActiveBeatId] = useState<string | null>(
     'mod1-beat-myth'
   );
-  const [mobileStageMode, setMobileStageMode] =
-    useState<MobileStageViewMode>('minimized');
+  const [mobileStageDetent, setMobileStageDetent] =
+    useState<MobileStageDetent>('collapsed');
 
   // 단발성 스크롤 이동 명령(scrollRequest)이 전달되었을 때만 1회 이동 후 즉시 소비
   useEffect(() => {
@@ -185,8 +185,8 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
     if (beatElements.length === 0) return;
 
     const activeRootMargin =
-      mobileStageMode === 'split'
-        ? OBSERVER_MARGIN_SPLIT_STAGE
+      mobileStageDetent === 'half'
+        ? OBSERVER_MARGIN_HALF_SHEET
         : OBSERVER_MARGIN_STANDARD;
 
     const observer = new IntersectionObserver(
@@ -222,7 +222,7 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
 
     beatElements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [visibleModules, mobileStageMode, onMarkBeatVisited, onActiveNodeChange]);
+  }, [visibleModules, mobileStageDetent, onMarkBeatVisited, onActiveNodeChange]);
 
   const activeModule: ModulePayload = useMemo(() => {
     return (
@@ -257,9 +257,9 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
     if (
       typeof window !== 'undefined' &&
       window.matchMedia(MOBILE_MEDIA_QUERY).matches &&
-      mobileStageMode === 'minimized'
+      mobileStageDetent === 'collapsed'
     ) {
-      setMobileStageMode('split');
+      setMobileStageDetent('half');
     }
   };
 
@@ -315,21 +315,21 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
           <button
             type="button"
             onClick={() =>
-              setMobileStageMode((prev) =>
-                prev === 'split' ? 'minimized' : 'split'
+              setMobileStageDetent((prev) =>
+                prev === 'collapsed' ? 'half' : 'collapsed'
               )
             }
             className={`min-h-[34px] inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-extrabold border shrink-0 transition-colors ${
-              mobileStageMode === 'split'
+              mobileStageDetent !== 'collapsed'
                 ? 'bg-indigo-600 text-white border-indigo-600'
                 : 'bg-slate-900 text-white border-slate-900'
             }`}
           >
             <Rows2 className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
             <span>
-              {mobileStageMode === 'split'
-                ? '상단 도식 접기'
-                : '상하 반반 도식 비교'}
+              {mobileStageDetent !== 'collapsed'
+                ? '하단 도식 접기'
+                : '하단 반반 도식 올리기'}
             </span>
           </button>
         </div>
@@ -448,27 +448,14 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
         </div>
       </section>
 
-      {/* 모바일 전용 인터랙티브 도식 독 (상하 반반 스플릿 / 하단 플로팅 HUD / 바텀시트) */}
-      <MobileStageDock
-        stageViewMode={mobileStageMode}
-        onChangeStageViewMode={setMobileStageMode}
-        activeModule={activeModule}
-        activeBeat={activeBeat}
-        activeNodeId={activeNodeId}
-        nodeMap={nodeMap}
-        edges={edges}
-        masteryMap={masteryMap}
-        onSelectNode={(nodeId) => handleFocusNodeManual(nodeId)}
-        onInspectNode={onInspectNode}
-        onJumpToWorkspace={onJumpToWorkspace}
-      />
-
-      {/* 메인 2-Column Scrollytelling Split (데스크톱 좌측 5 : 우측 Sticky Stage 7) */}
+      {/* 메인 2-Column Scrollytelling Split (모바일은 서사 레일이 100% 주인공, 하단 바텀시트가 보조 비교 독으로 동작) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* 좌측: 서사 스크롤 레일 (Narrative Scroll Rail) */}
+        {/* 좌측(모바일 메인): 서사 스크롤 레일 */}
         <div
           ref={narrativeContainerRef}
-          className="lg:col-span-5 space-y-8 sm:space-y-10 min-w-0"
+          className={`lg:col-span-5 space-y-8 sm:space-y-10 min-w-0 ${
+            mobileStageDetent === 'half' ? 'pb-[46dvh] lg:pb-0' : ''
+          }`}
         >
           {visibleModules.map((mod) => (
             <ModuleStoryChapter
@@ -548,7 +535,7 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
           )}
         </div>
 
-        {/* 우측: 데스크톱 전용 고정 인터랙티브 스테이지 (모바일은 MobileStageDock이 담당) */}
+        {/* 우측: 데스크톱 전용 고정 인터랙티브 스테이지 */}
         <div className="hidden lg:block lg:col-span-7 lg:sticky lg:top-[72px] min-w-0">
           <StickyVisualStage
             activeModule={activeModule}
@@ -563,6 +550,21 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
           />
         </div>
       </div>
+
+      {/* 모바일 전용 하단 3단 디텐트 바텀시트 (collapsed ↔ half ↔ full, 서사 본문 다음 DOM 순서) */}
+      <MobileStageDock
+        detent={mobileStageDetent}
+        onChangeDetent={setMobileStageDetent}
+        activeModule={activeModule}
+        activeBeat={activeBeat}
+        activeNodeId={activeNodeId}
+        nodeMap={nodeMap}
+        edges={edges}
+        masteryMap={masteryMap}
+        onSelectNode={(nodeId) => handleFocusNodeManual(nodeId)}
+        onInspectNode={onInspectNode}
+        onJumpToWorkspace={onJumpToWorkspace}
+      />
     </div>
   );
 };

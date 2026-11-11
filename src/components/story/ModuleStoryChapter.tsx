@@ -435,7 +435,7 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                   className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 px-2.5 py-1 text-[11px] font-bold text-white"
                 >
                   <Compass className="w-3 h-3 shrink-0" />
-                  <span className="lg:hidden">상하 도식 비교</span>
+                  <span className="lg:hidden">하단 도식 올리기</span>
                   <span className="hidden lg:inline">우측 도식 동기화</span>
                 </button>
 
@@ -770,7 +770,7 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                       }}
                       className="inline-flex min-h-[32px] items-center gap-1 rounded-lg bg-violet-600 hover:bg-violet-700 px-3 py-1 text-xs font-bold text-white shrink-0"
                     >
-                      <span className="lg:hidden">3중 렌즈 도식 비교</span>
+                      <span className="lg:hidden">하단 3중 렌즈 올리기</span>
                       <span className="hidden lg:inline">
                         우측 스테이지에 3중 렌즈 표시
                       </span>
