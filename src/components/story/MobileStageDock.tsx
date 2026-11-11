@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState
@@ -45,7 +46,7 @@ interface MobileStageDockProps {
   ) => void;
 }
 
-const COLLAPSED_BAR_HEIGHT_PX = 62;
+const FALLBACK_HEADER_HEIGHT_PX = 60;
 const FULL_TOP_PEEK_PX = 8;
 const HALF_VISIBLE_RATIO = 0.46;
 const MIN_HALF_EXTRA_PX = 140;
@@ -107,7 +108,7 @@ export const MobileStageDock: React.FC<MobileStageDockProps> = ({
 
   const [viewportHeightPx, setViewportHeightPx] = useState<number>(0);
   const [headerHeightPx, setHeaderHeightPx] = useState<number>(
-    COLLAPSED_BAR_HEIGHT_PX
+    FALLBACK_HEADER_HEIGHT_PX
   );
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [dragOffsetPx, setDragOffsetPx] = useState<number | null>(null);
@@ -123,15 +124,15 @@ export const MobileStageDock: React.FC<MobileStageDockProps> = ({
     activeModule.theories[0]?.titleKo ??
     activeModule.title;
 
-  // 스테이지 가용 높이 실시간 측정 (ResizeObserver)
-  useEffect(() => {
+  // 스테이지 가용 높이 실시간 측정 (페인트 이전 useLayoutEffect + ResizeObserver)
+  useLayoutEffect(() => {
     const vp = viewportRef.current;
     if (!vp) return;
 
     const updateSizes = () => {
-      setViewportHeightPx(vp.clientHeight);
+      setViewportHeightPx(vp.getBoundingClientRect().height);
       if (headerRef.current) {
-        setHeaderHeightPx(headerRef.current.offsetHeight);
+        setHeaderHeightPx(headerRef.current.getBoundingClientRect().height);
       }
     };
 
@@ -216,20 +217,22 @@ export const MobileStageDock: React.FC<MobileStageDockProps> = ({
   const effectiveDetent: MobileStageDetent =
     isInputFocused && detent !== 'full' ? 'collapsed' : detent;
 
-  // 3단 디텐트별 픽셀 오프셋 연산 (0에 가까울수록 위로 열림)
+  // 3단 디텐트별 픽셀 오프셋 연산 (0에 가까울수록 위로 열림, 접힘 오프셋은 실측 헤더 높이 직접 참조)
   const detentOffsets = useMemo(() => {
     if (viewportHeightPx <= 0) {
       return null;
     }
+    const measuredCollapsedH =
+      headerHeightPx > 0 ? headerHeightPx : FALLBACK_HEADER_HEIGHT_PX;
     const fullOffset = FULL_TOP_PEEK_PX;
     const halfVisible = Math.max(
-      COLLAPSED_BAR_HEIGHT_PX + MIN_HALF_EXTRA_PX,
+      measuredCollapsedH + MIN_HALF_EXTRA_PX,
       Math.round(viewportHeightPx * HALF_VISIBLE_RATIO)
     );
     const halfOffset = Math.max(fullOffset, viewportHeightPx - halfVisible);
     const collapsedOffset = Math.max(
       halfOffset,
-      viewportHeightPx - COLLAPSED_BAR_HEIGHT_PX
+      Math.floor(viewportHeightPx - measuredCollapsedH)
     );
 
     return {
@@ -238,7 +241,7 @@ export const MobileStageDock: React.FC<MobileStageDockProps> = ({
       collapsed: collapsedOffset,
       halfVisible
     };
-  }, [viewportHeightPx]);
+  }, [viewportHeightPx, headerHeightPx]);
 
   const targetOffsetPx = detentOffsets
     ? detentOffsets[effectiveDetent]
@@ -439,7 +442,7 @@ export const MobileStageDock: React.FC<MobileStageDockProps> = ({
   return (
     <div
       ref={viewportRef}
-      className="no-print print:hidden lg:hidden fixed inset-x-0 top-[calc(var(--mobile-topbar-h)+env(safe-area-inset-top,0px))] bottom-[calc(var(--mobile-bottom-nav-h)+env(safe-area-inset-bottom,0px))] overflow-hidden pointer-events-none z-30"
+      className="no-print print:hidden lg:hidden fixed inset-x-0 top-[calc(var(--mobile-topbar-h)+env(safe-area-inset-top,0px))] bottom-[calc(var(--measured-bottom-nav-h)-1px)] overflow-hidden pointer-events-none z-30"
     >
       {/* 전체 화면(full) 확장 시에만 상단 8px 틈새 뒤로 은은한 배경 딤 표시 (탭 시 반반 모드로 하강) */}
       {effectiveDetent === 'full' && !isDragging && (
@@ -455,9 +458,9 @@ export const MobileStageDock: React.FC<MobileStageDockProps> = ({
         ref={sheetRef}
         aria-label="스크롤 연동 인터랙티브 도식 바텀시트"
         style={{ transform: renderedTransform }}
-        className={`mobile-detent-sheet pointer-events-auto relative h-full w-full flex flex-col rounded-t-2xl bg-white border-t border-slate-900/20 shadow-[0_-10px_32px_rgba(15,23,42,0.22)] overflow-hidden ${
-          isDragging ? 'dragging' : ''
-        }`}
+        className={`mobile-detent-sheet pointer-events-auto relative h-full w-full flex flex-col rounded-t-2xl border-t border-slate-900/20 shadow-[0_-10px_32px_rgba(15,23,42,0.22)] overflow-hidden ${
+          isCollapsed ? 'bg-slate-950' : 'bg-white'
+        } ${isDragging ? 'dragging' : ''}`}
       >
         {/* 상단 시트 헤더 & 애플 홈 인디케이터 스타일 그립 핸들(Grabber) */}
         <div
@@ -629,7 +632,9 @@ export const MobileStageDock: React.FC<MobileStageDockProps> = ({
               ? { height: `${bodyContainerHeightPx}px` }
               : undefined
           }
-          className="min-h-0 flex flex-col overflow-hidden bg-white"
+          className={`min-h-0 flex flex-col overflow-hidden bg-white ${
+            isCollapsed ? 'invisible pointer-events-none' : ''
+          }`}
         >
           <StickyVisualStage
             density="dock"

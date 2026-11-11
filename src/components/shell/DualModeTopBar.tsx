@@ -283,12 +283,13 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
             </kbd>
           </button>
 
+          {/* 데스크톱 전용 상단 AI 질문 버튼 (모바일은 하단 독의 독립형 AI 말풍선 런처가 전담) */}
           <button
             type="button"
             aria-expanded={isAiTutorOpen}
             aria-label="교재 우선 탐색 AI 질문창 열기"
             onClick={onToggleAiTutor}
-            className={`inline-flex min-h-[36px] items-center gap-1 rounded-lg px-2 sm:px-2.5 py-1.5 text-xs font-extrabold border transition-colors ${
+            className={`hidden lg:inline-flex min-h-[36px] items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-extrabold border transition-colors ${
               isAiTutorOpen
                 ? 'bg-indigo-600 text-white border-indigo-400'
                 : 'bg-indigo-500/20 text-indigo-200 border-indigo-400/35 hover:bg-indigo-500/30'

@@ -33,8 +33,10 @@
 
     /* Mobile Layout & Safe-Area Ergonomic Tokens */
     --mobile-topbar-h: 3.125rem;
-    --mobile-bottom-nav-h: 3.75rem;
-    --mobile-sheet-collapsed-h: 3.875rem;
+    --measured-bottom-nav-h: calc(
+      3.125rem + max(0.5rem, env(safe-area-inset-bottom, 0px))
+    );
+    --mobile-sheet-collapsed-h: 3.75rem;
 
     /* Motion Curves */
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -322,7 +324,7 @@ dialog[open]::backdrop {
 }
 
 /* 일반 모달 다이얼로그 */
-dialog:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog) {
+dialog:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog):not(.ai-tutor-dialog) {
   opacity: 0;
   transition-property: opacity, transform, display, overlay;
   transition-duration: 200ms;
@@ -334,7 +336,7 @@ dialog:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog) {
   }
 }
 
-dialog[open]:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog) {
+dialog[open]:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog):not(.ai-tutor-dialog) {
   opacity: 1;
   transform-origin: center;
 
@@ -468,13 +470,15 @@ dialog.instant-dialog[open] {
 @media (prefers-reduced-motion: reduce) {
   button:not(:disabled):not(.no-press-scale):active,
   .pressable:active,
-  dialog:not(.instant-dialog),
+  dialog:not(.instant-dialog):not(.ai-tutor-dialog),
+  .ai-tutor-bubble,
   .stage-card-swap,
   .mode-switch-pill,
   .toast-enter {
     transform: none !important;
     animation: none !important;
     transition-duration: 100ms !important;
+    transition-delay: 0ms !important;
   }
 
   .gpu-progress-bar,
@@ -568,11 +572,16 @@ dialog::backdrop {
   overscroll-behavior: contain;
 }
 
-/* AI 튜터 플로팅 채팅 <dialog> — 모바일(모달 바텀시트) / 데스크톱(비차단 플로팅 패널) */
+/* AI 튜터 말풍선 플로팅 <dialog> — 버튼 원점(Trigger-Origin) 애플 스프링 등장·수축 애니메이션 */
 dialog.ai-tutor-dialog {
   padding: 0;
   border: 0;
   background: transparent;
+  overflow: visible;
+  transform: none;
+  transition-property: display, overlay;
+  transition-duration: 260ms;
+  transition-behavior: allow-discrete;
 }
 
 dialog.ai-tutor-dialog[open] {
@@ -580,12 +589,83 @@ dialog.ai-tutor-dialog[open] {
   flex-direction: column;
 }
 
+/* 실제 스케일·오퍼시티 모션은 내부 말풍선 표면에 적용하여 <dialog> 레이아웃 좌표 왜곡을 원천 차단 */
+.ai-tutor-bubble {
+  opacity: 0;
+  will-change: transform, opacity;
+  transform-origin: var(--ai-origin-x, calc(100% - 2.25rem))
+    var(--ai-origin-y, calc(100% + 1.75rem));
+  transition-property: opacity, transform;
+  transition-duration: 170ms, 250ms;
+  transition-delay: 65ms, 0ms;
+  transition-timing-function:
+    ease-in,
+    cubic-bezier(0.36, 0, 0.66, -0.22);
+  transition-timing-function:
+    ease-in,
+    linear(0, -0.032 14%, 0.15 35%, 0.6 65%, 0.9 86%, 1);
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translate3d(0, 6px, 0) scale(0.08);
+  }
+}
+
+dialog.ai-tutor-dialog[open]:where(:not([data-closing])) .ai-tutor-bubble {
+  opacity: 1;
+  transition-duration: 160ms, 440ms;
+  transition-delay: 0ms, 0ms;
+  transition-timing-function:
+    ease-out,
+    cubic-bezier(0.22, 1.28, 0.36, 1);
+  transition-timing-function:
+    ease-out,
+    linear(
+      0,
+      0.42 8%,
+      0.86 19%,
+      1.048 32%,
+      1.056 39%,
+      1.015 54%,
+      0.994 70%,
+      1
+    );
+
+  @starting-style {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translate3d(0, 0, 0) scale(1);
+
+    @starting-style {
+      transform: translate3d(0, 6px, 0) scale(0.08);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.ai-tutor-dialog,
+  .ai-tutor-bubble,
+  dialog.ai-tutor-dialog[open]:where(:not([data-closing])) .ai-tutor-bubble {
+    transition-duration: 100ms;
+    transition-delay: 0ms;
+  }
+}
+
 @media (max-width: 1023px) {
   dialog.ai-tutor-dialog {
-    margin: auto 0 0 0;
-    width: 100%;
-    max-width: 100%;
-    max-height: 88dvh;
+    position: fixed;
+    inset: auto 0.75rem
+      calc(var(--measured-bottom-nav-h) + 0.75rem) 0.75rem;
+    margin: 0;
+    width: auto;
+    max-width: calc(100vw - 1.5rem);
+    height: min(28rem, 64dvh);
+    max-height: calc(
+      100dvh - var(--measured-bottom-nav-h) -
+        var(--mobile-topbar-h, 3.125rem) - 1.5rem
+    );
+    z-index: 50;
   }
 }
 
@@ -594,10 +674,10 @@ dialog.ai-tutor-dialog[open] {
     position: fixed;
     inset: auto 1.5rem 5.25rem auto;
     margin: 0;
-    width: min(28.5rem, calc(100vw - 2.5rem));
-    height: min(42rem, calc(100dvh - 7.25rem));
+    width: min(28rem, calc(100vw - 2.5rem));
+    height: min(38rem, calc(100dvh - 7.25rem));
     max-height: calc(100dvh - 7.25rem);
-    z-index: 45;
+    z-index: 50;
   }
 }
 

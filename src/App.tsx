@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { CommandSearchModal } from './components/shell/CommandSearchModal';
 import { DualModeTopBar } from './components/shell/DualModeTopBar';
 import { FloatingAiTutorChat } from './components/shell/FloatingAiTutorChat';
@@ -133,6 +139,10 @@ export const App: React.FC = () => {
   );
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isAiTutorOpen, setIsAiTutorOpen] = useState<boolean>(false);
+  const [mobileBottomNavHeightPx, setMobileBottomNavHeightPx] = useState<
+    number | null
+  >(null);
+  const mobileAiTriggerRef = useRef<HTMLButtonElement>(null);
 
   const handleConsumeScrollRequest = useCallback(() => {
     setStoryScrollRequest(null);
@@ -184,6 +194,7 @@ export const App: React.FC = () => {
 
   const handleChangeMode = useCallback(
     (nextMode: AppMode) => {
+      setIsAiTutorOpen(false);
       setMode(nextMode);
       setPreferredEntryMode(nextMode);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -231,8 +242,21 @@ export const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  const appShellStyle = useMemo<React.CSSProperties | undefined>(
+    () =>
+      mobileBottomNavHeightPx !== null
+        ? ({
+            '--measured-bottom-nav-h': `${mobileBottomNavHeightPx}px`
+          } as React.CSSProperties)
+        : undefined,
+    [mobileBottomNavHeightPx]
+  );
+
   return (
-    <div className="min-h-[100dvh] bg-[var(--bg-canvas)] text-[var(--ink-primary)] flex flex-col">
+    <div
+      style={appShellStyle}
+      className="min-h-[100dvh] bg-[var(--bg-canvas)] text-[var(--ink-primary)] flex flex-col"
+    >
       {/* 상단 고정 글로벌 듀얼 모드 바 */}
       <DualModeTopBar
         mode={mode}
@@ -350,18 +374,30 @@ export const App: React.FC = () => {
         modules={enrichedModules}
         weakOrReviewCount={weakOrReviewCount}
         isAiTutorOpen={isAiTutorOpen}
+        aiButtonRef={mobileAiTriggerRef}
+        onMeasuredHeightChange={setMobileBottomNavHeightPx}
         onChangeMode={handleChangeMode}
-        onChangeTab={setActiveTab}
-        onChangeModule={setSelectedModule}
-        onOpenSearch={() => setIsSearchOpen(true)}
+        onChangeTab={(nextTab) => {
+          setIsAiTutorOpen(false);
+          setActiveTab(nextTab);
+        }}
+        onChangeModule={(nextMod) => {
+          setIsAiTutorOpen(false);
+          setSelectedModule(nextMod);
+        }}
+        onOpenSearch={() => {
+          setIsAiTutorOpen(false);
+          setIsSearchOpen(true);
+        }}
         onToggleAiTutor={() => setIsAiTutorOpen((prev) => !prev)}
       />
 
-      {/* 교재 우선 탐색 AI 플로팅 채팅창 (데스크톱 플로팅 패널 / 모바일 슬라이드업 시트) */}
+      {/* 교재 우선 탐색 AI 말풍선 채팅창 ([AI 질문] 버튼 원점 탄성 스프링 등장·수축) */}
       <FloatingAiTutorChat
         isOpen={isAiTutorOpen}
         onToggleOpen={() => setIsAiTutorOpen((prev) => !prev)}
         onClose={() => setIsAiTutorOpen(false)}
+        mobileTriggerRef={mobileAiTriggerRef}
         modules={enrichedModules}
         edges={curriculumGraph.edges}
         nodeMap={curriculumGraph.nodeMap}

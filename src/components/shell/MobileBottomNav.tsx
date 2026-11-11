@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import {
   BookOpen,
   BookOpenCheck,
   Brain,
   CheckCircle2,
   Layers,
+  MessageCircleQuestion,
   MessageSquareWarning,
   Network,
   Printer,
@@ -23,6 +24,8 @@ interface MobileBottomNavProps {
   modules: ModulePayload[];
   weakOrReviewCount: number;
   isAiTutorOpen: boolean;
+  aiButtonRef: React.RefObject<HTMLButtonElement>;
+  onMeasuredHeightChange: (heightPx: number) => void;
   onChangeMode: (next: AppMode) => void;
   onChangeTab: (tab: WorkspaceTabId) => void;
   onChangeModule: (mod: ModuleId | 'all') => void;
@@ -77,13 +80,38 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   modules,
   weakOrReviewCount,
   isAiTutorOpen,
+  aiButtonRef,
+  onMeasuredHeightChange,
   onChangeMode,
   onChangeTab,
   onChangeModule,
   onOpenSearch,
   onToggleAiTutor
 }) => {
+  const navRef = useRef<HTMLElement | null>(null);
   const [isModulePickerOpen, setIsModulePickerOpen] = useState<boolean>(false);
+
+  // 하단 툴바 실제 렌더링 높이(Safe-Area·모듈피커·워크스페이스 스트립 포함)를 첫 페인트 이전에 측정하여 상위 좌표계에 동기화
+  useLayoutEffect(() => {
+    const navEl = navRef.current;
+    if (!navEl) return;
+
+    const emitHeight = () => {
+      const measured = navEl.getBoundingClientRect().height;
+      if (measured > 0) {
+        onMeasuredHeightChange(measured);
+      }
+    };
+
+    emitHeight();
+    const ro = new ResizeObserver(emitHeight);
+    ro.observe(navEl);
+    window.addEventListener('resize', emitHeight);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', emitHeight);
+    };
+  }, [onMeasuredHeightChange, mode, isModulePickerOpen]);
 
   const selectedModBadge =
     selectedModule === 'all'
@@ -98,6 +126,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 
   return (
     <nav
+      ref={navRef}
       aria-label="모바일 하단 학습 탐색 독"
       className="no-print print:hidden lg:hidden fixed inset-x-0 bottom-0 z-40 bg-slate-950/95 translucent-header backdrop-blur-md text-white border-t border-white/10 safe-bottom-bar pt-1.5 space-y-1.5"
     >
@@ -186,90 +215,109 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         </div>
       ) : null}
 
-      {/* 하단 메인 5버튼 엄지 네비게이션 (터치 타깃 >= 44px 준수, AI 질문 포함) */}
-      <div className="grid grid-cols-5 gap-1 px-0.5 tabular-nums">
-        <button
-          type="button"
-          aria-current={mode === 'story' ? 'page' : undefined}
-          onClick={() => {
-            setIsModulePickerOpen(false);
-            onChangeMode('story');
-          }}
-          className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
-            mode === 'story' && !isModulePickerOpen && !isAiTutorOpen
-              ? 'bg-indigo-600 text-white'
-              : 'text-slate-300 hover:bg-white/[0.06]'
-          }`}
-        >
-          <BookOpenCheck className="w-4 h-4 shrink-0" aria-hidden="true" />
-          <span>스토리</span>
-        </button>
+      {/* 하단 바: [좌측 4개 페이지 탐색 탭 그룹] | 세로 구분선 | [우측 독립형 AI 말풍선 런처 캡슐] */}
+      <div className="flex items-center gap-1.5 px-1 tabular-nums">
+        <div className="flex-1 grid grid-cols-4 gap-1 min-w-0">
+          <button
+            type="button"
+            aria-current={mode === 'story' ? 'page' : undefined}
+            onClick={() => {
+              setIsModulePickerOpen(false);
+              onChangeMode('story');
+            }}
+            className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
+              mode === 'story' && !isModulePickerOpen
+                ? 'bg-indigo-600 text-white'
+                : 'text-slate-300 hover:bg-white/[0.06]'
+            }`}
+          >
+            <BookOpenCheck className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <span>스토리</span>
+          </button>
 
-        <button
-          type="button"
-          aria-current={mode === 'workspace' ? 'page' : undefined}
-          onClick={() => {
-            setIsModulePickerOpen(false);
-            onChangeMode('workspace');
-          }}
-          className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
-            mode === 'workspace' && !isModulePickerOpen && !isAiTutorOpen
-              ? 'bg-indigo-600 text-white'
-              : 'text-slate-300 hover:bg-white/[0.06]'
-          }`}
-        >
-          <Network className="w-4 h-4 shrink-0" aria-hidden="true" />
-          <span>워크스페이스</span>
-        </button>
+          <button
+            type="button"
+            aria-current={mode === 'workspace' ? 'page' : undefined}
+            onClick={() => {
+              setIsModulePickerOpen(false);
+              onChangeMode('workspace');
+            }}
+            className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
+              mode === 'workspace' && !isModulePickerOpen
+                ? 'bg-indigo-600 text-white'
+                : 'text-slate-300 hover:bg-white/[0.06]'
+            }`}
+          >
+            <Network className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <span>워크스페이스</span>
+          </button>
 
-        <button
-          type="button"
-          aria-expanded={isModulePickerOpen}
-          onClick={() => setIsModulePickerOpen((prev) => !prev)}
-          className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
-            isModulePickerOpen
-              ? 'bg-slate-800 text-indigo-300 border border-indigo-500/40'
-              : 'text-slate-300 hover:bg-white/[0.06]'
-          }`}
-        >
-          <Layers className="w-4 h-4 shrink-0" aria-hidden="true" />
-          <span>모듈·{selectedModBadge}</span>
-        </button>
+          <button
+            type="button"
+            aria-expanded={isModulePickerOpen}
+            onClick={() => setIsModulePickerOpen((prev) => !prev)}
+            className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
+              isModulePickerOpen
+                ? 'bg-slate-800 text-indigo-300 border border-indigo-500/40'
+                : 'text-slate-300 hover:bg-white/[0.06]'
+            }`}
+          >
+            <Layers className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <span>모듈·{selectedModBadge}</span>
+          </button>
 
-        <button
-          type="button"
-          onClick={() => {
-            setIsModulePickerOpen(false);
-            onOpenSearch();
-          }}
-          className="no-press-scale relative min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold text-slate-300 hover:bg-white/[0.06] transition-colors"
-        >
-          <div className="relative">
-            <Search className="w-4 h-4 shrink-0" aria-hidden="true" />
-            {weakOrReviewCount > 0 && (
-              <span
-                aria-hidden="true"
-                className="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-rose-500"
-              />
-            )}
-          </div>
-          <span>검색</span>
-        </button>
+          <button
+            type="button"
+            onClick={() => {
+              setIsModulePickerOpen(false);
+              onOpenSearch();
+            }}
+            className="no-press-scale relative min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold text-slate-300 hover:bg-white/[0.06] transition-colors"
+          >
+            <div className="relative">
+              <Search className="w-4 h-4 shrink-0" aria-hidden="true" />
+              {weakOrReviewCount > 0 && (
+                <span
+                  aria-hidden="true"
+                  className="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-rose-500"
+                />
+              )}
+            </div>
+            <span>검색</span>
+          </button>
+        </div>
 
+        {/* 탐색 탭과 플로팅 런처를 구분하는 세로 헤어라인 디바이더 */}
+        <div
+          aria-hidden="true"
+          className="w-px h-7 bg-white/15 shrink-0"
+        />
+
+        {/* 별도 플로팅 액션 캡슐로 구별된 AI 말풍선 호출 버튼 */}
         <button
+          ref={aiButtonRef}
           type="button"
           aria-expanded={isAiTutorOpen}
+          aria-label="현재 페이지 위에서 AI 질문 말풍선 열기"
           onClick={() => {
             setIsModulePickerOpen(false);
             onToggleAiTutor();
           }}
-          className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
+          className={`shrink-0 min-h-[44px] rounded-2xl px-3 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold border transition-all active:scale-95 ${
             isAiTutorOpen
-              ? 'bg-indigo-600 text-white'
-              : 'text-indigo-300 hover:bg-white/[0.06]'
+              ? 'bg-white text-indigo-950 border-indigo-200 shadow-[0_0_0_3px_rgba(129,140,248,0.45)]'
+              : 'bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 text-white border-indigo-300/45 shadow-[0_3px_12px_rgba(99,102,241,0.45)]'
           }`}
         >
-          <Sparkles className="w-4 h-4 shrink-0" aria-hidden="true" />
+          <div className="relative flex items-center justify-center">
+            <MessageCircleQuestion className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <Sparkles
+              className={`w-2.5 h-2.5 -ml-0.5 -mt-1.5 shrink-0 ${
+                isAiTutorOpen ? 'text-indigo-600' : 'text-amber-200'
+              }`}
+              aria-hidden="true"
+            />
+          </div>
           <span>AI 질문</span>
         </button>
       </div>

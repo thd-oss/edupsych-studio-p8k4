@@ -1,4 +1,4 @@
-const CACHE_NAME = 'edupsych-prep-cache-v5';
+const CACHE_NAME = 'edupsych-prep-cache-v6';
 const PRECACHE_ASSETS = [
   './',
   './index.html',

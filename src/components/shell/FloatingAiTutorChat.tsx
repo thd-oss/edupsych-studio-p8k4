@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState
@@ -43,6 +44,7 @@ interface FloatingAiTutorChatProps {
   isOpen: boolean;
   onToggleOpen: () => void;
   onClose: () => void;
+  mobileTriggerRef: React.RefObject<HTMLButtonElement>;
   modules: ModulePayload[];
   edges: KnowledgeGraphEdge[];
   nodeMap: Record<string, KnowledgeGraphNode>;
@@ -54,6 +56,8 @@ interface FloatingAiTutorChatProps {
 const MOBILE_MEDIA_QUERY = '(max-width: 1023px)';
 const IME_PROCESS_KEYCODE = 229;
 const IME_COMPOSITION_GUARD_WINDOW_MS = 50;
+const TAIL_MIN_INSET_PX = 30;
+const EXIT_ANIMATION_SAFETY_TIMEOUT_MS = 340;
 const CHAT_HISTORY_STORAGE_KEY = 'edupsych_ai_tutor_history_v1';
 const MAX_PERSISTED_MESSAGES = 24;
 
@@ -99,6 +103,7 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
   isOpen,
   onToggleOpen,
   onClose,
+  mobileTriggerRef,
   modules,
   edges,
   nodeMap,
@@ -111,7 +116,9 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
   const apiKeyInputId = useId();
   const modelSelectId = useId();
 
-  const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const desktopTriggerRef = useRef<HTMLButtonElement>(null);
+  const closeGenerationRef = useRef<number>(0);
   const formRef = useRef<HTMLFormElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const scrollListRef = useRef<HTMLDivElement | null>(null);
@@ -189,62 +196,115 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
     container.scrollTop = container.scrollHeight;
   }, [messages, isOpen]);
 
-  // 네이티브 <dialog> 열기/닫기: 모바일(<1024px)은 showModal() + closedby="any", 데스크톱(>=1024px)은 비차단 show()
-  useEffect(() => {
+  // 현재 뷰포트의 활성 [AI 질문] 버튼 중심 좌표를 실측하여 말풍선 탄성 원점(--ai-origin-x/y)과 꼬리 위치(--ai-tail-x)를 동기화
+  const syncBubbleOriginAndTail = useCallback(() => {
+    const dialog = dialogRef.current;
+    if (!dialog || typeof window === 'undefined') return;
+
+    const isMobileViewport = window.matchMedia(MOBILE_MEDIA_QUERY).matches;
+    const triggerEl = isMobileViewport
+      ? mobileTriggerRef.current
+      : desktopTriggerRef.current;
+    if (!triggerEl) return;
+
+    const dialogRect = dialog.getBoundingClientRect();
+    const triggerRect = triggerEl.getBoundingClientRect();
+    if (dialogRect.width <= 0 || triggerRect.width <= 0) return;
+
+    const triggerCenterX = triggerRect.left + triggerRect.width / 2;
+    const triggerCenterY = triggerRect.top + triggerRect.height / 2;
+    const originX = triggerCenterX - dialogRect.left;
+    const originY = triggerCenterY - dialogRect.top;
+    const tailCenterX = Math.max(
+      TAIL_MIN_INSET_PX,
+      Math.min(dialogRect.width - TAIL_MIN_INSET_PX, originX)
+    );
+
+    dialog.style.setProperty('--ai-origin-x', `${originX.toFixed(1)}px`);
+    dialog.style.setProperty('--ai-origin-y', `${originY.toFixed(1)}px`);
+    dialog.style.setProperty('--ai-tail-x', `${tailCenterX.toFixed(1)}px`);
+  }, [mobileTriggerRef]);
+
+  // 비모달 말풍선 <dialog> 열기/닫기: 등장 시 버튼 중심에서 스프링으로 튀어나오고, 닫을 때 data-closing + getAnimations()로 버튼 속으로 다시 수축 (iOS Safari/Firefox 완벽 호환)
+  useLayoutEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
-    const isMobileViewport =
-      typeof window !== 'undefined' &&
-      window.matchMedia(MOBILE_MEDIA_QUERY).matches;
-
     if (isOpen) {
+      closeGenerationRef.current += 1;
+      dialog.removeAttribute('data-closing');
+      if (!dialog.open) {
+        dialog.show();
+      }
+      syncBubbleOriginAndTail();
+
+      const isDesktopViewport =
+        typeof window !== 'undefined' &&
+        !window.matchMedia(MOBILE_MEDIA_QUERY).matches;
+      if (isDesktopViewport && isReadyToAsk) {
+        textareaRef.current?.focus();
+      }
+      return;
+    }
+
+    if (!dialog.open) {
+      return;
+    }
+
+    const closeToken = ++closeGenerationRef.current;
+    syncBubbleOriginAndTail();
+    dialog.setAttribute('data-closing', '');
+
+    const runAnimatedClose = async () => {
+      const animations = dialog.getAnimations({ subtree: true });
+      if (animations.length > 0) {
+        await Promise.race([
+          Promise.allSettled(animations.map((anim) => anim.finished)),
+          new Promise<void>((resolve) =>
+            window.setTimeout(resolve, EXIT_ANIMATION_SAFETY_TIMEOUT_MS)
+          )
+        ]);
+      }
+      if (closeGenerationRef.current !== closeToken) {
+        return;
+      }
+      dialog.removeAttribute('data-closing');
       if (dialog.open) {
         dialog.close();
       }
-      if (isMobileViewport) {
-        dialog.setAttribute('closedby', 'any');
-        dialog.showModal();
-      } else {
-        dialog.removeAttribute('closedby');
-        dialog.show();
-      }
-      if (isReadyToAsk) {
-        textareaRef.current?.focus();
-      }
-    } else if (dialog.open) {
-      dialog.close();
-    }
-  }, [isOpen, isReadyToAsk]);
+    };
 
-  // closedby 미지원 브라우저(구형 Safari 등)용 모달 백드롭 클릭 Light-Dismiss 폴백
+    void runAnimatedClose();
+  }, [isOpen, isReadyToAsk, syncBubbleOriginAndTail]);
+
+  // 화면 회전·키보드 높이 변화 시에도 말풍선 꼬리가 [AI 질문] 버튼 정중앙을 가리키도록 실시간 보정
   useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if ('closedBy' in HTMLDialogElement.prototype) return;
+    if (!isOpen || typeof window === 'undefined') return;
+    const handleViewportUpdate = () => syncBubbleOriginAndTail();
 
-    const handleBackdropClick = (event: MouseEvent) => {
-      const isMobileViewport = window.matchMedia(MOBILE_MEDIA_QUERY).matches;
-      if (!isMobileViewport) return;
-      if (event.target !== dialog) return;
+    window.addEventListener('resize', handleViewportUpdate);
+    const vv = window.visualViewport;
+    vv?.addEventListener('resize', handleViewportUpdate);
+    return () => {
+      window.removeEventListener('resize', handleViewportUpdate);
+      vv?.removeEventListener('resize', handleViewportUpdate);
+    };
+  }, [isOpen, syncBubbleOriginAndTail]);
 
-      const rect = dialog.getBoundingClientRect();
-      const isDialogContent =
-        rect.top <= event.clientY &&
-        event.clientY <= rect.top + rect.height &&
-        rect.left <= event.clientX &&
-        event.clientX <= rect.left + rect.width;
-
-      if (!isDialogContent) {
-        dialog.close();
+  // 비모달 말풍선 상태에서 다른 모달 드로어/검색창이 열려 있지 않을 때 Esc로 부드럽게 수축 종료
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !document.querySelector('dialog:modal')) {
+        event.preventDefault();
+        onClose();
       }
     };
-
-    dialog.addEventListener('click', handleBackdropClick);
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
-      dialog.removeEventListener('click', handleBackdropClick);
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [isOpen, onClose]);
 
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
@@ -448,23 +508,35 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
 
   return (
     <>
-      {/* 데스크톱(lg+) 전용 우하단 플로팅 채팅 런처 버튼 (모바일은 상단바·하단독 버튼 사용하여 바텀시트 충돌 원천 차단) */}
+      {/* 모바일에서 현재 열람 페이지를 선명히 비춰주며 바깥 영역 탭 시 말풍선을 버튼 속으로 닫아주는 경량 베일 (하단 독 아래 레이어) */}
+      <div
+        aria-hidden="true"
+        onClick={onClose}
+        className={`no-print print:hidden lg:hidden fixed inset-0 z-[35] bg-slate-950/15 transition-opacity duration-200 ${
+          isOpen
+            ? 'opacity-100 pointer-events-auto'
+            : 'opacity-0 pointer-events-none'
+        }`}
+      />
+
+      {/* 데스크톱(lg+) 전용 우하단 플로팅 말풍선 런처 버튼 (모바일은 하단 독의 독립형 [AI 질문] 캡슐 사용) */}
       <button
+        ref={desktopTriggerRef}
         type="button"
         onClick={onToggleOpen}
         aria-expanded={isOpen}
-        aria-label="교재 우선 탐색 AI 용어·개념 질문창 열기 (⌘J)"
-        title="교재 우선 탐색 AI 질문창 (⌘J / Ctrl+J)"
-        className={`no-print print:hidden hidden lg:inline-flex fixed bottom-5 right-6 z-40 min-h-[48px] items-center gap-2.5 rounded-full px-4 py-2.5 text-sm font-extrabold shadow-lg border transition-colors ${
+        aria-label="교재 우선 탐색 AI 용어·개념 질문 말풍선 열기 (⌘J)"
+        title="교재 우선 탐색 AI 질문 말풍선 (⌘J / Ctrl+J)"
+        className={`no-print print:hidden hidden lg:inline-flex fixed bottom-5 right-6 z-40 min-h-[48px] items-center gap-2.5 rounded-full px-4 py-2.5 text-sm font-extrabold shadow-lg border transition-all active:scale-95 ${
           isOpen
-            ? 'bg-slate-900 text-white border-slate-700 hover:bg-slate-800'
-            : 'bg-indigo-600 text-white border-indigo-400/40 hover:bg-indigo-500'
+            ? 'bg-white text-indigo-950 border-indigo-200 shadow-[0_0_0_3px_rgba(99,102,241,0.35)]'
+            : 'bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 text-white border-indigo-400/40 hover:brightness-105'
         }`}
       >
         {isOpen ? (
           <>
-            <X className="w-4 h-4 shrink-0" aria-hidden="true" />
-            <span>AI 질문창 닫기</span>
+            <X className="w-4 h-4 shrink-0 text-indigo-700" aria-hidden="true" />
+            <span>AI 말풍선 접기</span>
           </>
         ) : (
           <>
@@ -477,7 +549,7 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
         )}
       </button>
 
-      {/* 네이티브 <dialog>: 모바일은 모달 바텀시트(showModal), 데스크톱은 비차단 플로팅 패널(show) */}
+      {/* 비모달 말풍선 <dialog>: 현재 페이지 위에 가볍게 떠서 버튼으로부터 스프링 등장·수축 */}
       <dialog
         ref={dialogRef}
         aria-labelledby={headingId}
@@ -487,31 +559,37 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
           }
           onClose();
         }}
-        className="ai-tutor-dialog no-print print:hidden backdrop:bg-slate-950/55 backdrop:backdrop-blur-[2px]"
+        className="ai-tutor-dialog no-print print:hidden"
       >
-        <div className="flex flex-col w-full h-full max-h-[88dvh] lg:max-h-[calc(100dvh-7.25rem)] bg-white text-slate-900 rounded-t-2xl lg:rounded-2xl border border-slate-200 shadow-2xl overflow-hidden">
-          {/* 상단 헤더 */}
-          <div className="bg-slate-950 text-white px-4 py-3 border-b border-white/10 shrink-0">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="w-7 h-7 rounded-lg bg-indigo-600 border border-indigo-400/40 flex items-center justify-center shrink-0">
-                  <MessageCircleQuestion
-                    className="w-4 h-4 text-white"
-                    aria-hidden="true"
-                  />
+        <div className="ai-tutor-bubble relative flex flex-col w-full h-full rounded-[22px] bg-white border border-indigo-200/95 shadow-[0_22px_54px_-10px_rgba(15,23,42,0.32),0_4px_16px_rgba(79,70,229,0.14)]">
+          <div className="flex flex-col w-full h-full rounded-[21px] overflow-hidden bg-white text-slate-900">
+            {/* 상단 헤더 */}
+            <div className="bg-slate-950 text-white px-3.5 py-2.5 border-b border-white/10 shrink-0">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 border border-indigo-400/40 flex items-center justify-center shrink-0">
+                    <MessageCircleQuestion
+                      className="w-4 h-4 text-white"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <h2
+                        id={headingId}
+                        className="text-xs sm:text-sm font-extrabold tracking-tight text-white truncate"
+                      >
+                        교재 우선 AI 질문
+                      </h2>
+                      <span className="shrink-0 rounded-full bg-indigo-500/25 border border-indigo-400/35 px-1.5 py-0.5 text-[9.5px] font-bold text-indigo-200">
+                        현재 페이지 유지
+                      </span>
+                    </div>
+                    <p className="text-[10.5px] text-slate-300 truncate">
+                      1차 수록 교재 90노드 탐색 → 불가피 시 학술 검색 보충
+                    </p>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <h2
-                    id={headingId}
-                    className="text-sm font-extrabold tracking-tight text-white truncate"
-                  >
-                    교재 우선 탐색 AI 튜터
-                  </h2>
-                  <p className="text-[11px] text-slate-300 truncate">
-                    1차 Woolfolk·Seifert 90노드 탐색 → 불가피 시 학술 검색 보충
-                  </p>
-                </div>
-              </div>
 
               <div className="flex items-center gap-1 shrink-0">
                 {messages.length > 0 && (
@@ -931,7 +1009,7 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
           <form
             ref={formRef}
             onSubmit={handleFormSubmit}
-            className="bg-white border-t border-slate-200 px-3 py-2.5 pb-[max(0.65rem,env(safe-area-inset-bottom,0px))] shrink-0"
+            className="bg-white border-t border-slate-200 px-3 py-2.5 shrink-0"
           >
             <div className="flex items-end gap-2">
               <label htmlFor={inputId} className="sr-only">
@@ -968,6 +1046,31 @@ export const FloatingAiTutorChat: React.FC<FloatingAiTutorChatProps> = ({
               </button>
             </div>
           </form>
+          </div>
+
+          {/* 하단 [AI 질문] 런처 버튼을 정확히 가리키는 애플 팝오버 스타일 곡선 말풍선 꼬리(Pointer Tail) */}
+          <svg
+            aria-hidden="true"
+            width="26"
+            height="12"
+            viewBox="0 0 26 12"
+            style={{
+              left: 'var(--ai-tail-x, calc(100% - 2.25rem))'
+            }}
+            className="pointer-events-none absolute -bottom-[11px] -translate-x-1/2 z-20 drop-shadow-[0_4px_5px_rgba(15,23,42,0.10)]"
+          >
+            <path
+              d="M 0 0 L 26 0 L 26 1 C 22 1 19.5 3 16.2 8.2 Q 13 12.2 9.8 8.2 C 6.5 3 4 1 0 1 Z"
+              fill="#ffffff"
+            />
+            <path
+              d="M 0 1 C 4 1 6.5 3 9.8 8.2 Q 13 12.2 16.2 8.2 C 19.5 3 22 1 26 1"
+              fill="none"
+              stroke="rgba(199, 210, 254, 0.95)"
+              strokeWidth="1.25"
+              strokeLinecap="round"
+            />
+          </svg>
         </div>
       </dialog>
     </>
