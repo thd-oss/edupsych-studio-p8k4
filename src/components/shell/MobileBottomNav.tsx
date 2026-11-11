@@ -8,7 +8,8 @@ import {
   MessageSquareWarning,
   Network,
   Printer,
-  Search
+  Search,
+  Sparkles
 } from 'lucide-react';
 import { MODULE_CONCEPT_ANCHORS } from '../../data/curriculumGraph';
 import { AppMode, ModuleId, WorkspaceTabId } from '../../types/graph';
@@ -21,10 +22,12 @@ interface MobileBottomNavProps {
   completedModules: ModuleId[];
   modules: ModulePayload[];
   weakOrReviewCount: number;
+  isAiTutorOpen: boolean;
   onChangeMode: (next: AppMode) => void;
   onChangeTab: (tab: WorkspaceTabId) => void;
   onChangeModule: (mod: ModuleId | 'all') => void;
   onOpenSearch: () => void;
+  onToggleAiTutor: () => void;
 }
 
 const MOBILE_WORKSPACE_TOOLS: Array<{
@@ -73,10 +76,12 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   completedModules,
   modules,
   weakOrReviewCount,
+  isAiTutorOpen,
   onChangeMode,
   onChangeTab,
   onChangeModule,
-  onOpenSearch
+  onOpenSearch,
+  onToggleAiTutor
 }) => {
   const [isModulePickerOpen, setIsModulePickerOpen] = useState<boolean>(false);
 
@@ -181,8 +186,8 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         </div>
       ) : null}
 
-      {/* 하단 메인 4버튼 엄지 네비게이션 (터치 타깃 >= 44px 준수) */}
-      <div className="grid grid-cols-4 gap-1 px-0.5 tabular-nums">
+      {/* 하단 메인 5버튼 엄지 네비게이션 (터치 타깃 >= 44px 준수, AI 질문 포함) */}
+      <div className="grid grid-cols-5 gap-1 px-0.5 tabular-nums">
         <button
           type="button"
           aria-current={mode === 'story' ? 'page' : undefined}
@@ -190,8 +195,8 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             setIsModulePickerOpen(false);
             onChangeMode('story');
           }}
-          className={`no-press-scale min-h-[44px] rounded-xl px-1.5 py-1 flex flex-col items-center justify-center gap-0.5 text-[11px] font-extrabold transition-colors ${
-            mode === 'story' && !isModulePickerOpen
+          className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
+            mode === 'story' && !isModulePickerOpen && !isAiTutorOpen
               ? 'bg-indigo-600 text-white'
               : 'text-slate-300 hover:bg-white/[0.06]'
           }`}
@@ -207,8 +212,8 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             setIsModulePickerOpen(false);
             onChangeMode('workspace');
           }}
-          className={`no-press-scale min-h-[44px] rounded-xl px-1.5 py-1 flex flex-col items-center justify-center gap-0.5 text-[11px] font-extrabold transition-colors ${
-            mode === 'workspace' && !isModulePickerOpen
+          className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
+            mode === 'workspace' && !isModulePickerOpen && !isAiTutorOpen
               ? 'bg-indigo-600 text-white'
               : 'text-slate-300 hover:bg-white/[0.06]'
           }`}
@@ -221,14 +226,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           type="button"
           aria-expanded={isModulePickerOpen}
           onClick={() => setIsModulePickerOpen((prev) => !prev)}
-          className={`no-press-scale min-h-[44px] rounded-xl px-1.5 py-1 flex flex-col items-center justify-center gap-0.5 text-[11px] font-extrabold transition-colors ${
+          className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
             isModulePickerOpen
               ? 'bg-slate-800 text-indigo-300 border border-indigo-500/40'
               : 'text-slate-300 hover:bg-white/[0.06]'
           }`}
         >
           <Layers className="w-4 h-4 shrink-0" aria-hidden="true" />
-          <span>모듈 · {selectedModBadge}</span>
+          <span>모듈·{selectedModBadge}</span>
         </button>
 
         <button
@@ -237,7 +242,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             setIsModulePickerOpen(false);
             onOpenSearch();
           }}
-          className="no-press-scale relative min-h-[44px] rounded-xl px-1.5 py-1 flex flex-col items-center justify-center gap-0.5 text-[11px] font-extrabold text-slate-300 hover:bg-white/[0.06] transition-colors"
+          className="no-press-scale relative min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold text-slate-300 hover:bg-white/[0.06] transition-colors"
         >
           <div className="relative">
             <Search className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -248,7 +253,24 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               />
             )}
           </div>
-          <span>노드 검색</span>
+          <span>검색</span>
+        </button>
+
+        <button
+          type="button"
+          aria-expanded={isAiTutorOpen}
+          onClick={() => {
+            setIsModulePickerOpen(false);
+            onToggleAiTutor();
+          }}
+          className={`no-press-scale min-h-[44px] rounded-xl px-1 py-1 flex flex-col items-center justify-center gap-0.5 text-[10.5px] font-extrabold transition-colors ${
+            isAiTutorOpen
+              ? 'bg-indigo-600 text-white'
+              : 'text-indigo-300 hover:bg-white/[0.06]'
+          }`}
+        >
+          <Sparkles className="w-4 h-4 shrink-0" aria-hidden="true" />
+          <span>AI 질문</span>
         </button>
       </div>
     </nav>

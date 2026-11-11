@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 import http from 'node:http';
 import fs from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { exec } from 'node:child_process';
+import { GoogleGenAI } from '@google/genai';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,6 +15,36 @@ const DB_ROOT = path.join(ROOT_DIR, 'server', 'db');
 const MANIFEST_FILE = path.join(DB_ROOT, 'manifest.json');
 const USER_PROGRESS_FILE = path.join(DB_ROOT, 'user-progress.json');
 const GRAPH_EDGES_FILE = path.join(DB_ROOT, 'graph-edges.json');
+
+function resolveLocalGeminiApiKey() {
+  if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim()) {
+    return process.env.GEMINI_API_KEY.trim();
+  }
+  for (const envFile of ['.env.local', '.env']) {
+    const envPath = path.join(ROOT_DIR, envFile);
+    if (!existsSync(envPath)) continue;
+    try {
+      const raw = readFileSync(envPath, 'utf-8');
+      for (const line of raw.split(/\r?\n/)) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) continue;
+        const eqIdx = trimmed.indexOf('=');
+        if (eqIdx === -1) continue;
+        const key = trimmed.slice(0, eqIdx).trim();
+        const val = trimmed
+          .slice(eqIdx + 1)
+          .trim()
+          .replace(/^['"]|['"]$/g, '');
+        if (key === 'GEMINI_API_KEY' && val) {
+          return val;
+        }
+      }
+    } catch {
+      // ignore local env parse error
+    }
+  }
+  return '';
+}
 
 const DEFAULT_PORT = Number(process.env.PORT || 5174);
 const SHOULD_OPEN_APP_WINDOW = process.argv.includes('--open-app');
@@ -394,6 +425,49 @@ async function handleRequest(req, res) {
         };
         await writeJsonSafe(USER_PROGRESS_FILE, nextProgress);
         sendJson(res, 200, { status: 'ok', userProgress: nextProgress });
+        return;
+      }
+
+      if (method === 'GET' && pathname === '/api/ai/status') {
+        const serverKey = resolveLocalGeminiApiKey();
+        sendJson(res, 200, { hasServerApiKey: Boolean(serverKey) });
+        return;
+      }
+
+      if (method === 'POST' && pathname === '/api/ai/interact') {
+        const serverKey = resolveLocalGeminiApiKey();
+        if (!serverKey) {
+          sendJson(res, 400, {
+            error:
+              '로컬 서버 .env.local에 GEMINI_API_KEY가 없습니다. 채팅창 [API 키 설정]에 개인 키를 등록해 주세요.'
+          });
+          return;
+        }
+        const body = await readRequestBody(req);
+        const model = String(body.model || 'gemini-3.8-flash');
+        const systemInstruction = String(body.systemInstruction || '');
+        const input = String(body.input || '');
+        const schema = body.schema ?? {};
+        const enableGoogleSearch = Boolean(body.enableGoogleSearch);
+
+        const ai = new GoogleGenAI({ apiKey: serverKey });
+        const interaction = await ai.interactions.create({
+          model,
+          system_instruction: systemInstruction,
+          input,
+          ...(enableGoogleSearch ? { tools: [{ type: 'google_search' }] } : {}),
+          response_format: {
+            type: 'text',
+            mime_type: 'application/json',
+            schema
+          },
+          store: false
+        });
+
+        sendJson(res, 200, {
+          outputText: interaction.output_text ?? '',
+          steps: interaction.steps ?? []
+        });
         return;
       }
 

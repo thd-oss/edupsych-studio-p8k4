@@ -8,6 +8,7 @@ import {
   Network,
   RotateCcw,
   Search,
+  Sparkles,
   Upload
 } from 'lucide-react';
 import { AppMode, MasteryState, ModuleId } from '../../types/graph';
@@ -20,7 +21,9 @@ interface DualModeTopBarProps {
   masteryMap: Record<string, MasteryState>;
   totalNodesCount: number;
   isServerConnected: boolean;
+  isAiTutorOpen: boolean;
   onOpenSearch: () => void;
+  onToggleAiTutor: () => void;
   onJumpToWeakGraph: () => void;
   onExportBackup: () => void;
   onImportBackup: (file: File) => Promise<{ success: boolean; message: string }>;
@@ -38,7 +41,9 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
   masteryMap,
   totalNodesCount,
   isServerConnected,
+  isAiTutorOpen,
   onOpenSearch,
+  onToggleAiTutor,
   onJumpToWeakGraph,
   onExportBackup,
   onImportBackup,
@@ -276,6 +281,22 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
             <kbd className="hidden lg:inline rounded bg-white/[0.08] border border-white/[0.1] px-1.5 py-0.5 text-[10px] font-mono text-slate-300">
               ⌘K
             </kbd>
+          </button>
+
+          <button
+            type="button"
+            aria-expanded={isAiTutorOpen}
+            aria-label="교재 우선 탐색 AI 질문창 열기"
+            onClick={onToggleAiTutor}
+            className={`inline-flex min-h-[36px] items-center gap-1 rounded-lg px-2 sm:px-2.5 py-1.5 text-xs font-extrabold border transition-colors ${
+              isAiTutorOpen
+                ? 'bg-indigo-600 text-white border-indigo-400'
+                : 'bg-indigo-500/20 text-indigo-200 border-indigo-400/35 hover:bg-indigo-500/30'
+            }`}
+            title="교재 우선 탐색 AI 용어·개념 질문창 (⌘J)"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-indigo-300 shrink-0" aria-hidden="true" />
+            <span>AI 질문</span>
           </button>
 
           <button

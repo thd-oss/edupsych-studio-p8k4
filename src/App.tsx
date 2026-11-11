@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { CommandSearchModal } from './components/shell/CommandSearchModal';
 import { DualModeTopBar } from './components/shell/DualModeTopBar';
+import { FloatingAiTutorChat } from './components/shell/FloatingAiTutorChat';
 import { MobileBottomNav } from './components/shell/MobileBottomNav';
 import { NodeDetailDrawer } from './components/shell/NodeDetailDrawer';
 import { ScrollytellingView } from './components/story/ScrollytellingView';
@@ -131,6 +132,7 @@ export const App: React.FC = () => {
     initialUrl.weakFocus
   );
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
+  const [isAiTutorOpen, setIsAiTutorOpen] = useState<boolean>(false);
 
   const handleConsumeScrollRequest = useCallback(() => {
     setStoryScrollRequest(null);
@@ -165,12 +167,15 @@ export const App: React.FC = () => {
     weakFocusActive
   ]);
 
-  // 글로벌 단축키 ⌘K / Ctrl+K -> 0ms 검색 모달 오픈
+  // 글로벌 단축키 ⌘K (검색 모달) & ⌘J (교재 우선 탐색 AI 질문창)
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsSearchOpen((prev) => !prev);
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'j') {
+        e.preventDefault();
+        setIsAiTutorOpen((prev) => !prev);
       }
     };
     window.addEventListener('keydown', onKeyDown);
@@ -237,7 +242,9 @@ export const App: React.FC = () => {
         masteryMap={nodeMasteryMap}
         totalNodesCount={curriculumGraph.nodes.length}
         isServerConnected={isServerConnected}
+        isAiTutorOpen={isAiTutorOpen}
         onOpenSearch={() => setIsSearchOpen(true)}
+        onToggleAiTutor={() => setIsAiTutorOpen((prev) => !prev)}
         onJumpToWeakGraph={handleJumpToWeakGraph}
         onExportBackup={exportBackupJson}
         onImportBackup={importBackupJson}
@@ -342,10 +349,28 @@ export const App: React.FC = () => {
         completedModules={userProgress.story.completedModules}
         modules={enrichedModules}
         weakOrReviewCount={weakOrReviewCount}
+        isAiTutorOpen={isAiTutorOpen}
         onChangeMode={handleChangeMode}
         onChangeTab={setActiveTab}
         onChangeModule={setSelectedModule}
         onOpenSearch={() => setIsSearchOpen(true)}
+        onToggleAiTutor={() => setIsAiTutorOpen((prev) => !prev)}
+      />
+
+      {/* 교재 우선 탐색 AI 플로팅 채팅창 (데스크톱 플로팅 패널 / 모바일 슬라이드업 시트) */}
+      <FloatingAiTutorChat
+        isOpen={isAiTutorOpen}
+        onToggleOpen={() => setIsAiTutorOpen((prev) => !prev)}
+        onClose={() => setIsAiTutorOpen(false)}
+        modules={enrichedModules}
+        edges={curriculumGraph.edges}
+        nodeMap={curriculumGraph.nodeMap}
+        activeNodeId={drawerNodeId ?? activeNodeId}
+        isServerConnected={isServerConnected}
+        onInspectNode={(nodeId) => {
+          setLastActiveNode(nodeId);
+          setDrawerNodeId(nodeId);
+        }}
       />
 
       {/* 글로벌 검색 모달 (⌘K, 0ms instant dialog) */}

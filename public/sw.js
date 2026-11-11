@@ -1,4 +1,4 @@
-const CACHE_NAME = 'edupsych-prep-cache-v4';
+const CACHE_NAME = 'edupsych-prep-cache-v5';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
@@ -40,8 +40,8 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // API 요청은 항상 네트워크 우선(Network-first)으로 처리하여 로컬 JSON DB Write-Back 보장
-  if (url.pathname.startsWith('/api/')) {
+  // 외부 도메인(Gemini API 등) 및 로컬 API 요청은 서비스워커 캐시를 우회하여 직접 통신 보장
+  if (url.origin !== self.location.origin || url.pathname.startsWith('/api/')) {
     return;
   }
 
