@@ -31,6 +31,7 @@ import {
   FlashcardStatus,
   ModulePayload
 } from '../../types/study';
+import { ComparisonCarousel } from '../shared/ComparisonCarousel';
 import { InlineTermQuickCheck } from './InlineTermQuickCheck';
 
 interface ModuleStoryChapterProps {
@@ -45,6 +46,7 @@ interface ModuleStoryChapterProps {
   nodeMap: Record<string, KnowledgeGraphNode>;
   masteryMap: Record<string, MasteryState>;
   onFocusNode: (nodeId: string, beatId?: string) => void;
+  onOpenMobileStage?: (nodeId: string, beatId?: string) => void;
   onInspectNode: (nodeId: string) => void;
   onRecordSimulationChoice: (theoryId: string, optionIndex: number) => void;
   onUpdateFlashcardStatus: (cardId: string, status: FlashcardStatus) => void;
@@ -110,6 +112,7 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
   nodeMap,
   masteryMap,
   onFocusNode,
+  onOpenMobileStage,
   onInspectNode,
   onRecordSimulationChoice,
   onUpdateFlashcardStatus,
@@ -423,12 +426,17 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onFocusNode(theory.id, beatId);
+                    if (onOpenMobileStage) {
+                      onOpenMobileStage(theory.id, beatId);
+                    } else {
+                      onFocusNode(theory.id, beatId);
+                    }
                   }}
                   className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 px-2.5 py-1 text-[11px] font-bold text-white"
                 >
                   <Compass className="w-3 h-3 shrink-0" />
-                  <span>우측 도식 동기화</span>
+                  <span className="lg:hidden">상하 도식 비교</span>
+                  <span className="hidden lg:inline">우측 도식 동기화</span>
                 </button>
 
                 <button
@@ -473,46 +481,118 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
               </p>
             </div>
 
-            {/* 교과서 핵심 명제 */}
-            <div className="surface-subtle p-4 space-y-2.5">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
-                <BookOpen className="w-4 h-4 text-indigo-600 shrink-0" />
-                <span>원서·교과서 핵심 명제</span>
-              </div>
-              <ul className="space-y-2">
-                {theory.textbookDefinition.map((line, lIdx) => (
-                  <li
-                    key={lIdx}
-                    className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed"
-                  >
-                    <span className="mt-0.5 w-5 h-5 rounded bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0 tabular-nums">
-                      {lIdx + 1}
-                    </span>
-                    <span className="min-w-0 flex-1">{line}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* 모바일(< lg): 가로 스와이프 & 세그먼트 탭 비교 캐러셀 */}
+            <ComparisonCarousel
+              ariaLabel={`${theory.titleKo} 3대 학술·임상 관점 비교`}
+              className="lg:hidden"
+              slides={[
+                {
+                  id: `${theory.id}-def`,
+                  tabLabel: '① 교과서 명제',
+                  badge: `${theory.textbookDefinition.length}`,
+                  activeTabClass:
+                    'bg-indigo-600 text-white border-indigo-600 shadow-xs',
+                  content: (
+                    <div className="surface-subtle p-4 space-y-2.5 h-full">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                        <BookOpen className="w-4 h-4 text-indigo-600 shrink-0" />
+                        <span>원서·교과서 핵심 명제</span>
+                      </div>
+                      <ul className="space-y-2">
+                        {theory.textbookDefinition.map((line, lIdx) => (
+                          <li
+                            key={lIdx}
+                            className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed"
+                          >
+                            <span className="mt-0.5 w-5 h-5 rounded bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0 tabular-nums">
+                              {lIdx + 1}
+                            </span>
+                            <span className="min-w-0 flex-1">{line}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )
+                },
+                {
+                  id: `${theory.id}-crit`,
+                  tabLabel: '② 비판적 재해석',
+                  activeTabClass:
+                    'bg-slate-900 text-white border-slate-900 shadow-xs',
+                  content: (
+                    <div className="rounded-xl bg-indigo-50/60 border border-indigo-200/80 p-4 space-y-1.5 h-full">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950">
+                        <Stethoscope className="w-4 h-4 text-indigo-600 shrink-0" />
+                        <span>과학자-실무자 비판적 재해석 및 임상 대안</span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
+                        {theory.criticalPerspective}
+                      </p>
+                    </div>
+                  )
+                },
+                {
+                  id: `${theory.id}-intv`,
+                  tabLabel: '③ 면접 90초',
+                  activeTabClass:
+                    'bg-amber-600 text-white border-amber-600 shadow-xs',
+                  content: (
+                    <div className="rounded-xl bg-amber-50/70 border border-amber-200/90 p-4 space-y-1.5 h-full">
+                      <span className="text-xs font-bold text-amber-950 block">
+                        대학원 면접 90초 구술 핵심 포인트
+                      </span>
+                      <p className="text-xs sm:text-sm font-medium text-amber-950 leading-relaxed">
+                        {theory.interviewPoint}
+                      </p>
+                    </div>
+                  )
+                }
+              ]}
+            />
 
-            {/* 과학자-실무자 비판적 재해석 vs 면접 구술 포인트 */}
-            <div className="grid grid-cols-1 gap-3">
-              <div className="rounded-xl bg-indigo-50/60 border border-indigo-200/80 p-4 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950">
-                  <Stethoscope className="w-4 h-4 text-indigo-600 shrink-0" />
-                  <span>과학자-실무자 비판적 재해석 및 임상 대안</span>
+            {/* 데스크톱(lg+): 기존 상하 비교 레이아웃 유지 */}
+            <div className="hidden lg:block space-y-3">
+              {/* 교과서 핵심 명제 */}
+              <div className="surface-subtle p-4 space-y-2.5">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                  <BookOpen className="w-4 h-4 text-indigo-600 shrink-0" />
+                  <span>원서·교과서 핵심 명제</span>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
-                  {theory.criticalPerspective}
-                </p>
+                <ul className="space-y-2">
+                  {theory.textbookDefinition.map((line, lIdx) => (
+                    <li
+                      key={lIdx}
+                      className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed"
+                    >
+                      <span className="mt-0.5 w-5 h-5 rounded bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0 tabular-nums">
+                        {lIdx + 1}
+                      </span>
+                      <span className="min-w-0 flex-1">{line}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              <div className="rounded-xl bg-amber-50/70 border border-amber-200/90 p-4 space-y-1.5">
-                <span className="text-xs font-bold text-amber-950 block">
-                  대학원 면접 90초 구술 핵심 포인트
-                </span>
-                <p className="text-xs sm:text-sm font-medium text-amber-950 leading-relaxed">
-                  {theory.interviewPoint}
-                </p>
+              {/* 과학자-실무자 비판적 재해석 vs 면접 구술 포인트 */}
+              <div className="grid grid-cols-1 gap-3">
+                <div className="rounded-xl bg-indigo-50/60 border border-indigo-200/80 p-4 space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950">
+                    <Stethoscope className="w-4 h-4 text-indigo-600 shrink-0" />
+                    <span>과학자-실무자 비판적 재해석 및 임상 대안</span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
+                    {theory.criticalPerspective}
+                  </p>
+                </div>
+
+                <div className="rounded-xl bg-amber-50/70 border border-amber-200/90 p-4 space-y-1.5">
+                  <span className="text-xs font-bold text-amber-950 block">
+                    대학원 면접 90초 구술 핵심 포인트
+                  </span>
+                  <p className="text-xs sm:text-sm font-medium text-amber-950 leading-relaxed">
+                    {theory.interviewPoint}
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -682,17 +762,80 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        onFocusNode(c.id, caseBeat.beatId);
+                        if (onOpenMobileStage) {
+                          onOpenMobileStage(c.id, caseBeat.beatId);
+                        } else {
+                          onFocusNode(c.id, caseBeat.beatId);
+                        }
                       }}
                       className="inline-flex min-h-[32px] items-center gap-1 rounded-lg bg-violet-600 hover:bg-violet-700 px-3 py-1 text-xs font-bold text-white shrink-0"
                     >
-                      <span>우측 스테이지에 3중 렌즈 표시</span>
+                      <span className="lg:hidden">3중 렌즈 도식 비교</span>
+                      <span className="hidden lg:inline">
+                        우측 스테이지에 3중 렌즈 표시
+                      </span>
                       <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                     </button>
                   </div>
 
-                  {/* 임상 단서 3분할 해부 */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                  {/* 모바일(< md): 임상 단서 3분할 가로 스와이프 비교 */}
+                  <ComparisonCarousel
+                    ariaLabel={`${c.title} 임상 단서 3단계 비교`}
+                    className="md:hidden"
+                    slides={[
+                      {
+                        id: `${c.id}-cue-a`,
+                        tabLabel: '① 선행 맥락',
+                        activeTabClass:
+                          'bg-amber-600 text-white border-amber-600 shadow-xs',
+                        content: (
+                          <div className="rounded-lg bg-white border border-amber-200/90 p-3.5 space-y-1.5 h-full">
+                            <span className="inline-block rounded bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] font-bold text-amber-900">
+                              1. 선행 맥락·과제 단서 (Antecedent)
+                            </span>
+                            <p className="text-xs text-slate-700 leading-relaxed">
+                              {cues.antecedentCue}
+                            </p>
+                          </div>
+                        )
+                      },
+                      {
+                        id: `${c.id}-cue-b`,
+                        tabLabel: '② 외현 행동',
+                        activeTabClass:
+                          'bg-rose-600 text-white border-rose-600 shadow-xs',
+                        content: (
+                          <div className="rounded-lg bg-white border border-rose-200/90 p-3.5 space-y-1.5 h-full">
+                            <span className="inline-block rounded bg-rose-50 border border-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-900">
+                              2. 외현 행동·병목 단서 (Behavior)
+                            </span>
+                            <p className="text-xs text-slate-700 leading-relaxed">
+                              {cues.behaviorCue}
+                            </p>
+                          </div>
+                        )
+                      },
+                      {
+                        id: `${c.id}-cue-c`,
+                        tabLabel: '③ 후속 반응',
+                        activeTabClass:
+                          'bg-indigo-600 text-white border-indigo-600 shadow-xs',
+                        content: (
+                          <div className="rounded-lg bg-white border border-indigo-200/90 p-3.5 space-y-1.5 h-full">
+                            <span className="inline-block rounded bg-indigo-50 border border-indigo-200 px-2 py-0.5 text-[10px] font-bold text-indigo-900">
+                              3. 후속 반응·강화 함정 (Consequence)
+                            </span>
+                            <p className="text-xs text-slate-700 leading-relaxed">
+                              {cues.consequenceCue}
+                            </p>
+                          </div>
+                        )
+                      }
+                    ]}
+                  />
+
+                  {/* 태블릿·데스크톱(md+): 임상 단서 3분할 3열 해부 */}
+                  <div className="hidden md:grid md:grid-cols-3 gap-2.5">
                     <div className="rounded-lg bg-white border border-amber-200/90 p-3 space-y-1">
                       <span className="inline-block rounded bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] font-bold text-amber-900">
                         1. 선행 맥락·과제 단서

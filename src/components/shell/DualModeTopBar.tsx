@@ -152,17 +152,20 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
         />
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2.5">
+      <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-1.5 lg:py-2.5 min-h-[3rem] flex flex-nowrap lg:flex-wrap items-center justify-between gap-2">
         {/* 좌측: 프로젝트 타이틀 + 모듈 진행률 링 (tabular-nums) */}
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 border border-indigo-400/30 flex items-center justify-center shrink-0">
-              <GraduationCap className="w-4 h-4 text-white" />
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-indigo-600 border border-indigo-400/30 flex items-center justify-center shrink-0">
+              <GraduationCap className="w-4 h-4 text-white" aria-hidden="true" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="text-sm sm:text-[15px] font-bold tracking-tight text-white truncate">
-                  EduPsych Interactive Studio
+                <h1 className="text-xs sm:text-[15px] font-bold tracking-tight text-white whitespace-nowrap">
+                  <span className="sm:hidden">교육심리 스튜디오</span>
+                  <span className="hidden sm:inline">
+                    EduPsych Interactive Studio
+                  </span>
                 </h1>
                 <span
                   className={`hidden xl:inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-semibold border shrink-0 ${
@@ -179,7 +182,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
                   <span>{isServerConnected ? '로컬 DB 연동' : '브라우저 저장소'}</span>
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 truncate hidden sm:block">
+              <p className="text-[11px] text-slate-400 truncate hidden lg:block">
                 Woolfolk 13판 · Seifert &amp; Sutton · 90개 학습 노드 지식 그래프
               </p>
             </div>
@@ -219,11 +222,11 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
           </div>
         </div>
 
-        {/* 중앙 세그먼트 스위치 (동심원 반경 rounded-xl -> rounded-lg, GPU translateX) */}
+        {/* 데스크톱(lg+) 중앙 세그먼트 스위치 (모바일은 하단 엄지 독 MobileBottomNav가 담당) */}
         <div
           role="group"
           aria-label="듀얼 학습 모드 전환"
-          className="relative grid grid-cols-2 rounded-xl bg-slate-900 p-1 border border-white/[0.08] w-full sm:w-auto min-w-[280px] sm:min-w-[380px]"
+          className="hidden lg:grid relative grid-cols-2 rounded-xl bg-slate-900 p-1 border border-white/[0.08] min-w-[380px]"
         >
           <div
             aria-hidden="true"
@@ -236,7 +239,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
           <button
             type="button"
             onClick={() => onChangeMode('story')}
-            className={`relative z-10 min-h-[36px] px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 ${
+            className={`relative z-10 min-h-[36px] px-4 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 ${
               mode === 'story'
                 ? 'text-white'
                 : 'text-slate-300 hover:text-white'
@@ -248,7 +251,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
           <button
             type="button"
             onClick={() => onChangeMode('workspace')}
-            className={`relative z-10 min-h-[36px] px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 ${
+            className={`relative z-10 min-h-[36px] px-4 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 ${
               mode === 'workspace'
                 ? 'text-white'
                 : 'text-slate-300 hover:text-white'
@@ -260,16 +263,17 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
         </div>
 
         {/* 우측: 글로벌 검색(⌘K) + 취약 항목 배지 + 백업/복원/초기화 */}
-        <div className="flex items-center gap-1.5 tabular-nums">
+        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 tabular-nums">
           <button
             type="button"
+            aria-label="90개 노드 즉시 검색 열기"
             onClick={onOpenSearch}
-            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] px-2.5 py-1.5 text-xs font-semibold text-slate-200"
+            className="hidden sm:inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] px-2.5 py-1.5 text-xs font-semibold text-slate-200"
             title="90개 노드 즉시 검색 및 이동 (⌘K)"
           >
-            <Search className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-            <span className="hidden sm:inline">노드 검색</span>
-            <kbd className="rounded bg-white/[0.08] border border-white/[0.1] px-1.5 py-0.5 text-[10px] font-mono text-slate-300">
+            <Search className="w-3.5 h-3.5 text-indigo-400 shrink-0" aria-hidden="true" />
+            <span>노드 검색</span>
+            <kbd className="hidden lg:inline rounded bg-white/[0.08] border border-white/[0.1] px-1.5 py-0.5 text-[10px] font-mono text-slate-300">
               ⌘K
             </kbd>
           </button>
@@ -277,7 +281,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
           <button
             type="button"
             onClick={onJumpToWeakGraph}
-            className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-bold border ${
+            className={`inline-flex min-h-[36px] items-center gap-1 rounded-lg px-2 sm:px-2.5 py-1.5 text-xs font-bold border ${
               counts.weakOrReview > 0
                 ? 'bg-rose-500/15 text-rose-200 border-rose-500/35 hover:bg-rose-500/25'
                 : 'bg-white/[0.05] text-slate-300 border-white/[0.08] hover:bg-white/[0.1]'
@@ -285,31 +289,37 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
             title="지식 그래프에서 복습 필요 노드만 하이라이트"
           >
             <AlertTriangle
+              aria-hidden="true"
               className={`w-3.5 h-3.5 shrink-0 ${
                 counts.weakOrReview > 0 ? 'text-rose-400' : 'text-slate-400'
               }`}
             />
-            <span>복습 표적 {counts.weakOrReview}개</span>
+            <span className="sm:hidden">복습 {counts.weakOrReview}</span>
+            <span className="hidden sm:inline">
+              복습 표적 {counts.weakOrReview}개
+            </span>
           </button>
 
           {/* 백업/복원 */}
           <button
             type="button"
+            aria-label="학습 진행도 JSON 백업 저장"
             onClick={onExportBackup}
-            className="inline-flex min-h-[36px] items-center gap-1 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] px-2.5 py-1.5 text-xs font-semibold text-slate-300"
+            className="inline-flex min-h-[36px] min-w-[36px] items-center justify-center gap-1 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-slate-300"
             title="학습 진행도 JSON 파일 다운로드"
           >
-            <Download className="w-3.5 h-3.5 shrink-0" />
+            <Download className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
             <span className="hidden xl:inline">백업 저장</span>
           </button>
 
           <button
             type="button"
+            aria-label="학습 진행도 JSON 백업 복원"
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex min-h-[36px] items-center gap-1 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] px-2.5 py-1.5 text-xs font-semibold text-slate-300"
+            className="inline-flex min-h-[36px] min-w-[36px] items-center justify-center gap-1 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-slate-300"
             title="백업 JSON 파일 불러오기"
           >
-            <Upload className="w-3.5 h-3.5 shrink-0" />
+            <Upload className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
             <span className="hidden xl:inline">백업 복원</span>
           </button>
           <input
@@ -323,20 +333,21 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
           {/* 1.4s Hold-to-Confirm 진도 초기화 버튼 */}
           <button
             type="button"
+            aria-label="1.4초 길게 눌러 전체 진도 초기화"
             data-holding={isHoldingReset ? 'true' : 'false'}
             onMouseDown={startHoldReset}
             onMouseUp={cancelHoldReset}
             onMouseLeave={cancelHoldReset}
             onTouchStart={startHoldReset}
             onTouchEnd={cancelHoldReset}
-            className="hold-confirm-btn relative overflow-hidden inline-flex min-h-[36px] items-center gap-1 rounded-lg bg-white/[0.05] border border-white/[0.08] px-2.5 py-1.5 text-xs font-semibold text-slate-400 hover:text-rose-300"
+            className="hold-confirm-btn relative overflow-hidden inline-flex min-h-[36px] min-w-[36px] items-center justify-center gap-1 rounded-lg bg-white/[0.05] border border-white/[0.08] px-2 sm:px-2.5 py-1.5 text-xs font-semibold text-slate-400 hover:text-rose-300"
             title="1.4초 동안 길게 누르면 전체 진도를 초기화합니다"
           >
             <span
               aria-hidden="true"
               className="hold-confirm-overlay pointer-events-none absolute inset-0 bg-rose-600/40"
             />
-            <RotateCcw className="w-3.5 h-3.5 relative z-10 shrink-0" />
+            <RotateCcw className="w-3.5 h-3.5 relative z-10 shrink-0" aria-hidden="true" />
             <span className="hidden 2xl:inline relative z-10">
               {isHoldingReset ? '유지 중...' : '진도 초기화'}
             </span>

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { ModuleId } from '../../types/graph';
 import { CaseLenses, ClassroomCase } from '../../types/study';
+import { ComparisonCarousel } from '../shared/ComparisonCarousel';
 import {
   CaseLensVisualRenderer,
   TriLensSummaryMatrix
@@ -428,11 +429,11 @@ export const CaseSimulatorTab: React.FC<CaseSimulatorTabProps> = ({
                   </div>
                 </div>
 
-                {/* Step 2: 3중 렌즈 개별 아코디언 토글 */}
+                {/* Step 2: 3중 렌즈 검증 (모바일은 내 초안 바로 아래 가로 스와이프 탭 비교, 데스크톱은 개별 아코디언) */}
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="text-xs font-extrabold text-slate-800">
-                      Step 2. 과학자-실무자 3대 이론 렌즈 개입안 검증 (클릭하여 개별 렌즈 개방):
+                      Step 2. 과학자-실무자 3대 이론 렌즈 개입안 검증:
                     </span>
                     <button
                       type="button"
@@ -448,55 +449,160 @@ export const CaseSimulatorTab: React.FC<CaseSimulatorTabProps> = ({
                       <span>
                         {showMatrix
                           ? '3중 렌즈 비교 매트릭스 닫기'
-                          : '3중 렌즈 한눈에 비교 매트릭스 열기'}
+                          : '3중 렌즈 요약 매트릭스'}
                       </span>
                     </button>
                   </div>
 
                   {showMatrix && <TriLensSummaryMatrix classroomCase={c} />}
 
-                  {LENS_META.map((meta) => {
-                    const isOpen = lensState[meta.key];
-                    return (
-                      <div
-                        key={meta.key}
-                        className="rounded-2xl border border-slate-200 overflow-hidden bg-white"
+                  {/* 모바일(< lg): 세로 3단 적층 대신 가로 스와이프 & 세그먼트 탭으로 내 초안과 즉시 대조 */}
+                  <div className="lg:hidden">
+                    {lensState.behavioral ||
+                    lensState.cognitive ||
+                    lensState.motivational ? (
+                      <ComparisonCarousel
+                        ariaLabel={`${c.title} 행동·인지·동기 3중 렌즈 처방 비교`}
+                        slides={[
+                          {
+                            id: `${c.id}-lens-beh`,
+                            tabLabel: '① 행동 FBA',
+                            activeTabClass:
+                              'bg-emerald-700 text-white border-emerald-700 shadow-xs',
+                            content: (
+                              <div className="rounded-2xl border border-emerald-200 bg-white p-4 space-y-2.5">
+                                <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                                  <Activity className="w-4 h-4 text-emerald-700 shrink-0" />
+                                  <div>
+                                    <span className="text-xs font-extrabold text-slate-900 block">
+                                      행동주의(FBA / PBS) 렌즈 처방도
+                                    </span>
+                                    <span className="text-[11px] text-slate-500">
+                                      A-B-C 기능 분석 · 사전교정 · 대체행동(FCT)
+                                    </span>
+                                  </div>
+                                </div>
+                                <CaseLensVisualRenderer
+                                  lensType="behavioral"
+                                  rawText={c.lenses.behavioral}
+                                  caseId={c.id}
+                                />
+                              </div>
+                            )
+                          },
+                          {
+                            id: `${c.id}-lens-cog`,
+                            tabLabel: '② 인지·보철',
+                            activeTabClass:
+                              'bg-indigo-600 text-white border-indigo-600 shadow-xs',
+                            content: (
+                              <div className="rounded-2xl border border-indigo-200 bg-white p-4 space-y-2.5">
+                                <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                                  <Brain className="w-4 h-4 text-indigo-700 shrink-0" />
+                                  <div>
+                                    <span className="text-xs font-extrabold text-slate-900 block">
+                                      인지·신경심리(CLT / 보철) 렌즈 처방도
+                                    </span>
+                                    <span className="text-[11px] text-slate-500">
+                                      작업기억 병목 완화 · 실행기능 외부 보철
+                                    </span>
+                                  </div>
+                                </div>
+                                <CaseLensVisualRenderer
+                                  lensType="cognitive"
+                                  rawText={c.lenses.cognitive}
+                                  caseId={c.id}
+                                />
+                              </div>
+                            )
+                          },
+                          {
+                            id: `${c.id}-lens-mot`,
+                            tabLabel: '③ 동기·상담',
+                            activeTabClass:
+                              'bg-rose-600 text-white border-rose-600 shadow-xs',
+                            content: (
+                              <div className="rounded-2xl border border-rose-200 bg-white p-4 space-y-2.5">
+                                <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                                  <HeartHandshake className="w-4 h-4 text-rose-600 shrink-0" />
+                                  <div>
+                                    <span className="text-xs font-extrabold text-slate-900 block">
+                                      동기·정서·상담(SDT / 귀인) 렌즈 처방도
+                                    </span>
+                                    <span className="text-[11px] text-slate-500">
+                                      심리적 욕구 지지 · 통제 가능 전략 귀인
+                                    </span>
+                                  </div>
+                                </div>
+                                <CaseLensVisualRenderer
+                                  lensType="motivational"
+                                  rawText={c.lenses.motivational}
+                                  caseId={c.id}
+                                />
+                              </div>
+                            )
+                          }
+                        ]}
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => toggleAllLensesForCase(c.id)}
+                        className="w-full min-h-[46px] rounded-2xl bg-violet-600 hover:bg-violet-500 text-white px-4 py-3 text-xs font-extrabold flex items-center justify-center gap-2 shadow-xs"
                       >
-                        <button
-                          type="button"
-                          onClick={() => toggleLens(c.id, meta.key)}
-                          className="w-full text-left px-4 py-3.5 bg-slate-50 hover:bg-slate-100 flex flex-wrap items-center justify-between gap-2"
-                        >
-                          <div className="flex items-center gap-2">
-                            {meta.icon}
-                            <div>
-                              <span className="text-xs sm:text-sm font-extrabold text-slate-900 block">
-                                {meta.title}
-                              </span>
-                              <span className="text-[11px] text-slate-500">
-                                {meta.subtitle}
-                              </span>
-                            </div>
-                          </div>
-                          <span
-                            className={`rounded-lg border px-2.5 py-1 text-xs font-extrabold ${meta.badgeClass}`}
-                          >
-                            {isOpen ? '▲ 렌즈 접기' : '▼ 처방 도식 열기'}
-                          </span>
-                        </button>
+                        <Eye className="w-4 h-4 shrink-0" />
+                        <span>
+                          3중 렌즈(행동·인지·동기) 가로 스와이프 처방 비교 열기
+                        </span>
+                      </button>
+                    )}
+                  </div>
 
-                        {isOpen && (
-                          <div className="p-4 sm:p-5 border-t border-slate-200 bg-slate-50/40">
-                            <CaseLensVisualRenderer
-                              lensType={meta.key}
-                              rawText={c.lenses[meta.key]}
-                              caseId={c.id}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                  {/* 데스크톱(lg+): 개별 아코디언 토글 유지 */}
+                  <div className="hidden lg:block space-y-3">
+                    {LENS_META.map((meta) => {
+                      const isOpen = lensState[meta.key];
+                      return (
+                        <div
+                          key={meta.key}
+                          className="rounded-2xl border border-slate-200 overflow-hidden bg-white"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => toggleLens(c.id, meta.key)}
+                            className="w-full text-left px-4 py-3.5 bg-slate-50 hover:bg-slate-100 flex flex-wrap items-center justify-between gap-2"
+                          >
+                            <div className="flex items-center gap-2">
+                              {meta.icon}
+                              <div>
+                                <span className="text-xs sm:text-sm font-extrabold text-slate-900 block">
+                                  {meta.title}
+                                </span>
+                                <span className="text-[11px] text-slate-500">
+                                  {meta.subtitle}
+                                </span>
+                              </div>
+                            </div>
+                            <span
+                              className={`rounded-lg border px-2.5 py-1 text-xs font-extrabold ${meta.badgeClass}`}
+                            >
+                              {isOpen ? '▲ 렌즈 접기' : '▼ 처방 도식 열기'}
+                            </span>
+                          </button>
+
+                          {isOpen && (
+                            <div className="p-4 sm:p-5 border-t border-slate-200 bg-slate-50/40">
+                              <CaseLensVisualRenderer
+                                lensType={meta.key}
+                                rawText={c.lenses[meta.key]}
+                                caseId={c.id}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </article>

@@ -21,6 +21,7 @@ import {
 } from '../../types/graph';
 import { TheoryConcept } from '../../types/study';
 import { VisualTopologyType } from '../../types/visuals';
+import { ComparisonCarousel } from '../shared/ComparisonCarousel';
 import { TheoryVisualRenderer } from '../visuals/TheoryVisualRenderer';
 
 interface TheoryArchiveTabProps {
@@ -492,7 +493,79 @@ export const TheoryArchiveTab: React.FC<TheoryArchiveTabProps> = ({
                 {/* 원서 명제 + 과학자-실무자 재해석 + 면접 포인트 + 개인 노트 */}
                 {viewMode === 'combined' && (
                   <div className="space-y-4">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {/* 모바일(< lg): 상단 도식과 동시에 한 화면에서 좌우 대조하는 비교 캐러셀 */}
+                    <ComparisonCarousel
+                      ariaLabel={`${theory.titleKo} 명제·비판·면접 포인트 비교`}
+                      className="lg:hidden"
+                      slides={[
+                        {
+                          id: `${theory.id}-ws-def`,
+                          tabLabel: '① 교과서 명제',
+                          badge: `${theory.textbookDefinition.length}`,
+                          activeTabClass:
+                            'bg-indigo-600 text-white border-indigo-600 shadow-xs',
+                          content: (
+                            <div className="surface-subtle p-4 space-y-2.5 h-full">
+                              <span className="text-xs font-extrabold text-slate-900 flex items-center gap-1.5">
+                                <BookOpen className="w-4 h-4 text-indigo-600 shrink-0" />
+                                <span>원서·교과서 핵심 명제</span>
+                              </span>
+                              <ul className="space-y-2">
+                                {theory.textbookDefinition.map((def, dIdx) => (
+                                  <li
+                                    key={dIdx}
+                                    className="flex items-start gap-2 text-xs sm:text-sm text-slate-700 leading-relaxed"
+                                  >
+                                    <span className="mt-0.5 w-5 h-5 rounded-md bg-indigo-600 text-white text-[11px] font-extrabold flex items-center justify-center shrink-0 tabular-nums">
+                                      {dIdx + 1}
+                                    </span>
+                                    <span className="[overflow-wrap:anywhere]">
+                                      {def}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )
+                        },
+                        {
+                          id: `${theory.id}-ws-crit`,
+                          tabLabel: '② 비판적 재해석',
+                          activeTabClass:
+                            'bg-slate-900 text-white border-slate-900 shadow-xs',
+                          content: (
+                            <div className="rounded-xl bg-slate-900 text-white p-4 space-y-1.5 h-full">
+                              <span className="text-xs font-extrabold text-amber-300 flex items-center gap-1.5">
+                                <Stethoscope className="w-4 h-4 shrink-0" />
+                                <span>과학자-실무자 비판적 재해석</span>
+                              </span>
+                              <p className="text-xs sm:text-sm text-slate-100 leading-relaxed [overflow-wrap:anywhere]">
+                                {theory.criticalPerspective}
+                              </p>
+                            </div>
+                          )
+                        },
+                        {
+                          id: `${theory.id}-ws-intv`,
+                          tabLabel: '③ 면접 90초',
+                          activeTabClass:
+                            'bg-amber-600 text-white border-amber-600 shadow-xs',
+                          content: (
+                            <div className="rounded-xl bg-amber-50 border border-amber-300 p-4 space-y-1.5 h-full">
+                              <span className="text-xs font-extrabold text-amber-950 block">
+                                대학원 면접 90초 구술 핵심 포인트
+                              </span>
+                              <p className="text-xs sm:text-sm font-medium text-amber-950 leading-relaxed [overflow-wrap:anywhere]">
+                                {theory.interviewPoint}
+                              </p>
+                            </div>
+                          )
+                        }
+                      ]}
+                    />
+
+                    {/* 데스크톱(lg+): 좌우 2컬럼 동시 비교 */}
+                    <div className="hidden lg:grid lg:grid-cols-2 gap-4">
                       <div className="surface-subtle p-4 space-y-2.5">
                         <span className="text-xs font-extrabold text-slate-900 flex items-center gap-1.5">
                           <BookOpen className="w-4 h-4 text-indigo-600 shrink-0" />

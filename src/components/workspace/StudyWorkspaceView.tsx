@@ -150,14 +150,14 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   onJumpToStory
 }) => {
   return (
-    <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-5 space-y-5">
-      {/* 워크스페이스 상단 6대 탭 & 모듈 필터 바 (인쇄 시 숨김) */}
+    <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-3 sm:py-5 space-y-4 sm:space-y-5">
+      {/* 워크스페이스 상단 탭 & 모듈 필터 바 (모바일은 6대 탭이 하단 엄지 독으로 이동하여 1줄 모듈 필터만 표시) */}
       <section className="no-print print:hidden surface-card p-3 sm:p-4 space-y-3">
-        {/* 6대 워크스페이스 탭 (0ms 즉시 교체) */}
+        {/* 데스크톱(lg+) 6대 워크스페이스 탭 (0ms 즉시 교체) */}
         <div
           role="tablist"
           aria-label="스터디 워크스페이스 도구 탭"
-          className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-2"
+          className="hidden lg:grid lg:grid-cols-3 xl:grid-cols-6 gap-2"
         >
           {WORKSPACE_TABS.map((tab) => {
             const isActive = activeTab === tab.id;
@@ -193,21 +193,21 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
         </div>
 
         {/* 모듈 공통 필터 바 & 스토리 모드 복귀 브릿지 */}
-        <div className="pt-2.5 border-t border-slate-900/[0.06] flex flex-wrap items-center justify-between gap-2 tabular-nums">
-          <div className="chip-scroll-row flex items-center gap-1.5 min-w-0 max-w-full">
-            <span className="text-xs font-extrabold text-slate-500 mr-1 shrink-0">
-              모듈 범위:
+        <div className="lg:pt-2.5 lg:border-t lg:border-slate-900/[0.06] flex flex-wrap items-center justify-between gap-2 tabular-nums">
+          <div className="mobile-strip-scroll sm:flex-wrap flex items-center gap-1.5 min-w-0 max-w-full">
+            <span className="text-xs font-extrabold text-slate-500 mr-0.5 shrink-0">
+              모듈:
             </span>
             <button
               type="button"
               onClick={() => onChangeModule('all')}
-              className={`min-h-[34px] rounded-lg px-3 py-1 text-xs font-extrabold border shrink-0 transition-colors ${
+              className={`min-h-[34px] rounded-lg px-2.5 py-1 text-xs font-extrabold border shrink-0 transition-colors ${
                 selectedModule === 'all'
                   ? 'bg-indigo-600 text-white border-indigo-600'
                   : 'bg-white text-slate-700 border-slate-900/[0.08] hover:bg-slate-50'
               }`}
             >
-              전 모듈 통합 (Mod 1~5)
+              전체(M1~5)
             </button>
 
             {modules.map((m) => {
@@ -218,7 +218,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                   key={m.id}
                   type="button"
                   onClick={() => onChangeModule(m.id)}
-                  className={`min-h-[34px] rounded-lg px-3 py-1 text-xs font-extrabold border flex items-center gap-1.5 shrink-0 transition-colors ${
+                  className={`min-h-[34px] rounded-lg px-2.5 py-1 text-xs font-extrabold border flex items-center gap-1.5 shrink-0 transition-colors ${
                     isSelected
                       ? 'bg-slate-900 text-white border-slate-900'
                       : 'bg-white text-slate-700 border-slate-900/[0.08] hover:bg-slate-50'
@@ -229,7 +229,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                     style={{ backgroundColor: anchor.accentHex }}
                   />
                   <span>
-                    Mod {m.number}. {m.title.split(' ')[0]}
+                    M{m.number}. {m.title.split(' ')[0]}
                   </span>
                 </button>
               );
@@ -244,7 +244,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                 selectedNodeId ?? 'mod1-theory-piaget'
               )
             }
-            className="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-1 text-xs font-extrabold text-indigo-900 shrink-0 transition-colors"
+            className="hidden lg:inline-flex min-h-[34px] items-center gap-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-1 text-xs font-extrabold text-indigo-900 shrink-0 transition-colors"
           >
             <Compass className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
             <span>스토리 가이드 모드로 이동</span>

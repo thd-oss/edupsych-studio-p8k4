@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { CommandSearchModal } from './components/shell/CommandSearchModal';
 import { DualModeTopBar } from './components/shell/DualModeTopBar';
+import { MobileBottomNav } from './components/shell/MobileBottomNav';
 import { NodeDetailDrawer } from './components/shell/NodeDetailDrawer';
 import { ScrollytellingView } from './components/story/ScrollytellingView';
 import { StudyWorkspaceView } from './components/workspace/StudyWorkspaceView';
@@ -30,7 +31,9 @@ const VALID_MODS: Array<ModuleId | 'all'> = [
   'mod5'
 ];
 
-function readInitialUrlState(): {
+const MOBILE_BREAKPOINT_QUERY = '(max-width: 1023px)';
+
+function readInitialUrlState(fallbackMobileModule: ModuleId): {
   mode: AppMode;
   tab: WorkspaceTabId;
   mod: ModuleId | 'all';
@@ -52,11 +55,15 @@ function readInitialUrlState(): {
   const rawMod = params.get('mod') as ModuleId | 'all' | null;
   const rawNode = params.get('node');
   const rawFocus = params.get('focus');
+  const isMobileViewport = window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches;
+  const defaultMod: ModuleId | 'all' = isMobileViewport
+    ? fallbackMobileModule
+    : 'all';
 
   return {
     mode: rawMode === 'workspace' ? 'workspace' : 'story',
     tab: rawTab && VALID_TABS.includes(rawTab) ? rawTab : 'graph',
-    mod: rawMod && VALID_MODS.includes(rawMod) ? rawMod : 'all',
+    mod: rawMod && VALID_MODS.includes(rawMod) ? rawMod : defaultMod,
     node: rawNode && rawNode.trim().length > 0 ? rawNode.trim() : null,
     weakFocus: rawFocus === 'weak'
   };
@@ -89,7 +96,23 @@ export const App: React.FC = () => {
     resetAllProgress
   } = useStudyGraphStore();
 
-  const initialUrl = React.useMemo(() => readInitialUrlState(), []);
+  const initialUrl = useMemo(() => {
+    const lastNode = userProgress.story.lastActiveNodeId;
+    const fallbackMod =
+      (lastNode && curriculumGraph.nodeMap[lastNode]?.moduleId) || 'mod1';
+    return readInitialUrlState(fallbackMod);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const weakOrReviewCount = useMemo(() => {
+    let count = 0;
+    for (const status of Object.values(nodeMasteryMap)) {
+      if (status === 'weak' || status === 'review') {
+        count += 1;
+      }
+    }
+    return count;
+  }, [nodeMasteryMap]);
 
   const [mode, setMode] = useState<AppMode>(initialUrl.mode);
   const [activeTab, setActiveTab] = useState<WorkspaceTabId>(initialUrl.tab);
@@ -163,10 +186,13 @@ export const App: React.FC = () => {
     [setPreferredEntryMode]
   );
 
-  // [스토리 맥락에서 다시 보기] 딥링크 점프 (단발성 스크롤 요청 생성)
+  // [스토리 맥락에서 다시 보기] 딥링크 점프 (단발성 스크롤 요청 생성, 모바일은 해당 단일 모듈로 페이징)
   const handleJumpToStoryNode = useCallback(
-    (_moduleId: ModuleId, nodeId: string) => {
-      setSelectedModule('all');
+    (moduleId: ModuleId, nodeId: string) => {
+      const isMobileViewport =
+        typeof window !== 'undefined' &&
+        window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches;
+      setSelectedModule(isMobileViewport ? moduleId : 'all');
       setActiveNodeId(nodeId);
       setStoryScrollRequest({ nodeId, requestId: Date.now() });
       setLastActiveNode(nodeId);
@@ -219,7 +245,7 @@ export const App: React.FC = () => {
       />
 
       {/* 메인 컨텐츠: Stage 1 스토리텔링 vs Stage 2 스터디 워크스페이스 */}
-      <main className="flex-1 pb-16">
+      <main className="flex-1 pb-36 lg:pb-16">
         {mode === 'story' ? (
           <ScrollytellingView
             modules={enrichedModules}
@@ -306,6 +332,20 @@ export const App: React.FC = () => {
         onUpdateItemNote={updateItemNote}
         onJumpToStory={handleJumpToStoryNode}
         onJumpToWorkspaceTab={handleJumpToWorkspaceNode}
+      />
+
+      {/* 모바일 전용 하단 엄지 네비게이션 독 (< lg) */}
+      <MobileBottomNav
+        mode={mode}
+        activeTab={activeTab}
+        selectedModule={selectedModule}
+        completedModules={userProgress.story.completedModules}
+        modules={enrichedModules}
+        weakOrReviewCount={weakOrReviewCount}
+        onChangeMode={handleChangeMode}
+        onChangeTab={setActiveTab}
+        onChangeModule={setSelectedModule}
+        onOpenSearch={() => setIsSearchOpen(true)}
       />
 
       {/* 글로벌 검색 모달 (⌘K, 0ms instant dialog) */}

@@ -38,6 +38,8 @@ import {
 } from '../visuals/CaseLensVisualRenderer';
 import { TheoryVisualRenderer } from '../visuals/TheoryVisualRenderer';
 
+export type StageDensityMode = 'desktop' | 'split' | 'sheet';
+
 interface StickyVisualStageProps {
   activeModule: ModulePayload;
   activeBeat: StoryBeatDescriptor | null;
@@ -45,6 +47,7 @@ interface StickyVisualStageProps {
   nodeMap: Record<string, KnowledgeGraphNode>;
   edges: KnowledgeGraphEdge[];
   masteryMap: Record<string, MasteryState>;
+  density?: StageDensityMode;
   onSelectNode: (nodeId: string) => void;
   onInspectNode: (nodeId: string) => void;
   onJumpToWorkspace: (
@@ -99,6 +102,7 @@ export const StickyVisualStage: React.FC<StickyVisualStageProps> = ({
   nodeMap,
   edges,
   masteryMap,
+  density = 'desktop',
   onSelectNode,
   onInspectNode,
   onJumpToWorkspace
@@ -202,94 +206,115 @@ export const StickyVisualStage: React.FC<StickyVisualStageProps> = ({
   const currentBeatKind = activeBeat?.kind ?? 'theory-topology';
   const stageSwapKey = `${stageMode}-${currentBeatKind}-${activeNodeId}`;
 
+  const isCompactSplit = density === 'split';
+  const isSheet = density === 'sheet';
+  const bodyScrollClass = isCompactSplit
+    ? 'stage-card-swap p-3 space-y-3 max-h-[calc(var(--mobile-split-stage-max-h)-5.5rem)] overflow-y-auto overscroll-contain'
+    : isSheet
+    ? 'stage-card-swap p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain'
+    : 'stage-card-swap p-4 sm:p-5 space-y-4 max-h-[calc(100dvh-11rem)] overflow-y-auto';
+
   return (
-    <div className="surface-card overflow-hidden flex flex-col">
+    <div
+      className={`overflow-hidden flex flex-col ${
+        isSheet ? 'h-full bg-white' : 'surface-card'
+      }`}
+    >
       {/* 상단 스테이지 컨트롤 바 */}
-      <div className="bg-slate-950 text-white px-4 sm:px-5 py-3.5 border-b border-white/[0.08] space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2 min-w-0">
-            <span
-              className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-bold text-white shrink-0 tabular-nums"
-              style={{ backgroundColor: conceptAnchor.accentHex }}
-            >
-              <span>모듈 {activeModule.number} 스테이지</span>
-            </span>
-            <span className="text-xs font-bold text-slate-200 truncate">
-              {activeBeat?.stepLabel ?? '개념 토폴로지 및 다중 렌즈 실험실'}
-            </span>
-          </div>
+      <div
+        className={`bg-slate-950 text-white border-b border-white/[0.08] ${
+          isCompactSplit ? 'px-3 py-2 space-y-1.5' : 'px-4 sm:px-5 py-3.5 space-y-3'
+        }`}
+      >
+        {!isCompactSplit && (
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span
+                className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-bold text-white shrink-0 tabular-nums"
+                style={{ backgroundColor: conceptAnchor.accentHex }}
+              >
+                <span>모듈 {activeModule.number} 스테이지</span>
+              </span>
+              <span className="text-xs font-bold text-slate-200 truncate">
+                {activeBeat?.stepLabel ?? '개념 토폴로지 및 다중 렌즈 실험실'}
+              </span>
+            </div>
 
-          <div className="flex items-center gap-1.5 shrink-0">
-            <button
-              type="button"
-              onClick={() => onInspectNode(egoCenterId)}
-              className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.1] px-2.5 py-1 text-[11px] font-bold text-slate-100"
-            >
-              <Network className="w-3.5 h-3.5 text-indigo-300 shrink-0" />
-              <span>노드 상세·연결망</span>
-            </button>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => onInspectNode(egoCenterId)}
+                className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.1] px-2.5 py-1 text-[11px] font-bold text-slate-100"
+              >
+                <Network className="w-3.5 h-3.5 text-indigo-300 shrink-0" />
+                <span>노드 상세·연결망</span>
+              </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                onJumpToWorkspace('graph', activeModule.id, egoCenterId)
-              }
-              className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 px-2.5 py-1 text-[11px] font-bold text-white"
-            >
-              <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-              <span>워크스페이스 열기</span>
-            </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onJumpToWorkspace('graph', activeModule.id, egoCenterId)
+                }
+                className="inline-flex min-h-[30px] items-center gap-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 px-2.5 py-1 text-[11px] font-bold text-white"
+              >
+                <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                <span>워크스페이스 열기</span>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* 3대 스테이지 서브모드 스위치 (동심원 반경 rounded-xl -> rounded-lg) */}
         <div className="grid grid-cols-3 gap-1 rounded-xl bg-slate-900 p-1 border border-white/[0.08]">
           <button
             type="button"
             onClick={() => setStageMode('diagram')}
-            className={`min-h-[32px] rounded-lg px-2.5 py-1 text-xs font-bold flex items-center justify-center gap-1.5 ${
+            className={`min-h-[32px] rounded-lg px-2 py-1 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 ${
               stageMode === 'diagram'
                 ? 'bg-indigo-600 text-white'
                 : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
             <Layers className="w-3.5 h-3.5 shrink-0" />
-            <span className="truncate">비트 연동 도식·처방</span>
+            <span className="truncate">
+              {isCompactSplit ? '도식·처방' : '비트 연동 도식·처방'}
+            </span>
           </button>
 
           <button
             type="button"
             onClick={() => setStageMode('clt-simulator')}
-            className={`min-h-[32px] rounded-lg px-2.5 py-1 text-xs font-bold flex items-center justify-center gap-1.5 ${
+            className={`min-h-[32px] rounded-lg px-2 py-1 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 ${
               stageMode === 'clt-simulator'
                 ? 'bg-indigo-600 text-white'
                 : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
             <Sliders className="w-3.5 h-3.5 shrink-0" />
-            <span className="truncate">작업기억·보철 실험기</span>
+            <span className="truncate">
+              {isCompactSplit ? '보철 실험기' : '작업기억·보철 실험기'}
+            </span>
           </button>
 
           <button
             type="button"
             onClick={() => setStageMode('mini-graph')}
-            className={`min-h-[32px] rounded-lg px-2.5 py-1 text-xs font-bold flex items-center justify-center gap-1.5 ${
+            className={`min-h-[32px] rounded-lg px-2 py-1 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 ${
               stageMode === 'mini-graph'
                 ? 'bg-indigo-600 text-white'
                 : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
             <Network className="w-3.5 h-3.5 shrink-0" />
-            <span className="truncate">서브그래프·기준 도해</span>
+            <span className="truncate">
+              {isCompactSplit ? '서브그래프' : '서브그래프·기준 도해'}
+            </span>
           </button>
         </div>
       </div>
 
       {/* 스테이지 본문 영역 (.stage-card-swap으로 180ms GPU 공간 전환 피드백 제공) */}
-      <div
-        key={stageSwapKey}
-        className="stage-card-swap p-4 sm:p-5 space-y-4 max-h-[calc(100dvh-11rem)] overflow-y-auto"
-      >
+      <div key={stageSwapKey} className={bodyScrollClass}>
         {/* Sub-mode 1: 비트 연동 인터랙티브 도식 / 사례 3중 렌즈 / 면접 게이트 */}
         {stageMode === 'diagram' && (
           <div className="space-y-4">

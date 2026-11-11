@@ -1,8 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  ArrowLeft,
+  ArrowRight,
   BookOpenCheck,
   CheckCircle2,
-  Network
+  Network,
+  Rows2
 } from 'lucide-react';
 import {
   buildModuleStoryBeats,
@@ -19,6 +22,7 @@ import {
   WorkspaceTabId
 } from '../../types/graph';
 import { FlashcardStatus, ModulePayload } from '../../types/study';
+import { MobileStageDock, MobileStageViewMode } from './MobileStageDock';
 import { ModuleStoryChapter } from './ModuleStoryChapter';
 import { StickyVisualStage } from './StickyVisualStage';
 
@@ -51,6 +55,9 @@ interface ScrollytellingViewProps {
 }
 
 const SCROLL_JUMP_DELAY_MS = 60;
+const MOBILE_MEDIA_QUERY = '(max-width: 1023px)';
+const OBSERVER_MARGIN_STANDARD = '-28% 0px -48% 0px';
+const OBSERVER_MARGIN_SPLIT_STAGE = '-46% 0px -28% 0px';
 
 export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
   modules,
@@ -112,6 +119,8 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
   const [activeBeatId, setActiveBeatId] = useState<string | null>(
     'mod1-beat-myth'
   );
+  const [mobileStageMode, setMobileStageMode] =
+    useState<MobileStageViewMode>('minimized');
 
   // 단발성 스크롤 이동 명령(scrollRequest)이 전달되었을 때만 1회 이동 후 즉시 소비
   useEffect(() => {
@@ -175,6 +184,11 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
     );
     if (beatElements.length === 0) return;
 
+    const activeRootMargin =
+      mobileStageMode === 'split'
+        ? OBSERVER_MARGIN_SPLIT_STAGE
+        : OBSERVER_MARGIN_STANDARD;
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -201,14 +215,14 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
       },
       {
         root: null,
-        rootMargin: '-30% 0px -48% 0px',
+        rootMargin: activeRootMargin,
         threshold: 0.05
       }
     );
 
     beatElements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [visibleModules, onMarkBeatVisited, onActiveNodeChange]);
+  }, [visibleModules, mobileStageMode, onMarkBeatVisited, onActiveNodeChange]);
 
   const activeModule: ModulePayload = useMemo(() => {
     return (
@@ -238,9 +252,29 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
     }
   };
 
+  const handleOpenMobileStage = (nodeId: string, beatId?: string) => {
+    handleFocusNodeManual(nodeId, beatId);
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia(MOBILE_MEDIA_QUERY).matches &&
+      mobileStageMode === 'minimized'
+    ) {
+      setMobileStageMode('split');
+    }
+  };
+
   const scrollToChapter = (modId: ModuleId) => {
     if (selectedModuleFilter !== 'all' && selectedModuleFilter !== modId) {
       onChangeModuleFilter(modId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia(MOBILE_MEDIA_QUERY).matches
+    ) {
+      onChangeModuleFilter(modId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     setActiveModuleId(modId);
@@ -250,13 +284,58 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
     }
   };
 
+  const currentModuleIndex = modules.findIndex(
+    (m) => m.id === (selectedModuleFilter === 'all' ? activeModule.id : selectedModuleFilter)
+  );
+  const prevModule =
+    currentModuleIndex > 0 ? modules[currentModuleIndex - 1] : null;
+  const nextModule =
+    currentModuleIndex >= 0 && currentModuleIndex < modules.length - 1
+      ? modules[currentModuleIndex + 1]
+      : null;
+
   const visitedCount = Object.keys(storyProgress.visitedBeats).length;
 
   return (
-    <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-5 space-y-6">
-      {/* 상단 스토리텔링 네비게이션 & 학습 흐름 브리프 (차분한 서피스 + 1px 헤어라인) */}
-      <section className="surface-card p-4 sm:p-6 space-y-4">
-        <div className="flex flex-wrap items-start justify-between gap-4">
+    <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-3 sm:py-5 space-y-4 sm:space-y-6">
+      {/* 상단 스토리텔링 네비게이션 (모바일은 1줄 압축 + 상하 반반 도식 토글, 데스크톱은 전체 안내) */}
+      <section className="surface-card p-3.5 sm:p-6 space-y-3 sm:space-y-4">
+        {/* 모바일(< lg) 슬림 상단 컨트롤 바 */}
+        <div className="flex lg:hidden items-center justify-between gap-2 tabular-nums">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="inline-flex items-center gap-1 rounded-md bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 text-[11px] font-extrabold text-indigo-800">
+              <BookOpenCheck className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+              <span>스토리 커리큘럼</span>
+            </span>
+            <span className="text-xs font-bold text-slate-600">
+              {visitedCount}/40 비트
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() =>
+              setMobileStageMode((prev) =>
+                prev === 'split' ? 'minimized' : 'split'
+              )
+            }
+            className={`min-h-[34px] inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-extrabold border shrink-0 transition-colors ${
+              mobileStageMode === 'split'
+                ? 'bg-indigo-600 text-white border-indigo-600'
+                : 'bg-slate-900 text-white border-slate-900'
+            }`}
+          >
+            <Rows2 className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+            <span>
+              {mobileStageMode === 'split'
+                ? '상단 도식 접기'
+                : '상하 반반 도식 비교'}
+            </span>
+          </button>
+        </div>
+
+        {/* 데스크톱(lg+) 상세 브리프 헤더 */}
+        <div className="hidden lg:flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-1.5 max-w-3xl min-w-0">
             <div className="inline-flex items-center gap-1.5 rounded-md bg-indigo-50 border border-indigo-200/80 px-2.5 py-0.5 text-xs font-bold text-indigo-800">
               <BookOpenCheck className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
@@ -291,27 +370,17 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
           </div>
         </div>
 
-        {/* 챕터 타임라인 네비게이터 (모바일 가로 스와이프 트랙 지원) */}
-        <div className="pt-3 border-t border-slate-900/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 tabular-nums">
+        {/* 챕터 타임라인 네비게이터 (모바일은 단일 모듈 페이징 우선) */}
+        <div className="pt-2.5 sm:pt-3 border-t border-slate-900/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 tabular-nums">
           <div
             role="region"
             aria-label="모듈 챕터 바로가기"
-            className="chip-scroll-row"
+            className="mobile-strip-scroll sm:flex-wrap"
           >
-            <button
-              type="button"
-              onClick={() => onChangeModuleFilter('all')}
-              className={`min-h-[34px] rounded-lg px-3 py-1.5 text-xs font-bold border ${
-                selectedModuleFilter === 'all'
-                  ? 'bg-slate-900 text-white border-slate-900'
-                  : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-              }`}
-            >
-              전 모듈 연속 학습 (Mod 1~5)
-            </button>
-
             {modules.map((m) => {
-              const isCurrent = activeModule.id === m.id;
+              const isSelected = selectedModuleFilter === m.id;
+              const isCurrent =
+                selectedModuleFilter === 'all' && activeModule.id === m.id;
               const isDone = storyProgress.completedModules.includes(m.id);
               const anchor = MODULE_CONCEPT_ANCHORS[m.id];
 
@@ -320,9 +389,9 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
                   key={m.id}
                   type="button"
                   onClick={() => scrollToChapter(m.id)}
-                  className={`min-h-[34px] rounded-lg px-3 py-1.5 text-xs font-bold border flex items-center gap-1.5 ${
-                    selectedModuleFilter === m.id
-                      ? 'bg-indigo-600 text-white border-indigo-600'
+                  className={`min-h-[36px] rounded-lg px-3 py-1.5 text-xs font-bold border flex items-center gap-1.5 ${
+                    isSelected
+                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
                       : isCurrent
                       ? 'bg-indigo-50 text-indigo-900 border-indigo-300'
                       : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
@@ -333,7 +402,7 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
                     style={{ backgroundColor: anchor.accentHex }}
                   />
                   <span>
-                    Mod {m.number}. {m.title.split(' ')[0]}
+                    M{m.number}. {m.title.split(' ')[0]}
                   </span>
                   {isDone && (
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
@@ -341,9 +410,21 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
                 </button>
               );
             })}
+
+            <button
+              type="button"
+              onClick={() => onChangeModuleFilter('all')}
+              className={`min-h-[36px] rounded-lg px-3 py-1.5 text-xs font-bold border ${
+                selectedModuleFilter === 'all'
+                  ? 'bg-slate-900 text-white border-slate-900'
+                  : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+              }`}
+            >
+              전 모듈 연속 (M1~5)
+            </button>
           </div>
 
-          <div className="flex items-center gap-1 text-[11px] text-slate-500 shrink-0">
+          <div className="hidden lg:flex items-center gap-1 text-[11px] text-slate-500 shrink-0">
             <span className="font-semibold mr-1">단일 모듈 집중:</span>
             {modules.map((m) => (
               <button
@@ -367,12 +448,27 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
         </div>
       </section>
 
-      {/* 메인 2-Column Scrollytelling Split (좌측 서사 레일 5 : 우측 Sticky Stage 7) */}
+      {/* 모바일 전용 인터랙티브 도식 독 (상하 반반 스플릿 / 하단 플로팅 HUD / 바텀시트) */}
+      <MobileStageDock
+        stageViewMode={mobileStageMode}
+        onChangeStageViewMode={setMobileStageMode}
+        activeModule={activeModule}
+        activeBeat={activeBeat}
+        activeNodeId={activeNodeId}
+        nodeMap={nodeMap}
+        edges={edges}
+        masteryMap={masteryMap}
+        onSelectNode={(nodeId) => handleFocusNodeManual(nodeId)}
+        onInspectNode={onInspectNode}
+        onJumpToWorkspace={onJumpToWorkspace}
+      />
+
+      {/* 메인 2-Column Scrollytelling Split (데스크톱 좌측 5 : 우측 Sticky Stage 7) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* 좌측: 서사 스크롤 레일 (Narrative Scroll Rail) */}
         <div
           ref={narrativeContainerRef}
-          className="lg:col-span-5 space-y-10 order-2 lg:order-1 min-w-0"
+          className="lg:col-span-5 space-y-8 sm:space-y-10 min-w-0"
         >
           {visibleModules.map((mod) => (
             <ModuleStoryChapter
@@ -388,6 +484,7 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
               nodeMap={nodeMap}
               masteryMap={masteryMap}
               onFocusNode={handleFocusNodeManual}
+              onOpenMobileStage={handleOpenMobileStage}
               onInspectNode={onInspectNode}
               onRecordSimulationChoice={onRecordSimulationChoice}
               onUpdateFlashcardStatus={onUpdateFlashcardStatus}
@@ -397,10 +494,62 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
               onJumpToWorkspace={onJumpToWorkspace}
             />
           ))}
+
+          {/* 단일 모듈 집중 모드일 때 하단 빠른 이전/다음 모듈 페이저 */}
+          {selectedModuleFilter !== 'all' && (
+            <nav
+              aria-label="이전 및 다음 모듈 페이징"
+              className="surface-card p-4 flex flex-wrap items-center justify-between gap-2.5 tabular-nums"
+            >
+              {prevModule ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChangeModuleFilter(prevModule.id);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="min-h-[42px] inline-flex items-center gap-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 px-3.5 py-2 text-xs font-extrabold text-slate-800"
+                >
+                  <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  <span>이전: M{prevModule.number}</span>
+                </button>
+              ) : (
+                <span className="text-xs font-semibold text-slate-400 px-2">
+                  첫 번째 모듈입니다
+                </span>
+              )}
+
+              <button
+                type="button"
+                onClick={() => onChangeModuleFilter('all')}
+                className="min-h-[42px] rounded-xl bg-white hover:bg-slate-50 border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600"
+              >
+                전 모듈 한눈에
+              </button>
+
+              {nextModule ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChangeModuleFilter(nextModule.id);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="min-h-[42px] inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-xs font-extrabold text-white shadow-xs"
+                >
+                  <span>다음: M{nextModule.number}. {nextModule.title.split(' ')[0]}</span>
+                  <ArrowRight className="w-4 h-4 shrink-0" aria-hidden="true" />
+                </button>
+              ) : (
+                <span className="text-xs font-bold text-emerald-700 px-2">
+                  마지막 모듈(M5) 도달
+                </span>
+              )}
+            </nav>
+          )}
         </div>
 
-        {/* 우측: 고정 인터랙티브 스테이지 (Sticky Interactive Stage) */}
-        <div className="lg:col-span-7 lg:sticky lg:top-[72px] order-1 lg:order-2 min-w-0">
+        {/* 우측: 데스크톱 전용 고정 인터랙티브 스테이지 (모바일은 MobileStageDock이 담당) */}
+        <div className="hidden lg:block lg:col-span-7 lg:sticky lg:top-[72px] min-w-0">
           <StickyVisualStage
             activeModule={activeModule}
             activeBeat={activeBeat}

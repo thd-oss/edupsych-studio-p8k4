@@ -1,4 +1,4 @@
-const CACHE_NAME = 'edupsych-prep-cache-v2';
+const CACHE_NAME = 'edupsych-prep-cache-v3';
 const PRECACHE_ASSETS = [
   './',
   './index.html',
@@ -46,6 +46,24 @@ self.addEventListener('fetch', (event) => {
   }
 
   if (request.method !== 'GET') {
+    return;
+  }
+
+  // HTML 문서 네비게이션은 네트워크 우선(Network-first)으로 최신 배포 번들을 즉시 반영하고 오프라인 시 캐시 폴백
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, responseClone);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(request).then((res) => res || caches.match('./index.html')))
+    );
     return;
   }
 
