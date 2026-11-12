@@ -1,0 +1,543 @@
+{
+  "moduleId": "mod1",
+  "generatedAt": "2026-11-12T12:53:46.665551+00:00",
+  "entries": {
+    "mod1-theory-piaget": {
+      "nodeId": "mod1-theory-piaget",
+      "moduleId": "mod1",
+      "nodeKind": "theory",
+      "titleKo": "피아제 인지발달이론과 신피아제 학파의 재해석",
+      "titleEn": "Piaget's Cognitive Development & Neo-Piagetian Perspectives",
+      "sourceCitation": "Woolfolk Ch.2 (pp. 43-57) / Seifert & Sutton Ch.3",
+      "excerpts": [
+        {
+          "id": "mod1-theory-piaget-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 2 · Cognitive Development",
+          "sectionHeading": "Piaget’S Theory Of Cognitive Development",
+          "pageLabel": "p. 72",
+          "verbatimExcerpt": "EQUILIBRATION. According to Piaget, organizing, assimilating, and accommodating can be viewed as a kind of complex balancing act. In his theory, the actual changes in thinking take place through the process of equilibration—the act of searching for a balance. Piaget assumed that people continually test the adequacy of their thinking processes in order to achieve that balance. Briefly, the process of equilibration works like this: If we apply a particular scheme to an event or situation and the scheme works, then equilibrium exists. If the scheme does not produce a satisfying result, then disequilibrium exists, and we become uncomfortable. This motivates us to keep searching for a solution through assimilation and accommodation, and thus our thinking changes and moves ahead.",
+          "highlightQuotes": [
+            "This motivates us to keep searching for a solution through assimilation and accommodation, and thus our thinking changes and moves ahead.",
+            "In his theory, the actual changes in thinking take place through the process of equilibration—the act of searching for a balance."
+          ],
+          "glossaryEntry": "Equilibration: Search for mental balance between cognitive schemes and information from the environment. (Woolfolk Glossary, p. 658)",
+          "koreanContextGuide": "구성주의적 인식론과 도식(Schema): 인간은 외부 자극을 수동적으로 수용하는 존재가 아니라, 환경과 능동적으로 상호작용하며 행동적·상징적·조작적 심리 구조인 도식(Schema)을 끊임없이 조직화(Organization)하고 정교화하는 주체이다."
+        },
+        {
+          "id": "mod1-theory-piaget-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 2 · Cognitive Development",
+          "sectionHeading": "Piaget’S Theory Of Cognitive Development",
+          "pageLabel": "p. 72",
+          "verbatimExcerpt": "People adapt to their increasingly complex environments by using existing schemes whenever these schemes work (assimilation) and by modifying and adding to their schemes when something new is needed (accommodation). In fact, both processes are required most of the time. Even using an established pattern such as sucking through a straw requires some accommodation if the straw is of a different size or length than the type you are used to. If you have tried drinking juice from box packages, you know that you have to add a new skill to your sucking-through-a-straw scheme: don’t squeeze the box or you will shoot juice through the straw, straight up into the air and into your lap.",
+          "highlightQuotes": [
+            "People adapt to their increasingly complex environments by using existing schemes whenever these schemes work (assimilation) and by modifying and adding to their schemes when something new is needed (accommodation).",
+            "Even using an established pattern such as sucking through a straw requires some accommodation if the straw is of a different size or length than the type you are used to."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "적응(Adaptation)의 이중 기제: 유기체가 환경과 상호작용할 때 기존의 인지 도식 틀 안에서 새로운 정보나 경험을 해석하여 통합하는 동화(Assimilation)와, 기존 도식만으로는 새로운 자극을 설명할 수 없을 때 도식 자체의 형태나 범주를 변형·확장하는 조절(Accommodation)의 상호보완적 과정을 거친다."
+        },
+        {
+          "id": "mod1-theory-piaget-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 2 · The Learning Process",
+          "sectionHeading": "Chapter 2 · The Learning Process",
+          "pageLabel": "p. 34",
+          "verbatimExcerpt": "A more recent example of psychological constructivism is the cognitive theory of Jean Piaget (Piaget, 2001; Gruber & Voneche, 1995). Piaget described learning as interplay between two mental activities that he called assimilation and accommodation. Assimilation is the interpretation of new information in terms of pre-existing concepts, information or ideas. A preschool child who already understands the concept of bird, for example, might initially label any flying object with this term—even butterflies or mosquitoes. Assimilation is therefore a bit like the idea of generalization in operant conditioning, or the idea of transfer described at the beginning of this chapter.",
+          "highlightQuotes": [
+            "Piaget described learning as interplay between two mental activities that he called assimilation and accommodation.",
+            "Assimilation is the interpretation of new information in terms of pre-existing concepts, information or ideas."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "피아제의 고전적 단계 모형은 인지발달의 영역일반성(Domain-generality)과 질적 불연속성을 과대평가한 반면, 표준 과제가 요구하는 과도한 언어적 이해력·주의 통제·작업기억 부담으로 인해 아동의 실제 초기 역량을 과소평가했다는 심리측정적·실험적 한계가 입증되었다. 신피아제 학파(Neo-Piagetian; Case, Pascual-Leone, Fischer)와 현대 정보처리이론의 과학자-실무자 관점에 따르면, 연령 증가…"
+        }
+      ]
+    },
+    "mod1-theory-vygotsky": {
+      "nodeId": "mod1-theory-vygotsky",
+      "moduleId": "mod1",
+      "nodeKind": "theory",
+      "titleKo": "비고츠키 사회문화적 이론과 근접발달영역(ZPD)·비계설정",
+      "titleEn": "Vygotsky's Sociocultural Theory, ZPD & Scaffolding",
+      "sourceCitation": "Woolfolk Ch.2 (pp. 58-68) / Seifert & Sutton Ch.3",
+      "excerpts": [
+        {
+          "id": "mod1-theory-vygotsky-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 2 · Cognitive Development",
+          "sectionHeading": "Vygotsky’S Sociocultural Perspective",
+          "pageLabel": "p. 87",
+          "verbatimExcerpt": "PRIVATE SPEECH AND THE ZONE. We can see how Vygotsky’s beliefs about the role of private speech in cognitive development fit with the notion of the ZPD. Often, an adult uses verbal prompts and structuring to help a child solve a problem or accomplish a task. We will see later that this type of support has been called scaffolding. This support can be gradually reduced as the child takes over the guidance, perhaps first by giving the prompts as private speech and finally as inner speech. As an example, think of the young girl described earlier who had lost her toy. Let’s move forward several years in her life and listen to her thoughts as an older student when she realizes that a schoolbook is missing.",
+          "highlightQuotes": [
+            "We can see how Vygotsky’s beliefs about the role of private speech in cognitive development fit with the notion of the ZPD.",
+            "We will see later that this type of support has been called scaffolding."
+          ],
+          "glossaryEntry": "Scaffolding: Support for learning and problem solving. The support could be clues, reminders, encouragement, breaking the problem down into steps, providing an example, or anything else that allows the student to grow in independence as a learner. Teachers and students make meaningful connections between what the teacher knows and what the students know and need in order to help the students learn more. (Woolfolk Glossary, p. 662)",
+          "koreanContextGuide": "발생학적 일반 법칙과 내면화(Internalization): 인간의 모든 고등정신기능(논리적 기억, 선택적 주의, 개념 형성, 의지적 자기조절)은 먼저 타인과의 사회적 상호작용 차원(대인간 심리 범주, Interpsychological plane)에서 출현한 뒤, 문화적 기호 체계를 거쳐 개인 내부의 심리적 차원(개인내 심리 범주, Intrapsychological plane)으로 내면화된다."
+        },
+        {
+          "id": "mod1-theory-vygotsky-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 2 · Cognitive Development",
+          "sectionHeading": "Vygotsky’S Sociocultural Perspective",
+          "pageLabel": "p. 87",
+          "verbatimExcerpt": "According to Vygotsky, at any given point in development, a child is on the verge of solving certain problems—“processes that have not matured at the time but are in a period of maturation” (Vygotsky, 1930–1931/1998, p. 201). The child just needs some structure, demonstrations, clues, reminders, help with remembering details or steps, encouragement to keep trying, and so on. Some problems, of course, are beyond the child’s capabilities, even if every step is explained clearly. The zone of proximal development (ZPD) is the area between the child’s current performance (the problems the child can solve independently without any support) and the level of performance that the child could achieve with adult guidance or by working with “a more fully developed child” (p. 202).",
+          "highlightQuotes": [
+            "The zone of proximal development (ZPD) is the area between the child’s current performance (the problems the child can solve independently without any support) and the level of performance that the child could achieve with adult guidance or by working with “a more fully developed child” (p.",
+            "According to Vygotsky, at any given point in development, a child is on the verge of solving certain problems—“processes that have not matured at the time but are in a period of maturation” (Vygotsky, 1930–1931/1998, p."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "문화적 도구(Cultural Tools)와 심리적 매개: 물질적 도구(계산기, 컴퓨터, 시각 차트)와 심리적 기호 도구(언어, 수 체계, 도해 조직자)는 인간의 지각과 사고 과정을 근본적으로 매개(Mediation)하고 재구조화하는 인지적 증폭기 역할을 수행한다."
+        },
+        {
+          "id": "mod1-theory-vygotsky-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 2 · The Learning Process",
+          "sectionHeading": "Chapter 2 · The Learning Process",
+          "pageLabel": "p. 36",
+          "verbatimExcerpt": "Vygotsky proposed that when a child (or any novice) is learning a new skill or solving a new problem, he or she can perform better if accompanied and helped by an expert than if performing alone—though still not as well as the expert. Someone who has played very little chess, for example, will probably compete against an opponent better if helped by an expert chess player than if competing alone against an opponent. Vygotsky called the difference between solo performance and assisted performance the zone of proximal development (or ZPD for short)—meaning the place or area (figuratively speaking) of immediate change. From this perspective learning is like assisted performance (Tharp & Gallimore, 1991). Initially during learning, knowledge or skill is found mostly “in” the expert helper.",
+          "highlightQuotes": [
+            "Vygotsky called the difference between solo performance and assisted performance the zone of proximal development (or ZPD for short)—meaning the place or area (figuratively speaking) of immediate change.",
+            "Vygotsky proposed that when a child (or any novice) is learning a new skill or solving a new problem, he or she can perform better if accompanied and helped by an expert than if performing alone—though still not as well as the expert."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "학교 현장에서 비고츠키의 근접발달영역(ZPD)과 비계설정(Scaffolding)은 흔히 '교사가 정답을 알려주지 않고 열린 질문을 던지며 학생이 스스로 깨달을 때까지 기다려 주는 발견학습'으로 오해된다. 그러나 인지부하이론(Cognitive Load Theory; Kirschner, Sweller, & Clark, 2006)과 과학자-실무자 모형에 따르면, 장기기억 내 도식(사전지식)이 부재하거나 작업기억이 취약한 초보자·위기…"
+        }
+      ]
+    },
+    "mod1-theory-ecological": {
+      "nodeId": "mod1-theory-ecological",
+      "moduleId": "mod1",
+      "nodeKind": "theory",
+      "titleKo": "브론펜브레너 생물생태학적 모형과 에릭슨·마샤 정체성 발달",
+      "titleEn": "Bronfenbrenner's Bioecological Model & Erikson/Marcia Identity Development",
+      "sourceCitation": "Woolfolk Ch.3 (pp. 76-98) / Seifert & Sutton Ch.3",
+      "excerpts": [
+        {
+          "id": "mod1-theory-ecological-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 3 · The Self, Social, And Moral Development",
+          "sectionHeading": "Bronfenbrenner: The Social Context For Development",
+          "pageLabel": "p. 107",
+          "verbatimExcerpt": "Urie Bronfenbrenner’s bioecological model of development (Bronfenbrenner, 1989; Bronfenbrenner & Morris, 2006) recognizes that the physical and social contexts in which we develop are ecosystems because they are constantly interacting with and influencing each other. Look at Figure 3.3 on the next page. Every person lives within a microsystem, inside a mesosystem, embedded in an exosystem, all of which are a part of the macrosystem—like a set of Russian painted dolls, nested one inside the other. In addition, all development occurs in and is influenced by the time period—the chronosystem.",
+          "highlightQuotes": [
+            "Urie Bronfenbrenner’s bioecological model of development (Bronfenbrenner, 1989; Bronfenbrenner & Morris, 2006) recognizes that the physical and social contexts in which we develop are ecosystems because they are constantly interacting with and influencing each other.",
+            "Every person lives within a microsystem, inside a mesosystem, embedded in an exosystem, all of which are a part of the macrosystem—like a set of Russian painted dolls, nested one inside the other."
+          ],
+          "glossaryEntry": "Bioecological model: Bronfenbrenner’s theory describing the nested social and cultural contexts that shape development. Every person develops within a microsystem, inside a mesosystem, embedded in an exosystem, all of which are a part of the macrosystem of the culture. All development occurs in and is influenced by the time period—the chronosystem. (Woolfolk Glossary, p. 656)",
+          "koreanContextGuide": "브론펜브레너(Bronfenbrenner)의 다층적 생태 환경 체계: 인간 발달은 진공 상태에서 일어나지 않으며, 개인의 생물학적·기질적 특성을 중심으로 아동이 직접 상호작용하는 미시체계(Microsystem: 가정, 학급, 또래), 미시체계들 간의 연결망인 중간체계(Mesosystem: 가정-학교 소통, 담임-상담교사 협력), 아동이 직접 참여하지 않으나 간접 영향을 미치는 외체계(Exosystem: 부모의 근로 조건, 교육청 정책, 지역사회 복지망), 사회의 문화적 규범·이념·입시 제도인 거시체계(Macrosystem), 그리고 전 생애적 시간 흐름과 역사적 사건인 시간체계(Chronosystem)의 중첩된 상호작용 속에서 이루어진다."
+        },
+        {
+          "id": "mod1-theory-ecological-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 3 · The Self, Social, And Moral Development",
+          "sectionHeading": "Guidelines: Encouraging Initiative And Industry",
+          "pageLabel": "p. 123",
+          "verbatimExcerpt": "Adolescents in the midst of struggling with choices are experiencing what Erikson called a moratorium. Erikson used the term moratorium to describe exploration with a delay in commitment to personal and occupational choices. This delay is very common, and probably healthy, for modern adolescents. Erikson believed that adolescents in complex societies have an identity crisis during moratorium. Today, the period is no longer referred to as a crisis because, for most people, the experience is a gradual exploration rather than a traumatic upheaval (Kroger et al., 2010; Wigfield, Byrnes, & Eccles, 2006). Both identity-achieved and moratorium statuses are considered healthy.",
+          "highlightQuotes": [
+            "Erikson believed that adolescents in complex societies have an identity crisis during moratorium.",
+            "Adolescents in the midst of struggling with choices are experiencing what Erikson called a moratorium."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "후기 생물생태학적 PPCT 모형과 근접과정(Proximal Processes): 후기 브론펜브레너는 발달을 실질적으로 추동하는 핵심 엔진으로 과정(Process)-개인(Person)-맥락(Context)-시간(Time) 모델을 정립하였으며, 특히 아동과 즉각적 환경(교사, 부모, 또래, 상징물) 사이에서 장기간에 걸쳐 규칙적·상호호혜적으로 점진적 복잡성을 띠며 일어나는 일상적 상호작용인 '근접과정(Proximal Processes)'이 유전적 잠재력을 실제 역량으로 발현시키는 일차적 기제임을 규명하였다."
+        },
+        {
+          "id": "mod1-theory-ecological-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 3 · Student Development",
+          "sectionHeading": "Chapter 3 · Student Development",
+          "pageLabel": "p. 51",
+          "verbatimExcerpt": "Like Piaget, Erik Erikson developed a theory of social development that relies on stages, except that Erikson thought of stages as a series of psychological or social (or psychosocial) crises—turning points in a person’s relationships and feelings about himself or herself (Erikson, 1963, 1980). Each crisis consists of a dilemma or choice that carries both advantages and risks, but in which one choice or alternative is normally considered more desirable or “healthy”. How one crisis is resolved affects how later crises are resolved. The resolution also helps to create an individual’s developing personality. Erikson proposed eight crises that extend from birth through old age; they are summarized in Table 7.",
+          "highlightQuotes": [
+            "Like Piaget, Erik Erikson developed a theory of social development that relies on stages, except that Erikson thought of stages as a series of psychological or social (or psychosocial) crises—turning points in a person’s relationships and feelings about himself or herself (Erikson, 1963, 1980).",
+            "Erikson proposed eight crises that extend from birth through old age; they are summarized in Table 7."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "학생의 학업 무기력, 학교 부적응, 진로 미결정 문제를 오직 학생 개인의 내면적 의지 박약이나 단일 심리사회적 단계의 고착으로만 귀인하는 것은 교육·상담 현장의 대표적인 근본적 귀인 오류(Fundamental Attribution Error)이다. 후기 브론펜브레너의 PPCT 모델이 실증하듯, 원격 환경(거시·외체계)이나 개인의 기질적 취약성보다 발달 결과를 직접 결정짓는 것은 매일 교실과 가정에서 반복되는 '근접과정(Prox…"
+        }
+      ]
+    },
+    "mod1-theory-moral": {
+      "nodeId": "mod1-theory-moral",
+      "moduleId": "mod1",
+      "nodeKind": "theory",
+      "titleKo": "도덕성 발달(콜버그·사회적 영역이론)과 사회정보처리모형",
+      "titleEn": "Moral Development, Social Domain Theory & Social Information Processing",
+      "sourceCitation": "Woolfolk Ch.3 (pp. 102-115) / Seifert & Sutton Ch.3",
+      "excerpts": [
+        {
+          "id": "mod1-theory-moral-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 3 · The Self, Social, And Moral Development",
+          "sectionHeading": "Understanding Others And Moral Development",
+          "pageLabel": "p. 132",
+          "verbatimExcerpt": "CRITICISMS OF KOHLBERG’S THEORY. In reality, Kohlberg’s stages do not seem to be separate, sequenced, and consistent. People often give reasons for moral choices that reflect several different stages simultaneously. Or a person’s choices in one instance may fit one stage, and his or her decisions in a different situation may reflect another stage. One of the most hotly debated criticisms of Kohlberg’s theory is that the stages are biased in favor of Western male values that emphasize individualism. His stages do not represent the way moral reasoning develops either in women or in other cultures, because the stage theory was based on a longitudinal study of American men only (Gilligan, 1982; Gilligan & Attanucci, 1988).",
+          "highlightQuotes": [
+            "His stages do not represent the way moral reasoning develops either in women or in other cultures, because the stage theory was based on a longitudinal study of American men only (Gilligan, 1982; Gilligan & Attanucci, 1988).",
+            "In reality, Kohlberg’s stages do not seem to be separate, sequenced, and consistent."
+          ],
+          "glossaryEntry": "Moral reasoning: The thinking process involved in judgments about questions of right and wrong. (Woolfolk Glossary, p. 660)",
+          "koreanContextGuide": "콜버그(Kohlberg)의 인지발달적 도덕 추론 3수준 6단계: 도덕적 딜레마에 대한 판단 내용(찬반)이 아니라 인지적 추론 구조를 기준으로, ① 인습 이전 수준(1단계 처벌과 복종 지향, 2단계 도구적 목적과 교환 지향), ② 인습 수준(3단계 대인관계 조화와 착한 아이 지향, 4단계 법과 사회질서 유지 지향), ③ 인습 이후 수준(5단계 사회계약과 개인 권리 지향, 6단계 보편적 윤리 원리 지향)으로 발달한다고 설명한다."
+        },
+        {
+          "id": "mod1-theory-moral-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 3 · The Self, Social, And Moral Development",
+          "sectionHeading": "Understanding Others And Moral Development",
+          "pageLabel": "p. 131",
+          "verbatimExcerpt": "Along with a more advanced theory of mind and an understanding of intention, children also are developing a sense of right and wrong. Until recently, theory and research about moral development focused on children’s moral reasoning, their thinking about right and wrong. Lately, some new perspectives building on insights from social and evolutionary psychology and neuroscience suggest there is more to morality than thinking (Haidt, 2013), as you will see later in this section. First, let’s look at the most famous conception of moral development based on reasoning—Kohlberg’s theory.",
+          "highlightQuotes": [
+            "Until recently, theory and research about moral development focused on children’s moral reasoning, their thinking about right and wrong.",
+            "First, let’s look at the most famous conception of moral development based on reasoning—Kohlberg’s theory."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "길리건(Gilligan)의 배려윤리(Ethics of Care): 콜버그의 모형이 남성 표본 중심의 추상적 정의·권리·공정성(Justice orientation)에 편향되어 있음을 비판하고, 인간관계의 상호의존성, 타인의 아픔에 대한 공감적 반응, 관계 유지를 도덕적 성숙의 핵심 축으로 보는 배려 지향 도덕성을 제시하였다."
+        },
+        {
+          "id": "mod1-theory-moral-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 3 · Student Development",
+          "sectionHeading": "Chapter 3 · Student Development",
+          "pageLabel": "p. 59",
+          "verbatimExcerpt": "One such framework has been developed by Carol Gilligan, whose ideas center on a morality of care, or system of beliefs about human responsibilities, care, and consideration for others. Gilligan proposed three moral positions that represent different extents or breadth of ethical care. Unlike Kohlberg, Piaget, or Erikson, she does not claim that the positions form a strictly developmental sequence, but only that they can be ranked hierarchically according to their depth or subtlety. In this respect her theory is “semi-developmental” in a way similar to Maslow’s theory of motivation (Brown & Gilligan, 1992; Taylor, Gilligan, & Sullivan, 1995).",
+          "highlightQuotes": [
+            "Gilligan proposed three moral positions that represent different extents or breadth of ethical care.",
+            "Unlike Kohlberg, Piaget, or Erikson, she does not claim that the positions form a strictly developmental sequence, but only that they can be ranked hierarchically according to their depth or subtlety."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "콜버그의 도덕성 발달 이론은 정서적으로 차분한 상태에서 가설적 딜레마(예: 하인츠 딜레마)에 대한 '언어적·숙고적 도덕 추론(Cold Moral Reasoning)'만을 측정할 뿐, 실제 교실의 갈등 상황에서 즉각적으로 표출되는 '도덕적·공격적 행동(Hot Moral Action)'을 예측하는 설명력이 매우 낮다(도덕적 추론-행동 간 괴리). 하이트(Haidt)의 사회적 직관주의 모형과 크릭·닷지(Crick & Dodge, 1…"
+        }
+      ]
+    },
+    "mod1-fc-equilibration": {
+      "nodeId": "mod1-fc-equilibration",
+      "moduleId": "mod1",
+      "nodeKind": "flashcard",
+      "titleKo": "평형화와 인지적 불균형",
+      "titleEn": "Equilibration & Cognitive Disequilibrium",
+      "sourceCitation": "Woolfolk p. 72 · Seifert & Sutton p. 34",
+      "excerpts": [
+        {
+          "id": "mod1-fc-equilibration-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 2 · Cognitive Development",
+          "sectionHeading": "Piaget’S Theory Of Cognitive Development",
+          "pageLabel": "p. 72",
+          "verbatimExcerpt": "EQUILIBRATION. According to Piaget, organizing, assimilating, and accommodating can be viewed as a kind of complex balancing act. In his theory, the actual changes in thinking take place through the process of equilibration—the act of searching for a balance. Piaget assumed that people continually test the adequacy of their thinking processes in order to achieve that balance. Briefly, the process of equilibration works like this: If we apply a particular scheme to an event or situation and the scheme works, then equilibrium exists. If the scheme does not produce a satisfying result, then disequilibrium exists, and we become uncomfortable. This motivates us to keep searching for a solution through assimilation and accommodation, and thus our thinking changes and moves ahead.",
+          "highlightQuotes": [
+            "This motivates us to keep searching for a solution through assimilation and accommodation, and thus our thinking changes and moves ahead.",
+            "In his theory, the actual changes in thinking take place through the process of equilibration—the act of searching for a balance."
+          ],
+          "glossaryEntry": "Equilibration: Search for mental balance between cognitive schemes and information from the environment. (Woolfolk Glossary, p. 658)",
+          "koreanContextGuide": "기존의 도식(동화)으로 새로운 경험이 설명되지 않을 때 발생하는 인지적 불편감(불균형)을 해소하기 위해 도식을 수정(조절)하며 고차원적 이해로 나아가는 자기조절 과정. (현장 적용: 내담 학생이 '친구가 인사하지 않으면 나를 싫어하는 것'이라는 경직된 도식에 머물 때, 상담교사가 반례(친구가 안경을 안 쓰고 온 날)를 탐색하게 하여 적절한 인지적 불균형과 도식 조절을 유도한다.)"
+        },
+        {
+          "id": "mod1-fc-equilibration-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 2 · The Learning Process",
+          "sectionHeading": "Chapter 2 · The Learning Process",
+          "pageLabel": "p. 34",
+          "verbatimExcerpt": "A more recent example of psychological constructivism is the cognitive theory of Jean Piaget (Piaget, 2001; Gruber & Voneche, 1995). Piaget described learning as interplay between two mental activities that he called assimilation and accommodation. Assimilation is the interpretation of new information in terms of pre-existing concepts, information or ideas. A preschool child who already understands the concept of bird, for example, might initially label any flying object with this term—even butterflies or mosquitoes. Assimilation is therefore a bit like the idea of generalization in operant conditioning, or the idea of transfer described at the beginning of this chapter.",
+          "highlightQuotes": [
+            "Piaget described learning as interplay between two mental activities that he called assimilation and accommodation.",
+            "Assimilation is the interpretation of new information in terms of pre-existing concepts, information or ideas."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "기존의 도식(동화)으로 새로운 경험이 설명되지 않을 때 발생하는 인지적 불편감(불균형)을 해소하기 위해 도식을 수정(조절)하며 고차원적 이해로 나아가는 자기조절 과정."
+        }
+      ]
+    },
+    "mod1-fc-neopiagetian": {
+      "nodeId": "mod1-fc-neopiagetian",
+      "moduleId": "mod1",
+      "nodeKind": "flashcard",
+      "titleKo": "신피아제 이론",
+      "titleEn": "Neo-Piagetian Theory",
+      "sourceCitation": "Woolfolk p. 80 · Seifert & Sutton p. 27",
+      "excerpts": [
+        {
+          "id": "mod1-fc-neopiagetian-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 2 · Cognitive Development",
+          "sectionHeading": "Guidelines: Helping Students To Use Formal Operations",
+          "pageLabel": "p. 80",
+          "verbatimExcerpt": "Some developmental psychologists have formulated neo-Piagetian theories that retain Piaget’s insights about children’s construction of knowledge and the general trends in children’s thinking but add findings from information processing theories about the role of attention, memory, and strategies (Croker, 2012). Perhaps the best-known neo-Piagetian theory was developed by Robbie Case (1992, 1998). He devised an explanation of cognitive development suggesting that children develop in stages within specific domains such as numerical concepts, spatial concepts, social tasks, storytelling, reasoning about physical objects, and motor development. As children practice using the schemes in a particular domain (e.g., using counting schemes in the number concept area), accomplishing the schemes requires less attention.",
+          "highlightQuotes": [
+            "Perhaps the best-known neo-Piagetian theory was developed by Robbie Case (1992, 1998).",
+            "Some developmental psychologists have formulated neo-Piagetian theories that retain Piaget’s insights about children’s construction of knowledge and the general trends in children’s thinking but add findings from information processing theories about the role of attention, memory, and strategies (Croker, 2012)."
+          ],
+          "glossaryEntry": "Neo-Piagetian theories: More recent theories that integrate findings about attention, memory, and strategy use with Piaget’s insights about children’s thinking and the construction of knowledge. (Woolfolk Glossary, p. 660)",
+          "koreanContextGuide": "피아제의 구성주의 틀을 유지하되, 인지발달의 단계적 변화를 작업기억(Working Memory) 용량의 확장, 처리속도 및 실행기능 성숙, 영역특수적 지식의 자동화로 설명하는 정보처리 통합 이론. (현장 적용: 복잡한 문장제 수학 문제를 못 푸는 초등학생을 '논리적 사고 미발달'로 단정하지 않고, 핵심 조건에 밑줄을 긋고 그림으로 외현화하여 작업기억 부담을 덜어주자 문제를 스스로 해결한다.)"
+        },
+        {
+          "id": "mod1-fc-neopiagetian-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 2 · The Learning Process",
+          "sectionHeading": "Chapter 2 · The Learning Process",
+          "pageLabel": "p. 27",
+          "verbatimExcerpt": "The changes described in these two examples are important because they can affect students’ attitude about school, and therefore also their motivation to learn. In the positive case, the child becomes more inclined to please the teacher and to attend to what he or she has to offer; in the negative case, the opposite occurs. Since the changes in attitude happen “inside” the child, they are best thought of as one way that a child can acquire i intrinsic motivation, meaning a desire or tendency to direct attention and energy in a particular way that originates from the child himself or herself. Intrinsic motivation is sometimes contrasted to extrinsic motivation, a tendency to direct attention and energy that originates from outside of the child.",
+          "highlightQuotes": [
+            "In the positive case, the child becomes more inclined to please the teacher and to attend to what he or she has to offer; in the negative case, the opposite occurs.",
+            "Since the changes in attitude happen “inside” the child, they are best thought of as one way that a child can acquire i intrinsic motivation, meaning a desire or tendency to direct attention and energy in a particular way that originates from the child himself or herself."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "피아제의 구성주의 틀을 유지하되, 인지발달의 단계적 변화를 작업기억(Working Memory) 용량의 확장, 처리속도 및 실행기능 성숙, 영역특수적 지식의 자동화로 설명하는 정보처리 통합 이론."
+        }
+      ]
+    },
+    "mod1-fc-zpd": {
+      "nodeId": "mod1-fc-zpd",
+      "moduleId": "mod1",
+      "nodeKind": "flashcard",
+      "titleKo": "근접발달영역",
+      "titleEn": "Zone of Proximal Development (ZPD)",
+      "sourceCitation": "Woolfolk p. 87 · Seifert & Sutton p. 36",
+      "excerpts": [
+        {
+          "id": "mod1-fc-zpd-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 2 · Cognitive Development",
+          "sectionHeading": "Vygotsky’S Sociocultural Perspective",
+          "pageLabel": "p. 87",
+          "verbatimExcerpt": "According to Vygotsky, at any given point in development, a child is on the verge of solving certain problems—“processes that have not matured at the time but are in a period of maturation” (Vygotsky, 1930–1931/1998, p. 201). The child just needs some structure, demonstrations, clues, reminders, help with remembering details or steps, encouragement to keep trying, and so on. Some problems, of course, are beyond the child’s capabilities, even if every step is explained clearly. The zone of proximal development (ZPD) is the area between the child’s current performance (the problems the child can solve independently without any support) and the level of performance that the child could achieve with adult guidance or by working with “a more fully developed child” (p. 202).",
+          "highlightQuotes": [
+            "The zone of proximal development (ZPD) is the area between the child’s current performance (the problems the child can solve independently without any support) and the level of performance that the child could achieve with adult guidance or by working with “a more fully developed child” (p.",
+            "According to Vygotsky, at any given point in development, a child is on the verge of solving certain problems—“processes that have not matured at the time but are in a period of maturation” (Vygotsky, 1930–1931/1998, p."
+          ],
+          "glossaryEntry": "Development: Orderly, adaptive changes we go through between conception and death; these developmental changes remain for a reasonably long period of time. (Woolfolk Glossary, p. 657)",
+          "koreanContextGuide": "아동이 독자적으로 문제를 해결할 수 있는 실제적 발달 수준과, 성인이나 유능한 동료의 체계적 비계설정(Scaffolding)을 통해 도달할 수 있는 잠재적 발달 수준 사이의 영역. (현장 적용: 갈등 상황에서 스스로 사과문을 쓰기 어려워하는 학생에게 감정 단어 카드와 3단계 문장 틀(나-전달법 템플릿)을 제공하여 자기표현에 성공하게 돕는다.)"
+        },
+        {
+          "id": "mod1-fc-zpd-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 2 · The Learning Process",
+          "sectionHeading": "Chapter 2 · The Learning Process",
+          "pageLabel": "p. 36",
+          "verbatimExcerpt": "Vygotsky proposed that when a child (or any novice) is learning a new skill or solving a new problem, he or she can perform better if accompanied and helped by an expert than if performing alone—though still not as well as the expert. Someone who has played very little chess, for example, will probably compete against an opponent better if helped by an expert chess player than if competing alone against an opponent. Vygotsky called the difference between solo performance and assisted performance the zone of proximal development (or ZPD for short)—meaning the place or area (figuratively speaking) of immediate change. From this perspective learning is like assisted performance (Tharp & Gallimore, 1991). Initially during learning, knowledge or skill is found mostly “in” the expert helper.",
+          "highlightQuotes": [
+            "Vygotsky called the difference between solo performance and assisted performance the zone of proximal development (or ZPD for short)—meaning the place or area (figuratively speaking) of immediate change.",
+            "Vygotsky proposed that when a child (or any novice) is learning a new skill or solving a new problem, he or she can perform better if accompanied and helped by an expert than if performing alone—though still not as well as the expert."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "아동이 독자적으로 문제를 해결할 수 있는 실제적 발달 수준과, 성인이나 유능한 동료의 체계적 비계설정(Scaffolding)을 통해 도달할 수 있는 잠재적 발달 수준 사이의 영역."
+        }
+      ]
+    },
+    "mod1-fc-scaffolding": {
+      "nodeId": "mod1-fc-scaffolding",
+      "moduleId": "mod1",
+      "nodeKind": "flashcard",
+      "titleKo": "비계설정과 점진적 소거",
+      "titleEn": "Scaffolding & Fading",
+      "sourceCitation": "Woolfolk p. 87 · Seifert & Sutton p. 35",
+      "excerpts": [
+        {
+          "id": "mod1-fc-scaffolding-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 2 · Cognitive Development",
+          "sectionHeading": "Vygotsky’S Sociocultural Perspective",
+          "pageLabel": "p. 87",
+          "verbatimExcerpt": "PRIVATE SPEECH AND THE ZONE. We can see how Vygotsky’s beliefs about the role of private speech in cognitive development fit with the notion of the ZPD. Often, an adult uses verbal prompts and structuring to help a child solve a problem or accomplish a task. We will see later that this type of support has been called scaffolding. This support can be gradually reduced as the child takes over the guidance, perhaps first by giving the prompts as private speech and finally as inner speech. As an example, think of the young girl described earlier who had lost her toy. Let’s move forward several years in her life and listen to her thoughts as an older student when she realizes that a schoolbook is missing.",
+          "highlightQuotes": [
+            "We will see later that this type of support has been called scaffolding.",
+            "This support can be gradually reduced as the child takes over the guidance, perhaps first by giving the prompts as private speech and finally as inner speech."
+          ],
+          "glossaryEntry": "Scaffolding: Support for learning and problem solving. The support could be clues, reminders, encouragement, breaking the problem down into steps, providing an example, or anything else that allows the student to grow in independence as a learner. Teachers and students make meaningful connections between what the teacher knows and what the students know and need in order to help the students learn more. (Woolfolk Glossary, p. 662)",
+          "koreanContextGuide": "초기 학습이나 문제해결 시 구조화된 단서·모델링·환경적 지원을 제공하여 외재적 인지부하를 줄여주고, 학습자의 숙달도가 높아짐에 따라 지원을 단계적으로 거두어들이는(Fading) 교수·상담 원리. (현장 적용: 발표 불안이 높은 학생에게 1주 차에는 대본 전문 읽기, 2주 차에는 키워드 큐카드 보기, 3주 차에는 한 문장 암기 발표로 스캐폴딩을 점진적으로 소거한다.)"
+        },
+        {
+          "id": "mod1-fc-scaffolding-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 2 · The Learning Process",
+          "sectionHeading": "Chapter 2 · The Learning Process",
+          "pageLabel": "p. 35",
+          "verbatimExcerpt": "Unlike Piaget’s rather individually oriented version of constructivism, some psychologists and educators have explicitly focused on the relationships and interactions between a learner and more knowledgeable and experienced individuals. One early expression of this viewpoint came from the American psychologist Jerome Bruner (1960, 1966, 1996), who became convinced that students could usually learn more than had been traditionally expected as long as they were given appropriate guidance and resources. He called such support instructional scaffolding— literally meaning a temporary framework, like one used in constructing a building, that allows a much stronger structure to be built within it.",
+          "highlightQuotes": [
+            "He called such support instructional scaffolding— literally meaning a temporary framework, like one used in constructing a building, that allows a much stronger structure to be built within it."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "초기 학습이나 문제해결 시 구조화된 단서·모델링·환경적 지원을 제공하여 외재적 인지부하를 줄여주고, 학습자의 숙달도가 높아짐에 따라 지원을 단계적으로 거두어들이는(Fading) 교수·상담 원리."
+        }
+      ]
+    },
+    "mod1-fc-privatespeech": {
+      "nodeId": "mod1-fc-privatespeech",
+      "moduleId": "mod1",
+      "nodeKind": "flashcard",
+      "titleKo": "혼잣말 (사적 언어)",
+      "titleEn": "Private Speech",
+      "sourceCitation": "Woolfolk p. 85 · Woolfolk p. 87",
+      "excerpts": [
+        {
+          "id": "mod1-fc-privatespeech-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 2 · Cognitive Development",
+          "sectionHeading": "Vygotsky’S Sociocultural Perspective",
+          "pageLabel": "p. 85",
+          "verbatimExcerpt": "PRIVATE SPEECH: VYGOTSKY’S AND PIAGET’S VIEWS COMPARED. If you have spent much time around young children, you know that they often talk to themselves as they play. This can happen when the child is alone or, even more often, in a group of children—each child talks enthusiastically, without any real interaction or conversation. Piaget called this the collective monologue, and he labeled all of the children’s self-directed talk “egocentric speech.” He assumed that this egocentric speech is another indication that young children can’t see the world through the eyes of others, so they chat away without taking into account the needs or interests of their listeners. As they mature, and especially as they have disagreements with peers, Piaget believed, children develop socialized speech. They learn to listen and exchange (or argue) ideas.",
+          "highlightQuotes": [
+            "PRIVATE SPEECH: VYGOTSKY’S AND PIAGET’S VIEWS COMPARED.",
+            "Piaget called this the collective monologue, and he labeled all of the children’s self-directed talk “egocentric speech.” He assumed that this egocentric speech is another indication that young children can’t see the world through the eyes of others, so they chat away without taking into account the needs or interests of their listeners."
+          ],
+          "glossaryEntry": "Private speech: Children’s self-talk, which guides their thinking and action. Eventually, these verbalizations are internalized as silent inner speech. (Woolfolk Glossary, p. 661)",
+          "koreanContextGuide": "비고츠키가 제시한 개념으로, 아동이 자신의 사고와 행동을 계획·안내·억제하기 위해 소리 내어 자신에게 하는 말. 발달에 따라 내적 언어(Inner Speech)로 내면화되어 자기조절의 핵심 기제가 된다. (현장 적용: 과제 중 쉽게 산만해지는 아동에게 '첫째 문제를 끝까지 읽는다, 둘째 구하는 것에 동그라미 친다'라고 작게 속삭이며 문제를 푸는 자기교수(Self-Instruction) 전략을 훈련한다.)"
+        },
+        {
+          "id": "mod1-fc-privatespeech-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 2 · Cognitive Development",
+          "sectionHeading": "Vygotsky’S Sociocultural Perspective",
+          "pageLabel": "p. 87",
+          "verbatimExcerpt": "PRIVATE SPEECH AND THE ZONE. We can see how Vygotsky’s beliefs about the role of private speech in cognitive development fit with the notion of the ZPD. Often, an adult uses verbal prompts and structuring to help a child solve a problem or accomplish a task. We will see later that this type of support has been called scaffolding. This support can be gradually reduced as the child takes over the guidance, perhaps first by giving the prompts as private speech and finally as inner speech. As an example, think of the young girl described earlier who had lost her toy. Let’s move forward several years in her life and listen to her thoughts as an older student when she realizes that a schoolbook is missing.",
+          "highlightQuotes": [
+            "This support can be gradually reduced as the child takes over the guidance, perhaps first by giving the prompts as private speech and finally as inner speech.",
+            "We can see how Vygotsky’s beliefs about the role of private speech in cognitive development fit with the notion of the ZPD."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "비고츠키가 제시한 개념으로, 아동이 자신의 사고와 행동을 계획·안내·억제하기 위해 소리 내어 자신에게 하는 말. 발달에 따라 내적 언어(Inner Speech)로 내면화되어 자기조절의 핵심 기제가 된다. (현장 적용: 과제 중 쉽게 산만해지는 아동에게 '첫째 문제를 끝까지 읽는다, 둘째 구하는 것에 동그라미 친다'라고 작게 속삭이며 문제를 푸는 자기교수(Self-Instruction) 전략을 훈련한다.)"
+        }
+      ]
+    },
+    "mod1-fc-mesosystem": {
+      "nodeId": "mod1-fc-mesosystem",
+      "moduleId": "mod1",
+      "nodeKind": "flashcard",
+      "titleKo": "중간체계와 근접과정",
+      "titleEn": "Mesosystem & Proximal Processes",
+      "sourceCitation": "Woolfolk p. 107 · Woolfolk p. 108",
+      "excerpts": [
+        {
+          "id": "mod1-fc-mesosystem-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 3 · The Self, Social, And Moral Development",
+          "sectionHeading": "Bronfenbrenner: The Social Context For Development",
+          "pageLabel": "p. 107",
+          "verbatimExcerpt": "Urie Bronfenbrenner’s bioecological model of development (Bronfenbrenner, 1989; Bronfenbrenner & Morris, 2006) recognizes that the physical and social contexts in which we develop are ecosystems because they are constantly interacting with and influencing each other. Look at Figure 3.3 on the next page. Every person lives within a microsystem, inside a mesosystem, embedded in an exosystem, all of which are a part of the macrosystem—like a set of Russian painted dolls, nested one inside the other. In addition, all development occurs in and is influenced by the time period—the chronosystem.",
+          "highlightQuotes": [
+            "Every person lives within a microsystem, inside a mesosystem, embedded in an exosystem, all of which are a part of the macrosystem—like a set of Russian painted dolls, nested one inside the other.",
+            "Urie Bronfenbrenner’s bioecological model of development (Bronfenbrenner, 1989; Bronfenbrenner & Morris, 2006) recognizes that the physical and social contexts in which we develop are ecosystems because they are constantly interacting with and influencing each other."
+          ],
+          "glossaryEntry": "Bioecological model: Bronfenbrenner’s theory describing the nested social and cultural contexts that shape development. Every person develops within a microsystem, inside a mesosystem, embedded in an exosystem, all of which are a part of the macrosystem of the culture. All development occurs in and is influenced by the time period—the chronosystem. (Woolfolk Glossary, p. 656)",
+          "koreanContextGuide": "중간체계는 아동을 둘러싼 미시체계들(가정-학급-상담실) 간의 연결망이며, 근접과정은 아동이 직접적인 환경 내 타인·대상과 일상적으로 주고받는 지속적·상호적 상호작용 과정이다. (현장 적용: 위기 학생 상담의 효과를 높이기 위해 상담교사가 담임교사 및 보호자와 일일 긍정 피드백 노트(중간체계 연결)를 공유하여 가정과 교실에서의 일상적 상호작용(근접과정)을 변화시킨다.)"
+        },
+        {
+          "id": "mod1-fc-mesosystem-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 3 · The Self, Social, And Moral Development",
+          "sectionHeading": "Bronfenbrenner: The Social Context For Development",
+          "pageLabel": "p. 108",
+          "verbatimExcerpt": "Every person develops within a microsystem (family, friends, school activities, teacher, etc.) inside a mesosystem (the interactions among all the microsystem elements), embedded in an exosystem (social settings that affect the child, even though the child is not a direct member—community resources, parents’ workplace, etc.); all are part of the macrosystem (the larger society with its laws, customs, values, etc.). All development occurs in and is influenced by the time period—the chronosystem.",
+          "highlightQuotes": [
+            "Every person develops within a microsystem (family, friends, school activities, teacher, etc.) inside a mesosystem (the interactions among all the microsystem elements), embedded in an exosystem (social settings that affect the child, even though the child is not a direct member—community resources, parents’ workplace, etc.); all are part of the macrosystem (the larger society with its laws, customs, values, etc.)."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "중간체계는 아동을 둘러싼 미시체계들(가정-학급-상담실) 간의 연결망이며, 근접과정은 아동이 직접적인 환경 내 타인·대상과 일상적으로 주고받는 지속적·상호적 상호작용 과정이다. (현장 적용: 위기 학생 상담의 효과를 높이기 위해 상담교사가 담임교사 및 보호자와 일일 긍정 피드백 노트(중간체계 연결)를 공유하여 가정과 교실에서의 일상적 상호작용(근접과정)을 변화시킨다.)"
+        }
+      ]
+    },
+    "mod1-fc-identitystatus": {
+      "nodeId": "mod1-fc-identitystatus",
+      "moduleId": "mod1",
+      "nodeKind": "flashcard",
+      "titleKo": "정체성 유예 vs. 정체성 유실",
+      "titleEn": "Identity Moratorium vs. Identity Foreclosure",
+      "sourceCitation": "Woolfolk p. 125 · Seifert & Sutton p. 62",
+      "excerpts": [
+        {
+          "id": "mod1-fc-identitystatus-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 3 · The Self, Social, And Moral Development",
+          "sectionHeading": "Guidelines: Supporting Identity Formation",
+          "pageLabel": "p. 125",
+          "verbatimExcerpt": "Some psychologists have used Marcia’s identity statuses to understand the process of forming an ethnic identity. Children may begin with an unexamined ethnic identity, either because they have not explored at all (diffusion) or because they have accepted the identity encouraged by others (foreclosure). Many European American adolescents could fit the unexamined category. A period of ethnic identity exploration (moratorium) might be followed by a resolution of the conflict (identity achieved).",
+          "highlightQuotes": [
+            "A period of ethnic identity exploration (moratorium) might be followed by a resolution of the conflict (identity achieved).",
+            "Some psychologists have used Marcia’s identity statuses to understand the process of forming an ethnic identity."
+          ],
+          "glossaryEntry": "Identity foreclosure: Acceptance of parental life choices without consideration of options. (Woolfolk Glossary, p. 659)",
+          "koreanContextGuide": "마샤의 정체성 지위 이론에서 유예(Moratorium)는 대안을 치열하게 탐색 중이나 아직 최종 전념은 유보한 건강한 탐색기인 반면, 유실(Foreclosure)은 독자적 탐색 없이 부모 등 타인의 가치를 그대로 수용·전념한 상태이다. (현장 적용: 부모의 강요로 의대 진학만 목표로 삼았다가 성적 하락 후 극심한 우울을 겪는 고등학생(정체성 유실 위기)에게 안전한 심리적 유예(Moratorium) 공간을 제공하여 자기 가치관을 탐색하도록 돕는다.)"
+        },
+        {
+          "id": "mod1-fc-identitystatus-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 3 · Student Development",
+          "sectionHeading": "Chapter 3 · Student Development",
+          "pageLabel": "p. 62",
+          "verbatimExcerpt": "Socially, students face and resolve a number of issues—especially the issue of industry (dedicated, sustained work) during childhood and the issue of identity during adolescence. Erik Erikson has described these crises in detail, as well as social crises that precede and follow the school years. Students are motivated both by basic human needs (food, safety, belonging, esteem) and by needs to enhance themselves psychologically (self-actualization). Abraham Maslow has described these motivations and how they relate to each other.",
+          "highlightQuotes": [
+            "Socially, students face and resolve a number of issues—especially the issue of industry (dedicated, sustained work) during childhood and the issue of identity during adolescence.",
+            "Erik Erikson has described these crises in detail, as well as social crises that precede and follow the school years."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "마샤의 정체성 지위 이론에서 유예(Moratorium)는 대안을 치열하게 탐색 중이나 아직 최종 전념은 유보한 건강한 탐색기인 반면, 유실(Foreclosure)은 독자적 탐색 없이 부모 등 타인의 가치를 그대로 수용·전념한 상태이다."
+        }
+      ]
+    },
+    "mod1-fc-hostileattribution": {
+      "nodeId": "mod1-fc-hostileattribution",
+      "moduleId": "mod1",
+      "nodeKind": "flashcard",
+      "titleKo": "적대적 귀인 편향",
+      "titleEn": "Hostile Attribution Bias",
+      "sourceCitation": "Woolfolk p. 114 · Seifert & Sutton p. 154",
+      "excerpts": [
+        {
+          "id": "mod1-fc-hostileattribution-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 3 · The Self, Social, And Moral Development",
+          "sectionHeading": "Guidelines: Helping Children Of Divorce",
+          "pageLabel": "p. 114",
+          "verbatimExcerpt": "AGGRESSION. Aggression should not be confused with assertiveness, which means affirming or maintaining a legitimate right. Saying, “You are sitting in my chair!” is assertive. Pushing the invader out of the chair is aggressive. There are several forms of aggression. The most common form is instrumental aggression, which is intended to gain an object or privilege, such as shoving to get a chair or snatching a book from another student. The intent is to get what you want, not to hurt the other child, but the hurt may happen anyway. A second kind is hostile aggression—inflicting intentional harm.",
+          "highlightQuotes": [
+            "A second kind is hostile aggression—inflicting intentional harm.",
+            "The most common form is instrumental aggression, which is intended to gain an object or privilege, such as shoving to get a chair or snatching a book from another student."
+          ],
+          "glossaryEntry": "Hostile aggression: Bold, direct action that is intended to hurt someone else; unprovoked attack. (Woolfolk Glossary, p. 659)",
+          "koreanContextGuide": "닷지(Dodge)의 사회정보처리모형에서 제시된 개념으로, 상대방의 의도가 모호한 사회적 상황(예: 복도에서 어깨가 부딪힘)을 자신을 해치려는 악의적·적대적 의도로 즉각 해석하는 인지 편향. (현장 적용: 급식 줄에서 친구가 실수로 발을 밟았을 때 '나를 무시해서 일부러 밟았다'며 주먹을 휘두르는 학생과 함께, 한 사건에 대해 가능한 3가지 대안적 이유(실수, 뒤에서 밀림 등)를 찾는 훈련을 실시한다.)"
+        },
+        {
+          "id": "mod1-fc-hostileattribution-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 7 · Classroom Management and the Learning Environment",
+          "sectionHeading": "Chapter 7 · Classroom Management and the Learning Environment",
+          "pageLabel": "p. 154",
+          "verbatimExcerpt": "• They should be assertive—neither passive and apologetic, nor unnecessarily hostile and aggressive (Cantor, 1996). State the problem as matter-of-factly as possible: “Joe, you are talking while I’m explaining something”, instead of either “Joe, do you think you could be quiet now?” or “Joe, be quiet!”",
+          "highlightQuotes": [
+            "• They should be assertive—neither passive and apologetic, nor unnecessarily hostile and aggressive (Cantor, 1996)."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "닷지(Dodge)의 사회정보처리모형에서 제시된 개념으로, 상대방의 의도가 모호한 사회적 상황(예: 복도에서 어깨가 부딪힘)을 자신을 해치려는 악의적·적대적 의도로 즉각 해석하는 인지 편향."
+        }
+      ]
+    }
+  }
+}

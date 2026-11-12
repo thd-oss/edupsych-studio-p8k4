@@ -12,6 +12,7 @@ import { FloatingAiTutorChat } from './components/shell/FloatingAiTutorChat';
 import { MobileBottomNav } from './components/shell/MobileBottomNav';
 import { NodeDetailDrawer } from './components/shell/NodeDetailDrawer';
 import { ScrollytellingView } from './components/story/ScrollytellingView';
+import { TextbookPassageModal } from './components/textbook/TextbookPassageModal';
 import { StudyWorkspaceView } from './components/workspace/StudyWorkspaceView';
 import { useStudyGraphStore } from './store/useStudyGraphStore';
 import {
@@ -189,6 +190,9 @@ export const App: React.FC = () => {
         : null
     );
   const [drawerNodeId, setDrawerNodeId] = useState<string | null>(null);
+  const [textbookModalNodeId, setTextbookModalNodeId] = useState<string | null>(
+    null
+  );
   const [weakFocusActive, setWeakFocusActive] = useState<boolean>(
     initialUrl.weakFocus
   );
@@ -444,6 +448,7 @@ export const App: React.FC = () => {
             onToggleModuleCompleted={toggleModuleCompleted}
             onNavigateNode={navigateToCanonicalNode}
             onStartModuleTraining={handleStartModuleTraining}
+            onOpenTextbookPassage={setTextbookModalNodeId}
           />
         ) : (
           <StudyWorkspaceView
@@ -463,6 +468,7 @@ export const App: React.FC = () => {
             }}
             onNavigateCanonical={navigateToCanonicalNode}
             onJumpToConceptContext={handleJumpToConceptContext}
+            onOpenTextbookPassage={setTextbookModalNodeId}
             modules={enrichedModules}
             allFlashcards={allFlashcards}
             allQuestions={allQuestions}
@@ -506,6 +512,15 @@ export const App: React.FC = () => {
         onUpdateFlashcardStatus={updateFlashcardStatus}
         onUpdateItemNote={updateItemNote}
         onNavigateCanonical={navigateToCanonicalNode}
+        onOpenTextbookPassage={setTextbookModalNodeId}
+      />
+
+      {/* 교재 원문 발췌 음영 집중 플로팅 리더 카드 */}
+      <TextbookPassageModal
+        nodeId={textbookModalNodeId}
+        onClose={() => setTextbookModalNodeId(null)}
+        nodeMap={curriculumGraph.nodeMap}
+        adjacency={curriculumGraph.adjacency}
       />
 
       {/* 모바일 전용 1줄 하단 글래스 독 (< lg): [홈 · 개념학습 · 실전훈련 | AI 질문] */}

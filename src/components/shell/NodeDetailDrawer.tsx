@@ -46,6 +46,7 @@ interface NodeDetailDrawerProps {
   onUpdateFlashcardStatus: (cardId: string, status: FlashcardStatus) => void;
   onUpdateItemNote: (itemId: string, note: string) => void;
   onNavigateCanonical: (nodeId: string) => void;
+  onOpenTextbookPassage: (nodeId: string) => void;
 }
 
 const RELATION_LABEL: Record<
@@ -129,7 +130,8 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
   onToggleBookmark,
   onUpdateFlashcardStatus,
   onUpdateItemNote,
-  onNavigateCanonical
+  onNavigateCanonical,
+  onOpenTextbookPassage
 }) => {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const pressedOutsideRef = useRef(false);
@@ -284,18 +286,31 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
               <p className="text-xs text-slate-500">{node.titleEn}</p>
             </div>
 
-            {/* 단일 정규 위치 이동 버튼 */}
-            <div className="pt-1">
+            {/* 단일 정규 위치 이동 버튼 + 교재 원문 발췌 열기 */}
+            <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <button
                 type="button"
                 onClick={() => {
                   onNavigateCanonical(node.id);
                   dialogRef.current?.close();
                 }}
-                className="w-full inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-full bg-[var(--accent-solid)] hover:bg-[var(--accent-solid-hover)] px-4 py-2 text-xs font-semibold text-white transition-colors"
+                className="flex-1 inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-full bg-[var(--accent-solid)] hover:bg-[var(--accent-solid-hover)] px-4 py-2 text-xs font-semibold text-white transition-colors"
               >
                 <span>{CANONICAL_CTA_LABEL[node.kind]}</span>
                 <ArrowRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              </button>
+
+              <button
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() => {
+                  dialogRef.current?.close();
+                  onOpenTextbookPassage(node.id);
+                }}
+                className="shrink-0 inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200 px-4 py-2 text-xs font-semibold text-amber-950 transition-colors"
+              >
+                <BookOpen className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                <span>원문 발췌</span>
               </button>
             </div>
           </div>

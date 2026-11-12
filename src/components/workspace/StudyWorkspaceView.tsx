@@ -43,6 +43,7 @@ interface StudyWorkspaceViewProps {
   onSelectGraphNode: (nodeId: string) => void;
   onNavigateCanonical: (nodeId: string) => void;
   onJumpToConceptContext: (nodeId: string) => void;
+  onOpenTextbookPassage: (nodeId: string) => void;
   modules: ModulePayload[];
   allFlashcards: Flashcard[];
   allQuestions: InterviewQuestion[];
@@ -115,6 +116,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   onSelectGraphNode,
   onNavigateCanonical,
   onJumpToConceptContext,
+  onOpenTextbookPassage,
   modules,
   allFlashcards,
   allQuestions,
@@ -287,6 +289,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
               onCreateNewItem('flashcard', modId, item)
             }
             onJumpToConceptContext={onJumpToConceptContext}
+            onOpenTextbookPassage={onOpenTextbookPassage}
           />
         )}
 
@@ -304,6 +307,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
               onCreateNewItem('question', modId, item)
             }
             onJumpToConceptContext={onJumpToConceptContext}
+            onOpenTextbookPassage={onOpenTextbookPassage}
           />
         )}
 

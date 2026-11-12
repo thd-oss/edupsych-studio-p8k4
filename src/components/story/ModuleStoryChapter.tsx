@@ -43,6 +43,7 @@ interface ModuleStoryChapterProps {
   onToggleBookmark: (itemId: string) => void;
   onToggleModuleCompleted: (moduleId: ModuleId) => void;
   onStartModuleTraining: (moduleId: ModuleId) => void;
+  onOpenTextbookPassage: (nodeId: string) => void;
 }
 
 const MASTERY_KOR_LABEL: Record<MasteryState, string> = {
@@ -102,7 +103,8 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
   onRecordSimulationChoice,
   onToggleBookmark,
   onToggleModuleCompleted,
-  onStartModuleTraining
+  onStartModuleTraining,
+  onOpenTextbookPassage
 }) => {
   const beats = useMemo(() => buildModuleStoryBeats(mod), [mod]);
   const anchor = MODULE_CONCEPT_ANCHORS[mod.id];
@@ -141,9 +143,15 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
             >
               <span>Module 0{mod.number}</span>
             </span>
-            <span className="rounded-full bg-[#f5f5f7] px-3 py-1 text-xs font-semibold text-[#424245]">
-              {mod.sourceMapping}
-            </span>
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => onOpenTextbookPassage(mod.id)}
+              className="inline-flex min-h-[28px] items-center gap-1.5 rounded-full bg-[#f5f5f7] hover:bg-[var(--accent-subtle)] border border-black/[0.05] hover:border-[#0071e3]/25 px-3 py-1 text-xs font-semibold text-[#424245] hover:text-[var(--accent-solid)] transition-colors"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-[var(--accent-solid)] shrink-0" aria-hidden="true" />
+              <span>{mod.sourceMapping} · 원문</span>
+            </button>
             {isCompleted && (
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/12 px-3 py-1 text-xs font-semibold text-emerald-700">
                 <CheckCircle2 className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
@@ -340,9 +348,21 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                 <span className="rounded-full bg-[var(--accent-subtle)] px-3 py-1 text-xs font-semibold text-[var(--accent-solid)]">
                   2단계 · 핵심 이론 {idx + 1} / {mod.theories.length}
                 </span>
-                <span className="rounded-full bg-[#f5f5f7] px-2.5 py-1 text-[11px] font-medium text-[#6e6e73]">
-                  {theory.sourceMapping}
-                </span>
+                <button
+                  type="button"
+                  aria-haspopup="dialog"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpenTextbookPassage(theory.id);
+                  }}
+                  className="inline-flex min-h-[28px] items-center gap-1.5 rounded-full bg-[#f5f5f7] hover:bg-[var(--accent-subtle)] border border-black/[0.06] hover:border-[#0071e3]/30 px-3 py-1 text-[11px] font-semibold text-[#1d1d1f] hover:text-[var(--accent-solid)] transition-colors"
+                >
+                  <BookOpen
+                    className="w-3.5 h-3.5 text-[var(--accent-solid)] shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span>{theory.sourceMapping} · 원문 열기</span>
+                </button>
                 <span
                   className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
                     mastery === 'mastered'
@@ -410,6 +430,7 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
               nodeMap={nodeMap}
               masteryMap={masteryMap}
               onNavigateNode={onNavigateNode}
+              onOpenTextbookPassage={onOpenTextbookPassage}
             />
 
             {/* Apple [+] 프로그레시브 디스클로저: 원서 핵심 명제 전문 · 비판적 재해석 · 90초 면접 구술 포인트 */}
@@ -430,12 +451,23 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
 
               <div className="pb-5 pt-3 space-y-4 border-t border-black/[0.06]">
                 <div className="rounded-[16px] bg-white p-4 sm:p-5 space-y-3 border border-black/[0.04]">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#1d1d1f]">
-                    <BookOpen
-                      className="w-4 h-4 text-[var(--accent-solid)] shrink-0"
-                      aria-hidden="true"
-                    />
-                    <span>원서·교과서 핵심 명제 전문</span>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-[#1d1d1f]">
+                      <BookOpen
+                        className="w-4 h-4 text-[var(--accent-solid)] shrink-0"
+                        aria-hidden="true"
+                      />
+                      <span>원서·교과서 핵심 명제 전문</span>
+                    </div>
+                    <button
+                      type="button"
+                      aria-haspopup="dialog"
+                      onClick={() => onOpenTextbookPassage(theory.id)}
+                      className="inline-flex min-h-[26px] items-center gap-1 rounded-full bg-[var(--accent-subtle)] hover:bg-[#0071e3]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[var(--accent-solid)] transition-colors"
+                    >
+                      <span>영문 원문 발췌 열기</span>
+                      <ArrowUpRight className="w-3 h-3 shrink-0" aria-hidden="true" />
+                    </button>
                   </div>
                   <ul className="space-y-2.5">
                     {theory.textbookDefinition.map((line, lIdx) => (
@@ -652,6 +684,7 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                     nodeMap={nodeMap}
                     masteryMap={masteryMap}
                     onNavigateNode={onNavigateNode}
+                    onOpenTextbookPassage={onOpenTextbookPassage}
                   />
                 </div>
               );

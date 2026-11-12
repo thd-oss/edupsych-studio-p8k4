@@ -45,6 +45,7 @@ interface ScrollytellingViewProps {
   onToggleModuleCompleted: (moduleId: ModuleId) => void;
   onNavigateNode: (nodeId: string) => void;
   onStartModuleTraining: (moduleId: ModuleId) => void;
+  onOpenTextbookPassage: (nodeId: string) => void;
 }
 
 const SCROLL_JUMP_DELAY_MS = 60;
@@ -68,7 +69,8 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
   onToggleBookmark,
   onToggleModuleCompleted,
   onNavigateNode,
-  onStartModuleTraining
+  onStartModuleTraining,
+  onOpenTextbookPassage
 }) => {
   const tabBaseId = useId();
   const narrativeContainerRef = useRef<HTMLDivElement | null>(null);
@@ -408,6 +410,7 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
           onToggleBookmark={onToggleBookmark}
           onToggleModuleCompleted={onToggleModuleCompleted}
           onStartModuleTraining={onStartModuleTraining}
+          onOpenTextbookPassage={onOpenTextbookPassage}
         />
 
         {/* 하단 이전/다음 모듈 페이저 */}

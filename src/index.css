@@ -781,7 +781,7 @@ dialog[open]::backdrop {
 }
 
 /* 일반 모달 다이얼로그 */
-dialog:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog):not(.ai-tutor-dialog) {
+dialog:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog):not(.ai-tutor-dialog):not(.textbook-reader-dialog) {
   opacity: 0;
   transition-property: opacity, transform, display, overlay;
   transition-duration: 200ms;
@@ -793,7 +793,7 @@ dialog:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog):not(.a
   }
 }
 
-dialog[open]:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog):not(.ai-tutor-dialog) {
+dialog[open]:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog):not(.ai-tutor-dialog):not(.textbook-reader-dialog) {
   opacity: 1;
   transform-origin: center;
 
@@ -808,6 +808,99 @@ dialog[open]:not(.instant-dialog):not(.drawer-dialog):not(.bottom-sheet-dialog):
       transform: scale(0.96);
     }
   }
+}
+
+/* 교재 원문 발췌 집중 플로팅 리더 카드 (<dialog class="textbook-reader-dialog">) */
+dialog.textbook-reader-dialog {
+  margin: auto;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 26px;
+  background-color: #ffffff;
+  color: #1d1d1f;
+  width: min(calc(100vw - 1.25rem), 45rem);
+  max-width: min(calc(100vw - 1.25rem), 45rem);
+  max-height: min(90dvh, 52rem);
+  overflow: hidden;
+  box-shadow:
+    0 28px 68px -12px rgba(0, 0, 0, 0.42),
+    0 8px 24px rgba(0, 0, 0, 0.14);
+  opacity: 0;
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 210ms;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateY(10px) scale(0.96);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 100ms;
+  }
+}
+
+dialog.textbook-reader-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateY(0) scale(1);
+
+    @starting-style {
+      transform: translateY(10px) scale(0.96);
+    }
+  }
+}
+
+dialog.textbook-reader-dialog[data-closing] {
+  opacity: 0;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateY(10px) scale(0.96);
+  }
+}
+
+dialog.textbook-reader-dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(10, 10, 14, 0);
+  transition-property: background-color, display, overlay;
+  transition-duration: 220ms;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+}
+
+dialog.textbook-reader-dialog[open]::backdrop {
+  background-color: rgba(10, 10, 14, 0.72);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  backdrop-filter: saturate(140%) blur(12px);
+
+  @starting-style {
+    background-color: rgba(10, 10, 14, 0);
+  }
+}
+
+dialog.textbook-reader-dialog[data-closing]::backdrop {
+  background-color: rgba(10, 10, 14, 0);
+}
+
+.textbook-serif-prose {
+  font-family:
+    'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia,
+    'Times New Roman', serif;
+  line-height: 1.84;
+  letter-spacing: -0.004em;
+  word-break: normal;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 /* 모바일 하단 바텀시트 네이티브 <dialog class="bottom-sheet-dialog"> */

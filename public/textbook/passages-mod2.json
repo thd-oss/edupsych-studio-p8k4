@@ -1,0 +1,579 @@
+{
+  "moduleId": "mod2",
+  "generatedAt": "2026-11-12T12:53:46.684260+00:00",
+  "entries": {
+    "mod2-theory-chc": {
+      "nodeId": "mod2-theory-chc",
+      "moduleId": "mod2",
+      "nodeKind": "theory",
+      "titleKo": "지능이론의 재검토: 가드너 다중지능이론의 심리측정적 한계와 CHC·웩슬러(WISC-V) 모형",
+      "titleEn": "Critique of Multiple Intelligences vs. CHC Theory & Wechsler Intelligence Scales",
+      "sourceCitation": "Woolfolk Ch.4 (pp. 122-136) / Seifert & Sutton Ch.4",
+      "excerpts": [
+        {
+          "id": "mod2-theory-chc-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Intelligence",
+          "pageLabel": "p. 149",
+          "verbatimExcerpt": "Raymond Cattell and John Horn’s theory of fluid and crystallized intelligence is more helpful in providing explanations (Cattell, 1963; Horn, 1998; Kanazawa, 2010). Fluid intelligence is mental efficiency and the reasoning ability included in Kanazawa’s definition of intelligence just quoted (Kanazawa, 2010). The neurophysiological underpinnings of fluid intelligence may be related to changes in brain volume, myelinization (coating of neural fibers that makes processing faster), the density of dopamine receptors, or processing abilities in the prefrontal lobe of the brain such as selective attention and especially working memory (Waterhouse, 2006), an aspect of brain functioning we will explore in Chapter 8.",
+          "highlightQuotes": [
+            "Raymond Cattell and John Horn’s theory of fluid and crystallized intelligence is more helpful in providing explanations (Cattell, 1963; Horn, 1998; Kanazawa, 2010).",
+            "Fluid intelligence is mental efficiency and the reasoning ability included in Kanazawa’s definition of intelligence just quoted (Kanazawa, 2010)."
+          ],
+          "glossaryEntry": "Fluid intelligence: Mental efficiency, nonverbal abilities grounded in brain development. (Woolfolk Glossary, p. 658)",
+          "koreanContextGuide": "스피어만(Spearman)의 일반지능(g 요인: 모든 인지 과제 수행의 기저에 공통적으로 작용하는 정신 에너지)과 카텔-혼(Cattell-Horn)의 유동성·결정성 지능 모형, 캐럴(Carroll)의 3층 이론을 통합한 CHC(Cattell-Horn-Carroll) 3층 위계 모형은 현대 심리측정학의 표준 지능 구조로서 최상위 제3층 일반지능(g), 제2층의 광범위 능력(유동성 지능 Gf, 결정성 지능 Gc, 시공간 처리 Gv, 단기·작업기억 Gsm, 처리속도 Gs 등 10~16개 영역), 제1층의 70여 개 좁은 특수 능력으로 위계화된다."
+        },
+        {
+          "id": "mod2-theory-chc-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Intelligence",
+          "pageLabel": "p. 149",
+          "verbatimExcerpt": "In contrast, crystallized intelligence is the ability to apply the problem-solving methods appropriate in your cultural context—the “application to new domains” part of Kanazawa’s definition of intelligence. Crystallized intelligence can increase throughout the life span because it includes learned skills and knowledge such as reading, facts, and how to hail a cab, make a quilt, or design a unit on symbolism in poetry. By investing fluid intelligence in solving problems, we develop our crystallized intelligence, but many tasks in life such as mathematical reasoning draw on both fluid and crystallized intelligence working together (Ferrer & McArdle, 2004; Finkel, Reynolds, McArdle, Gatz, & Pedersen, 2003; Hunt, 2000).",
+          "highlightQuotes": [
+            "By investing fluid intelligence in solving problems, we develop our crystallized intelligence, but many tasks in life such as mathematical reasoning draw on both fluid and crystallized intelligence working together (Ferrer & McArdle, 2004; Finkel, Reynolds, McArdle, Gatz, & Pedersen, 2003; Hunt, 2000).",
+            "In contrast, crystallized intelligence is the ability to apply the problem-solving methods appropriate in your cultural context—the “application to new domains” part of Kanazawa’s definition of intelligence."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "웩슬러 아동용 지능검사 5판(K-WISC-V)은 CHC 이론을 정밀하게 반영하여 전체 IQ(FSIQ)와 함께 5대 기본 지표인 언어이해(VCI/Gc), 시공간(VSI/Gv), 유동추론(FRI/Gf), 작업기억(WMI/Gsm), 처리속도(PSI/Gs)를 산출하며, 추가적으로 일반능력지표(GAI: VCI·VSI·FRI 중심)와 인지효율성지표(CPI: WMI·PSI 중심) 간 내적 편차(Discrepancy) 분석을 통해 학업 수행의 인지적 병목(Bottleneck)을 진단한다."
+        },
+        {
+          "id": "mod2-theory-chc-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 4 · Student Diversity",
+          "sectionHeading": "Chapter 4 · Student Diversity",
+          "pageLabel": "p. 70",
+          "verbatimExcerpt": "Nonetheless, whatever the status of the research evidence, the model itself can be useful as a way for teachers to think about their work. Multiple intelligences suggest the importance of diversifying instruction in order to honor and to respond to diversity in students’ talents and abilities. Viewed like this, whether Gardner’s classification scheme is actually accurate is probably less important than the fact there is (or may be) more than one way to be “smart”. In the end, as with cognitive and learning styles, it may not be important to label students’ talents or intellectual strengths. It may be more important simply to provide important learning and knowledge in several modes or styles, ways that draw on more than one possible form of intelligence or skill. A good example of this principle is your own development in learning to teach.",
+          "highlightQuotes": [
+            "Multiple intelligences suggest the importance of diversifying instruction in order to honor and to respond to diversity in students’ talents and abilities.",
+            "Viewed like this, whether Gardner’s classification scheme is actually accurate is probably less important than the fact there is (or may be) more than one way to be “smart”."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "가드너의 다중지능이론(MI)은 학생의 다양한 강점을 존중한다는 교육철학적 은유로는 가치가 있으나, 심리측정학적·인지신경과학적 실증 근거가 매우 취약하다. 첫째, 대규모 요인분석 연구들은 하위 지능 영역 간에 유의미한 정적 상관(Positive Manifold)이 존재하여 상위 일반지능(g 요인)을 부정할 수 없음을 입증하며, 가드너가 분류한 신체운동·음악·대인관계 등은 지능이라기보다 재능(Talent), 기술, 혹은 성격 특성…"
+        }
+      ]
+    },
+    "mod2-theory-clt-prosthetics": {
+      "nodeId": "mod2-theory-clt-prosthetics",
+      "moduleId": "mod2",
+      "nodeKind": "theory",
+      "titleKo": "유동성 지능의 안정성을 보완하는 스키마 자동화·인지부하이론과 신경심리학적 환경적 보철",
+      "titleEn": "Schema Automatization, Cognitive Load Theory (CLT) & Neuropsychological Environmental Prosthetics",
+      "sourceCitation": "Woolfolk Ch.4, 8 / Seifert & Sutton Ch.4, 5",
+      "excerpts": [
+        {
+          "id": "mod2-theory-clt-prosthetics-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 326",
+          "verbatimExcerpt": "Intrinsic cognitive load is unavoidable—it is the amount of cognitive processing required to figure out the material. That amount depends on how many elements you have to take into account, how complicated the interactions among the elements are, and your level of expertise in the problem area (Antonenko, Paas, Grabner, & van Gog, 2010). Even though working memory can hold 5 to 9 new bits of information, it can process only about 2 to 4 at a time, so if you have to understand how many separate elements interact in a complex system, such as grasping the structure and function of DNA, you will be in trouble unless you already understand some of the parts: vocabulary, concepts, procedures, and so on (van Merriënboer & Sweller, 2005). Intrinsic cognitive load is essential to the task— it cannot be eliminated.",
+          "highlightQuotes": [
+            "Intrinsic cognitive load is unavoidable—it is the amount of cognitive processing required to figure out the material.",
+            "Intrinsic cognitive load is essential to the task— it cannot be eliminated."
+          ],
+          "glossaryEntry": "Cognitive load: The volume of resources necessary to complete a task. (Woolfolk Glossary, p. 656)",
+          "koreanContextGuide": "카텔(Cattell)의 유동성 지능(Gf: 신경생리학적 성숙과 전두엽-두정엽 네트워크 효율성에 기반한 비언어적 추론·신규 문제해결력)은 유전적 영향이 크고 비교적 생물학적 안정성을 띠는 반면, 결정성 지능(Gc: 문화적·교육적 경험으로 장기기억에 축적된 어휘·개념 도식·절차 지식)은 체계적 교육을 통해 평생 확장된다."
+        },
+        {
+          "id": "mod2-theory-clt-prosthetics-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 326",
+          "verbatimExcerpt": "Extraneous cognitive load is the cognitive capacity you use to deal with problems not related to the learning task, like trying to get your roommate (spouse, children, partner) to quit interrupting you or struggling with a disorganized lecture or a poorly written textbook (not this one of course!). Instruction can help manage extraneous load by providing supports, focusing attention on the main ideas, and generally supplying scaffolding (see Chapter 2).",
+          "highlightQuotes": [
+            "Extraneous cognitive load is the cognitive capacity you use to deal with problems not related to the learning task, like trying to get your roommate (spouse, children, partner) to quit interrupting you or struggling with a disorganized lecture or a poorly written textbook (not this one of course!).",
+            "Instruction can help manage extraneous load by providing supports, focusing attention on the main ideas, and generally supplying scaffolding (see Chapter 2)."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "스웰러(Sweller)의 인지부하이론(Cognitive Load Theory)은 한 번에 처리할 수 있는 용량(4±1 청크)과 지속시간(15~30초)이 엄격히 제한된 작업기억(Working Memory)의 병목을 용량 제한이 없는 장기기억(Long-Term Memory) 내 스키마 구축과 자동화(Schema Automatization)로 우회하는 인간 인지 건축학(Human Cognitive Architecture) 원리를 규명한다."
+        },
+        {
+          "id": "mod2-theory-clt-prosthetics-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 9 · Facilitating Complex Thinking",
+          "sectionHeading": "Chapter 9 · Facilitating Complex Thinking",
+          "pageLabel": "p. 208",
+          "verbatimExcerpt": "Van Meerionboer, J., Kirschner, P., & Kester, L. (2003). Taking the cognitive load off a learner’s mind: Instructional design for complex learning. Educational Psychologist, 38(1), 5-13.",
+          "highlightQuotes": [
+            "Taking the cognitive load off a learner’s mind: Instructional design for complex learning."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "유동성 지능(Gf)이나 선천적 작업기억 용량 자체를 컴퓨터 두뇌 게임이나 단순 암기 훈련(Working Memory Brain Training)으로 영구 증진하려는 시도는 훈련 과제와 유사한 근거리 전이(Near Transfer)만 있을 뿐 실제 학업 성취나 일상 문제해결로 이어지는 원거리 전이(Far Transfer) 효과가 전혀 없다는 것이 메타분석의 일관된 결론이다(Melby-Lervåg & Hulme, 2013; Sal…"
+        }
+      ]
+    },
+    "mod2-theory-rti": {
+      "nodeId": "mod2-theory-rti",
+      "moduleId": "mod2",
+      "nodeKind": "theory",
+      "titleKo": "중재반응모형(RTI / MTSS)과 학습장애(SLD)의 조기 선별·지원 체계",
+      "titleEn": "Response to Intervention (RTI / MTSS) & Specific Learning Disabilities",
+      "sourceCitation": "Woolfolk Ch.4 (pp. 142-151) / Seifert & Sutton Ch.5",
+      "excerpts": [
+        {
+          "id": "mod2-theory-rti-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Students Who Are Gifted And Talented",
+          "pageLabel": "p. 182",
+          "verbatimExcerpt": "Even with intensive, high-quality Tier 3 interventions, some students may continue to struggle and will need extended support, instruction, and practice (Denton et al., 2013). For more information on RTI, go to the Web site for the National Center on Response to Intervention (rti4success.org/).",
+          "highlightQuotes": [
+            "For more information on RTI, go to the Web site for the National Center on Response to Intervention (rti4success.org/).",
+            "Even with intensive, high-quality Tier 3 interventions, some students may continue to struggle and will need extended support, instruction, and practice (Denton et al., 2013)."
+          ],
+          "glossaryEntry": "Response to intervention (RTI): A process to make sure students get appropriate researchbased instruction and support as soon as possible and that teachers are systematic in documenting the interventions they have tried with these students so they can use this information in planning instruction. (Woolfolk Glossary, p. 662)",
+          "koreanContextGuide": "중재반응모형(RTI: Response to Intervention) 및 다층적 지원체계(MTSS: Multi-Tiered System of Supports)는 모든 학생에게 과학적으로 검증된 교육을 제공하고, 정기적인 보편적 선별과 교육과정 중심 측정(CBM: Curriculum-Based Measurement) 기반의 진전도 모니터링을 통해 중재 반응도에 따라 학업·정서·행동 지원 강도를 3단계로 높이는 예방적 학교 생태계 모형이다."
+        },
+        {
+          "id": "mod2-theory-rti-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Students Who Are Gifted And Talented",
+          "pageLabel": "p. 182",
+          "verbatimExcerpt": "One of the problems for students with serious learning problems is that they have to struggle through the early grades, often falling farther and farther behind, until they are identified, assessed, qualified for an IDEA category, receive an IEP, and finally get appropriate help. This has been called the “wait to fail” model. The reauthorization of IDEA in 2004 gave educators a new option for assessing and educating students who might have serious learning problems. The process is called response to intervention (RTI). The main goal of RTI is to make sure students get appropriate research-based instruction and support as soon as possible, in kindergarten if they need it, before they have fallen too far behind.",
+          "highlightQuotes": [
+            "The process is called response to intervention (RTI).",
+            "This has been called the “wait to fail” model."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "Tier 1(보편적 예방 지원, 전체 학생의 약 80%): 전교생을 대상으로 증거기반 고품질 일반 학급 수업(보편적 학습설계 UDL), 학급 차원의 사회정서학습(SEL) 및 긍정적 행동지원(PBS)을 제공하고, 연 2~3회 보편적 선별검사(Universal Screening)를 통해 잠재적 위험군을 조기 발굴한다."
+        },
+        {
+          "id": "mod2-theory-rti-w-3",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Students Who Are Gifted And Talented",
+          "pageLabel": "p. 182",
+          "verbatimExcerpt": "One common way of reaching these RTI goals is to use a three-tiered system (see Figure 4.4). The first tier is to use a strong, well-researched way of teaching all students (we will look at these kinds of approaches in Chapter 14). Students who are struggling in the Tier 1 curriculum, as identified by ongoing quality classroom assessments, are moved to the second tier and receive extra support and additional small-group instruction. If some students still make limited progress, they move to the third tier for additional one-to-one intensive help and perhaps a special needs assessment (Buffum, Mattos, & Weber, 2010; Denton et al., 2013).",
+          "highlightQuotes": [
+            "Students who are struggling in the Tier 1 curriculum, as identified by ongoing quality classroom assessments, are moved to the second tier and receive extra support and additional small-group instruction."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "Tier 2(표적 집단 보충 지원, 약 15%): Tier 1 선별에서 기준 미달로 포착된 학업·정서 위험군 학생에게 진단 확정 전이라도 즉시 주 3~4회 구조화된 소집단(3~5명) 명시적 보충 교수나 표적 집단상담을 투입하고, 1~2주 간격의 CBM 진전도 모니터링(Progress Monitoring)으로 성장 기울기(Slope)를 추적한다."
+        }
+      ]
+    },
+    "mod2-theory-adhd": {
+      "nodeId": "mod2-theory-adhd",
+      "moduleId": "mod2",
+      "nodeKind": "theory",
+      "titleKo": "ADHD 및 실행기능(Executive Function) 취약 학생을 위한 과학적 지원",
+      "titleEn": "ADHD, Executive Functioning (Barkley Model) & Multimodal Classroom Interventions",
+      "sourceCitation": "Woolfolk Ch.4 (pp. 152-158) / Seifert & Sutton Ch.5",
+      "excerpts": [
+        {
+          "id": "mod2-theory-adhd-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Students With Learning Challenges",
+          "pageLabel": "p. 169",
+          "verbatimExcerpt": "DEFINITIONS. Hyperactivity is not one particular condition, but two kinds of problems that may or may not occur together: attention disorders and impulsive-hyperactivity problems. About half the children diagnosed in the United States have both conditions. Today, most psychologists agree that the main problem for children labeled hyperactive is directing and maintaining attention, not simply controlling their physical activity. The American Psychiatric Association has established a diagnostic category called attention-deficit hyperactivity disorder (ADHD) to identify children with this problem. The association describes ADHD as a neurodevelopmental disorder affecting both children and adults.",
+          "highlightQuotes": [
+            "The American Psychiatric Association has established a diagnostic category called attention-deficit hyperactivity disorder (ADHD) to identify children with this problem.",
+            "Hyperactivity is not one particular condition, but two kinds of problems that may or may not occur together: attention disorders and impulsive-hyperactivity problems."
+          ],
+          "glossaryEntry": "Attention-deficit hyperactivity disorder (ADHD): Current term for disruptive behavior disorders marked by overactivity, excessive difficulty sustaining attention, or impulsiveness. (Woolfolk Glossary, p. 655)",
+          "koreanContextGuide": "주의력결핍 과잉행동장애(ADHD)는 발달 수준에 부적절한 부주의(Inattention), 과잉행동(Hyperactivity), 충동성(Impulsivity) 증상이 12세 이전에 발현되어 가정·학교 등 2개 이상의 생태학적 맥락에서 6개월 이상 지속되며 학업적·사회적 기능에 현저한 손상을 초래하는 신경발달장애이다."
+        },
+        {
+          "id": "mod2-theory-adhd-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Students With Learning Challenges",
+          "pageLabel": "p. 166",
+          "verbatimExcerpt": "STUDENT CHARACTERISTICS. Students with learning disabilities are not all alike. The most common characteristics are specific difficulties in one or more academic areas; poor coordination; problems paying attention; hyperactivity and impulsivity; problems organizing and interpreting visual and auditory information; seeming lack of motivation; and difficulties making and keeping friends (Hallahan et al., 2012; Rosenberg et al., 2011). As you can see, many students with other disabilities (e.g., ADHD) and many normal students may have some of the same characteristics. To complicate the situation even more, not all students with learning disabilities will have these problems, and very few will have all of these characteristics.",
+          "highlightQuotes": [
+            "The most common characteristics are specific difficulties in one or more academic areas; poor coordination; problems paying attention; hyperactivity and impulsivity; problems organizing and interpreting visual and auditory information; seeming lack of motivation; and difficulties making and keeping friends (Hallahan et al., 2012; Rosenberg et al., 2011).",
+            "As you can see, many students with other disabilities (e.g., ADHD) and many normal students may have some of the same characteristics."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "바클리(Barkley, 1997)의 실행기능 통합 모형에 따르면, ADHD의 일차적 핵심 결함은 단순한 주의 집중력 부족이 아니라 전두엽-선조체(Prefronto-Striatal) 신경회로의 '행동 반응 억제(Behavioral Inhibition: 우세 반응 억제, 진행 중인 부적절 반응 중단, 간섭 통제)' 결함이다."
+        },
+        {
+          "id": "mod2-theory-adhd-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 5 · Students with Special Educational Needs",
+          "sectionHeading": "Chapter 5 · Students with Special Educational Needs",
+          "pageLabel": "p. 104",
+          "verbatimExcerpt": "Attention deficit hyperactivity disorder (ADHD) is a problem in sustaining attention and controlling impulses. It can often be controlled with medications, but usually it is also important for teachers to provide a structured environment for the student as well.",
+          "highlightQuotes": [
+            "Attention deficit hyperactivity disorder (ADHD) is a problem in sustaining attention and controlling impulses.",
+            "It can often be controlled with medications, but usually it is also important for teachers to provide a structured environment for the student as well."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "바클리(Barkley)가 통찰했듯 ADHD는 '무엇을 해야 하는지 모르는 지식의 결함(Disorder of Knowing What to Do)'이 아니라 '아는 것을 실제 맥락에서 필요한 순간에 실행하지 못하는 수행의 장애(Disorder of Doing What You Know)'이다. 따라서 교실 밖 상담실에서 일주일에 한 번 만나 '다음 주부터는 수업 시간에 참을성 있게 앉아 있기로 약속하자'고 구두 다짐을 받거나, 사후…"
+        }
+      ]
+    },
+    "mod2-fc-chc": {
+      "nodeId": "mod2-fc-chc",
+      "moduleId": "mod2",
+      "nodeKind": "flashcard",
+      "titleKo": "CHC 지능이론",
+      "titleEn": "CHC Theory of Intelligence (Cattell-Horn-Carroll)",
+      "sourceCitation": "Woolfolk p. 149 · Woolfolk p. 149",
+      "excerpts": [
+        {
+          "id": "mod2-fc-chc-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Intelligence",
+          "pageLabel": "p. 149",
+          "verbatimExcerpt": "Raymond Cattell and John Horn’s theory of fluid and crystallized intelligence is more helpful in providing explanations (Cattell, 1963; Horn, 1998; Kanazawa, 2010). Fluid intelligence is mental efficiency and the reasoning ability included in Kanazawa’s definition of intelligence just quoted (Kanazawa, 2010). The neurophysiological underpinnings of fluid intelligence may be related to changes in brain volume, myelinization (coating of neural fibers that makes processing faster), the density of dopamine receptors, or processing abilities in the prefrontal lobe of the brain such as selective attention and especially working memory (Waterhouse, 2006), an aspect of brain functioning we will explore in Chapter 8.",
+          "highlightQuotes": [
+            "Raymond Cattell and John Horn’s theory of fluid and crystallized intelligence is more helpful in providing explanations (Cattell, 1963; Horn, 1998; Kanazawa, 2010).",
+            "Fluid intelligence is mental efficiency and the reasoning ability included in Kanazawa’s definition of intelligence just quoted (Kanazawa, 2010)."
+          ],
+          "glossaryEntry": "Fluid intelligence: Mental efficiency, nonverbal abilities grounded in brain development. (Woolfolk Glossary, p. 658)",
+          "koreanContextGuide": "현대 심리측정학에서 가장 강력한 실증적 지지를 받는 3층 위계 지능 모형으로, 일반지능(g) 아래 유동성 지능(Gf), 결정성 지능(Gc), 작업기억(Gsm), 처리속도(Gs), 시공간 처리(Gv) 등 광범위 인지능력과 특수 능력을 체계화한 이론. (현장 적용: K-WISC-V 검사 결과 언어이해(Gc)와 유동추론(Gf)은 우수하나 처리속도(Gs)가 현저히 낮은 영재성 학습부진 학생에게, 시간제한 지필평가 대신 충분한 풀이 시간과 노트북 타이핑 대안을 허용한다.)"
+        },
+        {
+          "id": "mod2-fc-chc-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Intelligence",
+          "pageLabel": "p. 149",
+          "verbatimExcerpt": "In contrast, crystallized intelligence is the ability to apply the problem-solving methods appropriate in your cultural context—the “application to new domains” part of Kanazawa’s definition of intelligence. Crystallized intelligence can increase throughout the life span because it includes learned skills and knowledge such as reading, facts, and how to hail a cab, make a quilt, or design a unit on symbolism in poetry. By investing fluid intelligence in solving problems, we develop our crystallized intelligence, but many tasks in life such as mathematical reasoning draw on both fluid and crystallized intelligence working together (Ferrer & McArdle, 2004; Finkel, Reynolds, McArdle, Gatz, & Pedersen, 2003; Hunt, 2000).",
+          "highlightQuotes": [
+            "By investing fluid intelligence in solving problems, we develop our crystallized intelligence, but many tasks in life such as mathematical reasoning draw on both fluid and crystallized intelligence working together (Ferrer & McArdle, 2004; Finkel, Reynolds, McArdle, Gatz, & Pedersen, 2003; Hunt, 2000).",
+            "In contrast, crystallized intelligence is the ability to apply the problem-solving methods appropriate in your cultural context—the “application to new domains” part of Kanazawa’s definition of intelligence."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "현대 심리측정학에서 가장 강력한 실증적 지지를 받는 3층 위계 지능 모형으로, 일반지능(g) 아래 유동성 지능(Gf), 결정성 지능(Gc), 작업기억(Gsm), 처리속도(Gs), 시공간 처리(Gv) 등 광범위 인지능력과 특수 능력을 체계화한 이론. (현장 적용: K-WISC-V 검사 결과 언어이해(Gc)와 유동추론(Gf)은 우수하나 처리속도(Gs)가 현저히 낮은 영재성 학습부진 학생에게, 시간제한 지필평가 대신 충분한 풀이 시간과 노트북 타이핑 대안을 허용한다.)"
+        }
+      ]
+    },
+    "mod2-fc-wmi-psi": {
+      "nodeId": "mod2-fc-wmi-psi",
+      "moduleId": "mod2",
+      "nodeKind": "flashcard",
+      "titleKo": "작업기억 지표(WMI)와 처리속도 지표(PSI)",
+      "titleEn": "Working Memory Index (WMI) & Processing Speed Index (PSI)",
+      "sourceCitation": "Woolfolk p. 328 · Seifert & Sutton p. 300",
+      "excerpts": [
+        {
+          "id": "mod2-fc-wmi-psi-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 328",
+          "verbatimExcerpt": "Three basic aspects of memory improve over time: memory span or the amount of information that can be held in short-term/working memory, memory processing efficiency, and speed of processing. As they get older, children can process many different kinds of information (verbal, visual, mathematical, etc.) faster, so increased speed of processing seems to be a general factor. In addition, the increase in speed with age is the same for American and Korean children, so increasing processing speed with age may be universal (Kail, 2000; Kail & Park, 1994).",
+          "highlightQuotes": [
+            "Three basic aspects of memory improve over time: memory span or the amount of information that can be held in short-term/working memory, memory processing efficiency, and speed of processing.",
+            "In addition, the increase in speed with age is the same for American and Korean children, so increasing processing speed with age may be universal (Kail, 2000; Kail & Park, 1994)."
+          ],
+          "glossaryEntry": "Deviation IQ: Score based on a statistical comparison of an individual’s performance with the average performance of others in that age group. (Woolfolk Glossary, p. 657)",
+          "koreanContextGuide": "웩슬러 지능검사(WISC-V)의 핵심 기본 지표로, 작업기억(WMI)은 정보를 일시적으로 유지하며 동시에 조작하는 능력이고, 처리속도(PSI)는 시각적 정보를 빠르고 정확하게 주사·변별·기호화하는 인지적 효율성이다. (현장 적용: 수업 내용을 이해는 잘하지만 알림장 필기나 칠판 판서를 끝내지 못해 늘 남아서 혼나는 학생의 PSI/WMI 병목을 파악하고, 빈칸 채우기형 유인물(환경적 보철)을 제공하여 인지 자원을 개념 이해에 집중시킨다.)"
+        },
+        {
+          "id": "mod2-fc-wmi-psi-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 12 · Standardized and Other Formal Assessments",
+          "sectionHeading": "Chapter 12 · Standardized and Other Formal Assessments",
+          "pageLabel": "p. 300",
+          "verbatimExcerpt": "Groups that are negatively stereotyped in some area, such as women’s performance in mathematics, are in danger of stereotype threat, i.e. concerns that others will view them through the negative or stereotyped lens (Aronson & Steele, 2005). Studies have shown that test performance of stereotyped groups (e.g. African Americans, Latinos, women) declines when it is emphasized to those taking the test that (a) the test is high stakes, measures intelligence or math and (b) they are reminded of their ethnicity, race or gender (e.g. by asking them before the test to complete a brief demographic questionnaire). Even if individuals believe they are competent, stereotype threat can reduce working memory capacity because individuals are trying to suppress the negative stereotypes.",
+          "highlightQuotes": [
+            "Even if individuals believe they are competent, stereotype threat can reduce working memory capacity because individuals are trying to suppress the negative stereotypes."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "웩슬러 지능검사(WISC-V)의 핵심 기본 지표로, 작업기억(WMI)은 정보를 일시적으로 유지하며 동시에 조작하는 능력이고, 처리속도(PSI)는 시각적 정보를 빠르고 정확하게 주사·변별·기호화하는 인지적 효율성이다."
+        }
+      ]
+    },
+    "mod2-fc-schema-automatization": {
+      "nodeId": "mod2-fc-schema-automatization",
+      "moduleId": "mod2",
+      "nodeKind": "flashcard",
+      "titleKo": "스키마 자동화와 유동성 지능 보완",
+      "titleEn": "Schema Automatization & Fluid Intelligence Compensation",
+      "sourceCitation": "Woolfolk p. 345 · Woolfolk p. 343",
+      "excerpts": [
+        {
+          "id": "mod2-fc-schema-automatization-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Point/Counterpoint: What’S Wrong With Memorizing?",
+          "pageLabel": "p. 345",
+          "verbatimExcerpt": "AUTOMATED BASIC SKILLS. Most psychologists identify three stages in the development of an automated skill: cognitive, associative, and autonomous (J. R. Anderson, 2010; Fitts & Posner, 1967). At the cognitive stage, when we are first learning, we rely on declarative knowledge and general problem-solving strategies to accomplish our goal. For example, to learn how to assemble a bookshelf, we might try to follow steps in the instruction manual, putting a check beside each step as we complete it to keep track of progress. At this stage, we have to “think about” every step and perhaps refer back to the pictures of parts to see what a “4-inch metal bolt with lock nut” looks like. The cognitive load on working memory is heavy. There can be quite a bit of trial-and-error learning at this stage when, for example, the bolt we chose doesn’t fit.",
+          "highlightQuotes": [
+            "The cognitive load on working memory is heavy."
+          ],
+          "glossaryEntry": "Automated basic skills: Skills that are applied without conscious thought. (Woolfolk Glossary, p. 655)",
+          "koreanContextGuide": "생물학적으로 비교적 안정적인 유동성 지능(Gf)과 제한된 작업기억 용량의 한계를 극복하기 위해, 영역별 핵심 개념과 절차를 장기기억의 자동화된 스키마로 구축하여 작업기억 부하 없이 즉각 인출·적용하게 만드는 인지 기제. (현장 적용: 기초 구구단과 분수 통분 절차를 완전히 자동화(스키마화)시켜 주자, 작업기억 용량이 작던 학생도 고난도 서술형 방정식 문제의 논리 추론에 작업기억 자원을 온전히 투입할 수 있게 된다.)"
+        },
+        {
+          "id": "mod2-fc-schema-automatization-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Family And Community Partnerships—Organizing Learning",
+          "pageLabel": "p. 343",
+          "verbatimExcerpt": "One characteristic that distinguishes experts from novices in every arena, from reading to medical diagnosis, is that the experts’ declarative knowledge has become “proceduralized,” that is, incorporated into routines they can apply automatically without making many demands on working memory. Explicit memories have become implicit, and the expert is no longer aware of them. Skills that are applied without conscious thought are called automated basic skills. An example is shifting gears in a standard transmission car.",
+          "highlightQuotes": [
+            "Skills that are applied without conscious thought are called automated basic skills.",
+            "One characteristic that distinguishes experts from novices in every arena, from reading to medical diagnosis, is that the experts’ declarative knowledge has become “proceduralized,” that is, incorporated into routines they can apply automatically without making many demands on working memory."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "생물학적으로 비교적 안정적인 유동성 지능(Gf)과 제한된 작업기억 용량의 한계를 극복하기 위해, 영역별 핵심 개념과 절차를 장기기억의 자동화된 스키마로 구축하여 작업기억 부하 없이 즉각 인출·적용하게 만드는 인지 기제. (현장 적용: 기초 구구단과 분수 통분 절차를 완전히 자동화(스키마화)시켜 주자, 작업기억 용량이 작던 학생도 고난도 서술형 방정식 문제의 논리 추론에 작업기억 자원을 온전히 투입할 수 있게 된다.)"
+        }
+      ]
+    },
+    "mod2-fc-clt": {
+      "nodeId": "mod2-fc-clt",
+      "moduleId": "mod2",
+      "nodeKind": "flashcard",
+      "titleKo": "외재적 인지부하 vs. 본유적 인지부하",
+      "titleEn": "Extraneous vs. Germane Cognitive Load",
+      "sourceCitation": "Woolfolk p. 326 · Seifert & Sutton p. 208",
+      "excerpts": [
+        {
+          "id": "mod2-fc-clt-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 326",
+          "verbatimExcerpt": "Intrinsic cognitive load is unavoidable—it is the amount of cognitive processing required to figure out the material. That amount depends on how many elements you have to take into account, how complicated the interactions among the elements are, and your level of expertise in the problem area (Antonenko, Paas, Grabner, & van Gog, 2010). Even though working memory can hold 5 to 9 new bits of information, it can process only about 2 to 4 at a time, so if you have to understand how many separate elements interact in a complex system, such as grasping the structure and function of DNA, you will be in trouble unless you already understand some of the parts: vocabulary, concepts, procedures, and so on (van Merriënboer & Sweller, 2005). Intrinsic cognitive load is essential to the task— it cannot be eliminated.",
+          "highlightQuotes": [
+            "Intrinsic cognitive load is unavoidable—it is the amount of cognitive processing required to figure out the material.",
+            "Intrinsic cognitive load is essential to the task— it cannot be eliminated."
+          ],
+          "glossaryEntry": "Extraneous cognitive load: The resources required to process stimuli irrelevant to the task. (Woolfolk Glossary, p. 658)",
+          "koreanContextGuide": "외재적 인지부하는 비효율적인 교수 제시나 산만한 환경 때문에 작업기억이 불필요하게 소모되는 부하이며, 본유적 인지부하는 핵심 개념의 스키마 형성과 정교화를 위해 투입되는 생산적인 인지적 노력이다. (현장 적용: 화려한 애니메이션과 복잡한 배경음악이 들어간 수업 자료를 단순·명료한 도식과 완결된 예제(Worked Example)로 교체하여 외재적 인지부하를 낮추고 본유적 인지부하를 촉진한다.)"
+        },
+        {
+          "id": "mod2-fc-clt-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 9 · Facilitating Complex Thinking",
+          "sectionHeading": "Chapter 9 · Facilitating Complex Thinking",
+          "pageLabel": "p. 208",
+          "verbatimExcerpt": "Van Meerionboer, J., Kirschner, P., & Kester, L. (2003). Taking the cognitive load off a learner’s mind: Instructional design for complex learning. Educational Psychologist, 38(1), 5-13.",
+          "highlightQuotes": [
+            "Taking the cognitive load off a learner’s mind: Instructional design for complex learning."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "외재적 인지부하는 비효율적인 교수 제시나 산만한 환경 때문에 작업기억이 불필요하게 소모되는 부하이며, 본유적 인지부하는 핵심 개념의 스키마 형성과 정교화를 위해 투입되는 생산적인 인지적 노력이다."
+        }
+      ]
+    },
+    "mod2-fc-prosthetics": {
+      "nodeId": "mod2-fc-prosthetics",
+      "moduleId": "mod2",
+      "nodeKind": "flashcard",
+      "titleKo": "신경심리학적 환경적 보철",
+      "titleEn": "Neuropsychological Environmental Prosthetics",
+      "sourceCitation": "Woolfolk p. 178 · Seifert & Sutton p. 86",
+      "excerpts": [
+        {
+          "id": "mod2-fc-prosthetics-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Guidelines: Teaching Students With Intellectual Disabilities",
+          "pageLabel": "p. 178",
+          "verbatimExcerpt": "As a general education teacher, you may not have contact with children needing extensive or pervasive support unless your school is participating in a full-inclusion program, but you probably will work with children needing intermittent or limited support. In the early grades, these students may simply learn more slowly than their peers. They need more time and more practice to learn, and they may have difficulty transferring learning from one setting to another or putting small skills together to accomplish a more complex task. They often have difficulties with metacognitive skills and executive functioning required to plan, monitor, and redirect attention and learning strategies (T. Simon, 2010), so very structured and complete teaching and guidance make sense.",
+          "highlightQuotes": [
+            "They often have difficulties with metacognitive skills and executive functioning required to plan, monitor, and redirect attention and learning strategies (T."
+          ],
+          "glossaryEntry": "Executive functioning: All those processes that we use to organize, coordinate, and perform goal-directed, intentional actions, including focusing attention, inhibiting impulsive responses, making and changing plans, and using memory to hold and manipulate information. (Woolfolk Glossary, p. 658)",
+          "koreanContextGuide": "작업기억과 실행기능이 취약한 학습자를 위해 내적 기억·억제 능력에 의존하지 않도록 실제 행동이 요구되는 바로 그 장소와 순간(Point of Performance)에 배치하는 외현적 시각 단서·타이머·체크리스트 등의 물리적 지원 도구. (현장 적용: 준비물을 매번 빠뜨리는 ADHD 성향 학생에게 구두로 꾸중하는 대신, 사물함 문과 책상 우측 상단에 [수업 시작 전 3가지 체크 스티커]와 시각적 잔여 시간 타이머(Time Timer)를 부착해 준다.)"
+        },
+        {
+          "id": "mod2-fc-prosthetics-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 5 · Students with Special Educational Needs",
+          "sectionHeading": "Chapter 5 · Students with Special Educational Needs",
+          "pageLabel": "p. 86",
+          "verbatimExcerpt": "This legislation also prohibited discrimination on the basis of disability, just as Section 504 of the Rehabilitation Act had done (PL 101-336, 1990). Although the ADA also applies to all people (not just to students), its provisions are more specific and “stronger” than those of Section 504. In particular, ADA extends to all employment and jobs, not just those receiving Federal funding. It also specifically requires accommodations to be made in public facilities such as with buses, restrooms, and telephones. ADA legislation is therefore responsible for some of the “minor” renovations in schools that you may have noticed in recent years, like wheelchair-accessible doors, ramps, and restrooms, and public telephones with volume controls.",
+          "highlightQuotes": [
+            "It also specifically requires accommodations to be made in public facilities such as with buses, restrooms, and telephones."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "작업기억과 실행기능이 취약한 학습자를 위해 내적 기억·억제 능력에 의존하지 않도록 실제 행동이 요구되는 바로 그 장소와 순간(Point of Performance)에 배치하는 외현적 시각 단서·타이머·체크리스트 등의 물리적 지원 도구."
+        }
+      ]
+    },
+    "mod2-fc-rti": {
+      "nodeId": "mod2-fc-rti",
+      "moduleId": "mod2",
+      "nodeKind": "flashcard",
+      "titleKo": "중재반응모형 / 다층적 지원체계",
+      "titleEn": "Response to Intervention (RTI) / MTSS",
+      "sourceCitation": "Woolfolk p. 182 · Woolfolk p. 182",
+      "excerpts": [
+        {
+          "id": "mod2-fc-rti-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Students Who Are Gifted And Talented",
+          "pageLabel": "p. 182",
+          "verbatimExcerpt": "Even with intensive, high-quality Tier 3 interventions, some students may continue to struggle and will need extended support, instruction, and practice (Denton et al., 2013). For more information on RTI, go to the Web site for the National Center on Response to Intervention (rti4success.org/).",
+          "highlightQuotes": [
+            "For more information on RTI, go to the Web site for the National Center on Response to Intervention (rti4success.org/).",
+            "Even with intensive, high-quality Tier 3 interventions, some students may continue to struggle and will need extended support, instruction, and practice (Denton et al., 2013)."
+          ],
+          "glossaryEntry": "Response to intervention (RTI): A process to make sure students get appropriate researchbased instruction and support as soon as possible and that teachers are systematic in documenting the interventions they have tried with these students so they can use this information in planning instruction. (Woolfolk Glossary, p. 662)",
+          "koreanContextGuide": "학생이 완전히 실패할 때까지 기다리는 불일치 모형(Wait-to-Fail)을 극복하기 위해, Tier 1(보편적 학급 지원) → Tier 2(소집단 표적 보충 중재) → Tier 3(개별 집중 중재)의 단계적 증거기반 개입과 진전도 모니터링을 제공하는 예방적 교육·상담 체계. (현장 적용: 초등 1학년 한글 해독 선별검사에서 하위 15%에 속한 학생에게 장애 진단 전이라도 즉시 Tier 2 소집단 파닉스 명시적 교수와 격주 CBM(교육과정 중심 측정) 모니터링을 제공한다.)"
+        },
+        {
+          "id": "mod2-fc-rti-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Students Who Are Gifted And Talented",
+          "pageLabel": "p. 182",
+          "verbatimExcerpt": "One common way of reaching these RTI goals is to use a three-tiered system (see Figure 4.4). The first tier is to use a strong, well-researched way of teaching all students (we will look at these kinds of approaches in Chapter 14). Students who are struggling in the Tier 1 curriculum, as identified by ongoing quality classroom assessments, are moved to the second tier and receive extra support and additional small-group instruction. If some students still make limited progress, they move to the third tier for additional one-to-one intensive help and perhaps a special needs assessment (Buffum, Mattos, & Weber, 2010; Denton et al., 2013).",
+          "highlightQuotes": [
+            "One common way of reaching these RTI goals is to use a three-tiered system (see Figure 4.4).",
+            "Students who are struggling in the Tier 1 curriculum, as identified by ongoing quality classroom assessments, are moved to the second tier and receive extra support and additional small-group instruction."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "학생이 완전히 실패할 때까지 기다리는 불일치 모형(Wait-to-Fail)을 극복하기 위해, Tier 1(보편적 학급 지원) → Tier 2(소집단 표적 보충 중재) → Tier 3(개별 집중 중재)의 단계적 증거기반 개입과 진전도 모니터링을 제공하는 예방적 교육·상담 체계. (현장 적용: 초등 1학년 한글 해독 선별검사에서 하위 15%에 속한 학생에게 장애 진단 전이라도 즉시 Tier 2 소집단 파닉스 명시적 교수와 격주 CBM(교육과정 중심 측정) 모니터링을 제공한다.)"
+        }
+      ]
+    },
+    "mod2-fc-meshing": {
+      "nodeId": "mod2-fc-meshing",
+      "moduleId": "mod2",
+      "nodeKind": "flashcard",
+      "titleKo": "학습양식 맞추기 가설의 실증적 비판",
+      "titleEn": "Critique of Learning Styles (Meshing Hypothesis)",
+      "sourceCitation": "Woolfolk p. 151 · Seifert & Sutton p. 67",
+      "excerpts": [
+        {
+          "id": "mod2-fc-meshing-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Intelligence",
+          "pageLabel": "p. 151",
+          "verbatimExcerpt": "Gardner’s supporters believe newer research methods that look at dynamic models and study intelligence in cultural contexts will support MI theory (J.-Q. Chen, 2004; Gardner & Moran, 2006). In addition, Gardner (2003, 2009) also has responded to critics by identifying a number of myths, misconceptions, and misuses related to MI theory and schooling. For example, he stresses that an intelligence is not the same as a sensory system; there is no “auditory intelligence” or “visual intelligence.” Intelligences are not the same as learning styles. (Gardner doesn’t believe that people actually have consistent learning styles.) Another misconception is that MI theory disproves the idea of general intelligence.",
+          "highlightQuotes": [
+            "For example, he stresses that an intelligence is not the same as a sensory system; there is no “auditory intelligence” or “visual intelligence.” Intelligences are not the same as learning styles.",
+            "(Gardner doesn’t believe that people actually have consistent learning styles.) Another misconception is that MI theory disproves the idea of general intelligence."
+          ],
+          "glossaryEntry": "Learning styles: Characteristic approaches to learning and studying. (Woolfolk Glossary, p. 660)",
+          "koreanContextGuide": "시각·청각·운동감각 등 개인이 선호하는 감각 양식에 맞춰 수업을 제공하면 학습 효과가 높아진다는 통념(Meshing Hypothesis)은 통제된 실험 연구에서 실증적 근거가 기각되었으며, 학습자의 선호가 아닌 학습 과제의 본질에 맞는 표상 방식을 써야 한다는 원리. (현장 적용: 학생을 '청각형 학습자'로 분류해 도형 단원까지 말로만 설명하는 오류를 피하고, 모든 학생에게 시각적 도표와 언어적 설명을 이중 부호화(Dual Coding)하여 제시한다.)"
+        },
+        {
+          "id": "mod2-fc-meshing-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 4 · Student Diversity",
+          "sectionHeading": "Chapter 4 · Student Diversity",
+          "pageLabel": "p. 67",
+          "verbatimExcerpt": "That said, there is evidence that individuals, including students, do differ in how they habitually think. These differences are more specific than learning styles or preferences, and psychologists sometimes call them cognitive styles, meaning typical ways of perceiving and remembering information, and typical ways of solving problems and making decisions (Zhang & Sternberg, 2006). In a style of thinking called field dependence, for example, individuals perceive patterns as a whole rather than focus on the parts of the pattern separately. In a complementary tendency, called field independence, individuals are more inclined to analyze overall patterns into their parts.",
+          "highlightQuotes": [
+            "These differences are more specific than learning styles or preferences, and psychologists sometimes call them cognitive styles, meaning typical ways of perceiving and remembering information, and typical ways of solving problems and making decisions (Zhang & Sternberg, 2006).",
+            "That said, there is evidence that individuals, including students, do differ in how they habitually think."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "시각·청각·운동감각 등 개인이 선호하는 감각 양식에 맞춰 수업을 제공하면 학습 효과가 높아진다는 통념(Meshing Hypothesis)은 통제된 실험 연구에서 실증적 근거가 기각되었으며, 학습자의 선호가 아닌 학습 과제의 본질에 맞는 표상 방식을 써야 한다는 원리."
+        }
+      ]
+    },
+    "mod2-fc-inhibition": {
+      "nodeId": "mod2-fc-inhibition",
+      "moduleId": "mod2",
+      "nodeKind": "flashcard",
+      "titleKo": "반응 억제와 실행기능",
+      "titleEn": "Response Inhibition & Executive Functions",
+      "sourceCitation": "Woolfolk p. 166 · Seifert & Sutton p. 89",
+      "excerpts": [
+        {
+          "id": "mod2-fc-inhibition-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 4 · Learner Differences And Learning Needs",
+          "sectionHeading": "Students With Learning Challenges",
+          "pageLabel": "p. 166",
+          "verbatimExcerpt": "STUDENT CHARACTERISTICS. Students with learning disabilities are not all alike. The most common characteristics are specific difficulties in one or more academic areas; poor coordination; problems paying attention; hyperactivity and impulsivity; problems organizing and interpreting visual and auditory information; seeming lack of motivation; and difficulties making and keeping friends (Hallahan et al., 2012; Rosenberg et al., 2011). As you can see, many students with other disabilities (e.g., ADHD) and many normal students may have some of the same characteristics. To complicate the situation even more, not all students with learning disabilities will have these problems, and very few will have all of these characteristics.",
+          "highlightQuotes": [
+            "The most common characteristics are specific difficulties in one or more academic areas; poor coordination; problems paying attention; hyperactivity and impulsivity; problems organizing and interpreting visual and auditory information; seeming lack of motivation; and difficulties making and keeping friends (Hallahan et al., 2012; Rosenberg et al., 2011).",
+            "As you can see, many students with other disabilities (e.g., ADHD) and many normal students may have some of the same characteristics."
+          ],
+          "glossaryEntry": "Executive functioning: All those processes that we use to organize, coordinate, and perform goal-directed, intentional actions, including focusing attention, inhibiting impulsive responses, making and changing plans, and using memory to hold and manipulate information. (Woolfolk Glossary, p. 658)",
+          "koreanContextGuide": "바클리(Barkley)가 제시한 ADHD의 핵심 결함 기제로, 즉각적인 우세 반응을 멈추고 방해 자극을 차단하는 반응 억제가 손상됨으로써 작업기억, 내적 언어, 정서·각성 조절, 목표 지향적 계획(실행기능) 전반에 어려움이 발생하는 현상. (현장 적용: 교사의 질문이 끝나기도 전에 불쑥 답을 외치는 학생에게 '손바닥을 책상 위 별표 스티커에 3초간 올린 뒤 손들기'라는 구체적 정지-대체 루틴을 훈련시킨다.)"
+        },
+        {
+          "id": "mod2-fc-inhibition-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 5 · Students with Special Educational Needs",
+          "sectionHeading": "Chapter 5 · Students with Special Educational Needs",
+          "pageLabel": "p. 89",
+          "verbatimExcerpt": "For you, the policy favoring the least restrictive environment means that if you continue teaching long enough, you will very likely encounter a student with a disability in one or more of your classes, or at least have one in a school-related activity for which you are responsible. It also means that the special educational needs of these students will most often be the “mildest”. Statistically, the most frequent forms of special needs are learning disabilities, which are impairments in specific aspects of learning, and especially of reading. Learning disabilities account for about half of all special educational needs—as much as all other types put together. Somewhat less common are speech and language disorders, cognitive disabilities, and attention deficit hyperactivity disorders (or ADHD).",
+          "highlightQuotes": [
+            "Somewhat less common are speech and language disorders, cognitive disabilities, and attention deficit hyperactivity disorders (or ADHD).",
+            "For you, the policy favoring the least restrictive environment means that if you continue teaching long enough, you will very likely encounter a student with a disability in one or more of your classes, or at least have one in a school-related activity for which you are responsible."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "바클리(Barkley)가 제시한 ADHD의 핵심 결함 기제로, 즉각적인 우세 반응을 멈추고 방해 자극을 차단하는 반응 억제가 손상됨으로써 작업기억, 내적 언어, 정서·각성 조절, 목표 지향적 계획(실행기능) 전반에 어려움이 발생하는 현상."
+        }
+      ]
+    },
+    "mod2-fc-drc": {
+      "nodeId": "mod2-fc-drc",
+      "moduleId": "mod2",
+      "nodeKind": "flashcard",
+      "titleKo": "일일행동보고카드",
+      "titleEn": "Daily Report Card (DRC)",
+      "sourceCitation": "Woolfolk p. 294 · Seifert & Sutton p. 95",
+      "excerpts": [
+        {
+          "id": "mod2-fc-drc-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 294",
+          "verbatimExcerpt": "Before you try a token system, you should be sure that your teaching methods and materials are right for the students. Sometimes, class disruptions or lack of motivation indicate that teaching practices need to be changed. Maybe the class rules are unclear or are enforced inconsistently. Perhaps your instructions are vague. Maybe the text is too easy or too hard or the pace is wrong. If these problems exist, a token system may improve the situation temporarily, but the students will still have trouble learning the academic material. Improve your teaching first. The few pages devoted here to token reinforcement and contingency contracts can offer only an introduction to these programs. If you want to set up a large-scale reward program in your classroom, you should probably seek professional advice.",
+          "highlightQuotes": [
+            "The few pages devoted here to token reinforcement and contingency contracts can offer only an introduction to these programs.",
+            "Before you try a token system, you should be sure that your teaching methods and materials are right for the students."
+          ],
+          "glossaryEntry": "Contingency contract: A contract between the teacher and a student specifying what the student must do to earn a particular reward or privilege. (Woolfolk Glossary, p. 656)",
+          "koreanContextGuide": "학교와 가정을 연계(중간체계 강화)하는 증거기반 행동 중재 도구로, 구체적이고 긍정적인 2~3개의 목표 행동을 매 교시 교사가 즉각 평가·피드백하고 가정에서 일일 보상을 제공하는 체계. (현장 적용: '오늘 하루 얌전히 있기' 같은 모호한 목표 대신 '1~4교시 시작 종이 울린 후 1분 내 자리에 앉아 교과서 펴기(교시별 별점)'로 구체화된 DRC를 운영하여 가정에서 저녁 자유시간 특권과 교환하게 한다.)"
+        },
+        {
+          "id": "mod2-fc-drc-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 5 · Students with Special Educational Needs",
+          "sectionHeading": "Chapter 5 · Students with Special Educational Needs",
+          "pageLabel": "p. 95",
+          "verbatimExcerpt": "The tendency to “over-diagnose” is more likely for boys than for girls (Maniadaki, et al., 2003), presumably because gender role expectations cause teachers to be especially alert to high activity in boys. Over-diagnosis is also especially likely for students who are culturally or linguistically non-Anglo (Chamberlain, 2005), presumably because cultural and language differences may sometimes lead teachers to misinterpret students’ behavior. To avoid making such mistakes, it is important to keep in mind that in true ADHD, restlessness, activity, and distractibility are widespread and sustained. A student who shows such problems at school but never at home, for example, may not have ADHD; he may simply not be getting along with his teacher or classmates.",
+          "highlightQuotes": [
+            "A student who shows such problems at school but never at home, for example, may not have ADHD; he may simply not be getting along with his teacher or classmates.",
+            "Over-diagnosis is also especially likely for students who are culturally or linguistically non-Anglo (Chamberlain, 2005), presumably because cultural and language differences may sometimes lead teachers to misinterpret students’ behavior."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "학교와 가정을 연계(중간체계 강화)하는 증거기반 행동 중재 도구로, 구체적이고 긍정적인 2~3개의 목표 행동을 매 교시 교사가 즉각 평가·피드백하고 가정에서 일일 보상을 제공하는 체계."
+        }
+      ]
+    }
+  }
+}

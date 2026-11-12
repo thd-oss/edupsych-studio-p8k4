@@ -1,0 +1,618 @@
+{
+  "moduleId": "mod4",
+  "generatedAt": "2026-11-12T12:53:46.716336+00:00",
+  "entries": {
+    "mod4-theory-ipm-working-memory": {
+      "nodeId": "mod4-theory-ipm-working-memory",
+      "moduleId": "mod4",
+      "nodeKind": "theory",
+      "titleKo": "정보처리모델과 배들리(Baddeley)의 다중요소 작업기억(음운루프·시공간잡기장·중앙집행기)",
+      "titleEn": "Information Processing Model & Baddeley's Multi-component Working Memory System",
+      "sourceCitation": "Woolfolk Ch.8 (pp. 290-307) / Seifert & Sutton Ch.2, 9",
+      "excerpts": [
+        {
+          "id": "mod4-theory-ipm-working-memory-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 324",
+          "verbatimExcerpt": "The phonological loop and visuospatial sketchpad are short-term memory storage for sounds and images, so they are like what was considered short-term memory in earlier information processing models. The phonological loop, visuospatial sketchpad, and episodic buffer do some lower-level work for the central executive—holding on to and combining information. Baddeley also said there may be other lower-level worker/storage systems for different information, but phonological loop, visuospatial sketchpad, and episodic buffer are the ones we know about Figure 8.4 shows the working memory system.",
+          "highlightQuotes": [
+            "Baddeley also said there may be other lower-level worker/storage systems for different information, but phonological loop, visuospatial sketchpad, and episodic buffer are the ones we know about Figure 8.4 shows the working memory system.",
+            "The phonological loop, visuospatial sketchpad, and episodic buffer do some lower-level work for the central executive—holding on to and combining information."
+          ],
+          "glossaryEntry": "Working memory: The brain system that provides temporary holding and processing of information to accomplish complex cognitive tasks such as language comprehension, learning, and reasoning; the information that you are focusing on at a given moment. (Woolfolk Glossary, p. 664)",
+          "koreanContextGuide": "감각기억(Sensory Memory)은 환경으로부터 유입되는 방대한 감각 자극을 원래 형태 그대로 아주 짧게(시각적 영상기억 Iconic Memory 약 0.5초, 청각적 잔향기억 Echoic Memory 약 2~3초) 보유하는 초기 등록기로, 선택적 주의(Selective Attention)와 상향식(자극의 물리적 특징 분석)·하향식(사전지식·맥락 기대 활용) 지각 처리를 거친 정보만이 작업기억으로 진입한다."
+        },
+        {
+          "id": "mod4-theory-ipm-working-memory-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 324",
+          "verbatimExcerpt": "Alan Baddeley and his colleagues are responsible for the model of working memory that is central to our current understanding of human cognition (Baddeley, 2007; Eysenck, 2012; Jarrold, Tam, Baddeley, & Harvey, 2011). In this model, working memory is composed of at least four elements: the central executive that controls attention and other mental resources (the “worker” of working memory), the phonological loop that holds verbal and acoustical (sound) information, the visuospatial sketchpad for visual and spatial information, and the episodic buffer where information from the phonological loop, visuospatial sketchpad, and long-term memory is integrated together to create representations based on verbal, spatial, and visual information.",
+          "highlightQuotes": [
+            "Alan Baddeley and his colleagues are responsible for the model of working memory that is central to our current understanding of human cognition (Baddeley, 2007; Eysenck, 2012; Jarrold, Tam, Baddeley, & Harvey, 2011)."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "배들리(Baddeley, 2000)의 다중요소 작업기억(Multi-component Working Memory) 모형은 과거의 수동적 단기기억 개념을 대체하여, 정보의 일시적 보유(Storage)와 능동적 인지 조작(Processing)이 동시에 일어나는 의식적 작업대를 4개 하위 체계의 역동적 상호작용으로 설명한다."
+        },
+        {
+          "id": "mod4-theory-ipm-working-memory-w-3",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 325",
+          "verbatimExcerpt": "The central executive system is the pool of mental resources for such cognitive activities as focusing attention, reasoning, and comprehension. The phonological loop holds verbal and sound information, and the visuospatial sketchpad holds visual and spatial information. The episodic buffer integrates information from the phonological loop, visuospatial sketchpad, and long-term memory. The system is limited and can be overwhelmed if there is too much information or it is too difficult. The interaction among the components of working memory actually takes place in the long-term memory where the visuospatial sketchpad activates visual meaning (semantics) in longterm memory, the phonological loop activates verbal meaning (language), and long-term memory for events and episodes integrates all this visual and verbal information.",
+          "highlightQuotes": [
+            "The episodic buffer integrates information from the phonological loop, visuospatial sketchpad, and long-term memory.",
+            "The interaction among the components of working memory actually takes place in the long-term memory where the visuospatial sketchpad activates visual meaning (semantics) in longterm memory, the phonological loop activates verbal meaning (language), and long-term memory for events and episodes integrates all this visual and verbal information."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "① 중앙집행기(Central Executive): 전두엽 실행기능에 기반하여 주의 자원을 통제·배분하고, 무관한 간섭 자극을 억제하며, 음운루프와 시공간잡기장을 감독하고 장기기억 인출 전략을 조율하는 최고 관리 체계이다. ② 음운루프(Phonological Loop): 말소리와 문자 언어 정보를 소리 형태로 보유하는 음운 저장소와 내적 되뇌기(조음 통제 과정)로 구성되며, 다단계 구두 지시나 독해 시 음운 해독에 관여한다."
+        }
+      ]
+    },
+    "mod4-theory-clt-automatization-chunking": {
+      "nodeId": "mod4-theory-clt-automatization-chunking",
+      "moduleId": "mod4",
+      "nodeKind": "theory",
+      "titleKo": "스웰러(Sweller)의 인지부하이론(내재적·외재적·본유적 부하)과 스키마 자동화 및 청킹",
+      "titleEn": "Sweller's Cognitive Load Theory (Intrinsic, Extraneous, Germane Load), Schema Automatization & Chunking",
+      "sourceCitation": "Woolfolk Ch.8, 9 (pp. 301-325) / Seifert & Sutton Ch.9",
+      "excerpts": [
+        {
+          "id": "mod4-theory-clt-automatization-chunking-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 9 · Complex Cognitive Processes",
+          "sectionHeading": "Problem Solving",
+          "pageLabel": "p. 370",
+          "verbatimExcerpt": "Another way to use worked examples is to have students compare examples that reach a right answer but are worked out in different ways. What is the same about each solution? What is different? Why? (Rittle-Johnson & Star, 2007). Also, worked-out examples should deal with one source of information at a time rather than having students move between text passages, graphs, tables, and so on. The cognitive load will be too heavy for beginners if they have to integrate many sources of information to make sense of the worked examples (Marcus, Cooper, & Sweller, 1996).",
+          "highlightQuotes": [
+            "The cognitive load will be too heavy for beginners if they have to integrate many sources of information to make sense of the worked examples (Marcus, Cooper, & Sweller, 1996).",
+            "Another way to use worked examples is to have students compare examples that reach a right answer but are worked out in different ways."
+          ],
+          "glossaryEntry": "Chunking: Grouping individual bits of data into meaningful larger units. (Woolfolk Glossary, p. 656)",
+          "koreanContextGuide": "스웰러(Sweller)의 인지부하이론(Cognitive Load Theory, CLT)은 인간의 작업기억 용량이 극도로 제한되어 있다는 진화적·신경인지적 전제 위에서, 학습 과제 수행 시 발생하는 총 인지부하가 작업기억 한계를 초과하면 학습과 스키마 형성이 완전히 마비된다고 설명한다."
+        },
+        {
+          "id": "mod4-theory-clt-automatization-chunking-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 328",
+          "verbatimExcerpt": "You just used chunking to group the string of letters into memorable (and meaningful) chunks, so you could hold more in memory. Also, you brought your knowledge of the world to bear on the memory task. Chunking helps you remember a password or social security number.",
+          "highlightQuotes": [
+            "You just used chunking to group the string of letters into memorable (and meaningful) chunks, so you could hold more in memory.",
+            "Chunking helps you remember a password or social security number."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "① 내재적 인지부하(Intrinsic Cognitive Load): 학습 자료 자체의 본질적 난이도와 동시에 작업기억에 올려놓고 조합해야 하는 '요소 간 상호작용성(Element Interactivity)'에 의해 결정되는 부하이다. 과제 자체를 임의로 바꿀 수는 없으나, 하위 과제로의 분할(Segmenting)이나 학습자의 사전 지식(스키마) 수준 및 청킹(Chunking) 여부에 따라 체감 부하가 크게 달라진다."
+        },
+        {
+          "id": "mod4-theory-clt-automatization-chunking-w-3",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 328",
+          "verbatimExcerpt": "The limited capacity of working memory can also be somewhat circumvented by the process of chunking. Because the number of bits of information, not the size of each bit, is a limitation for working memory, you can retain more information if you can group individual bits of information.",
+          "highlightQuotes": [
+            "The limited capacity of working memory can also be somewhat circumvented by the process of chunking."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "② 외재적 인지부하(Extraneous Cognitive Load): 학습 목표 달성에 전혀 기여하지 않는 부적절한 교수 설계 때문에 낭비되는 비생산적 인지부하이다. 도표와 설명문이 물리적으로 떨어져 있어 시선을 오가며 머릿속에서 통합해야 하는 '주의분산 효과(Split-Attention Effect)', 동일한 텍스트를 화면에 띄워놓고 그대로 읽어주는 '중복 효과(Redundancy Effect)', 기초 도식이 없는 초보자에게 무작위 시행착오 탐색(Means-Ends Analysis)을 강요하는 순수 발견학습 등이 대표적 원인이다."
+        }
+      ]
+    },
+    "mod4-theory-metacognition-srl": {
+      "nodeId": "mod4-theory-metacognition-srl",
+      "moduleId": "mod4",
+      "nodeKind": "theory",
+      "titleKo": "초인지(Metacognition)의 3요소와 지머만(Zimmerman)의 순환적 자기조절학습 모형",
+      "titleEn": "Metacognition (Knowledge & Regulation) & Zimmerman's Cyclical Model of Self-Regulated Learning",
+      "sourceCitation": "Woolfolk Ch.8, 9, 11 (pp. 318-324, 418-427) / Seifert & Sutton Ch.9",
+      "excerpts": [
+        {
+          "id": "mod4-theory-metacognition-srl-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 9 · Complex Cognitive Processes",
+          "sectionHeading": "Metacognition",
+          "pageLabel": "p. 355",
+          "verbatimExcerpt": "Of course, we don’t have to be metacognitive all the time. Some actions become routine or habits. Metacognition is most useful when tasks are challenging, but not too difficult. And even when we are planning, monitoring, and evaluating, these processes are not necessarily conscious, especially in adults. We may use them automatically without being aware of our efforts (Perner, 2000). Experts in a particular field plan, monitor, and evaluate as second nature; they have difficulty describing their metacognitive knowledge and skills (Pressley & Harris, 2006; Reder, 1996).",
+          "highlightQuotes": [
+            "And even when we are planning, monitoring, and evaluating, these processes are not necessarily conscious, especially in adults.",
+            "Metacognition is most useful when tasks are challenging, but not too difficult."
+          ],
+          "glossaryEntry": "Metacognition: Knowledge about our own thinking processes. (Woolfolk Glossary, p. 660)",
+          "koreanContextGuide": "플라벨(Flavell)과 브라운(Brown)의 초인지(Metacognition, 메타인지) 이론은 자신의 인지 과정을 한 차원 위에서 조망하고 통제하는 상위 인지로, 크게 '초인지적 지식(Metacognitive Knowledge)'과 '초인지적 조절(Metacognitive Regulation)'의 두 축으로 구성된다."
+        },
+        {
+          "id": "mod4-theory-metacognition-srl-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 9 · Complex Cognitive Processes",
+          "sectionHeading": "Metacognition",
+          "pageLabel": "p. 355",
+          "verbatimExcerpt": "Metacognition regulates thinking and learning (A. Brown, 1987; T. O. Nelson, 1996). There are three essential skills: planning, monitoring, and evaluating. Planning involves deciding how much time to give to a task, which strategies to use, how to start, which resources to gather, what order to follow, what to skim and what to give intense attention to, and so on. Monitoring is the real-time awareness of “how I’m doing.” Monitoring is asking, “Is this making sense? Am I trying to go too fast? Have I studied enough?” Evaluating involves making judgments about the processes and outcomes of thinking and learning. “Should I change strategies? Get help? Give up for now?",
+          "highlightQuotes": [
+            "There are three essential skills: planning, monitoring, and evaluating.",
+            "Metacognition regulates thinking and learning (A."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "초인지적 지식의 3요소: ① 선언적 지식(Declarative Knowledge: 학습자 자신의 기억 특성, 과제 난이도, 존재 가능한 학습 전략이 무엇인지에 대한 사실적 지식), ② 절차적 지식(Procedural Knowledge: 개념도 그리기, 요약하기 등 해당 전략을 구체적으로 어떻게 실행하는지에 대한 방법적 지식), ③ 조건적 지식(Conditional Knowledge: 특정 과제와 맥락에서 '언제(When)', 그리고 '왜(Why)' 그 전략을 선택해 적용해야 하는지에 대한 맥락적·결정적 지식)이다."
+        },
+        {
+          "id": "mod4-theory-metacognition-srl-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 9 · Facilitating Complex Thinking",
+          "sectionHeading": "Chapter 9 · Facilitating Complex Thinking",
+          "pageLabel": "p. 185",
+          "verbatimExcerpt": "Notice that in both of these research studies, as in others like them, what made the thinking “critical” was students’ use of metacognition—strategies for thinking about thinking and for monitoring the success and quality of one’s own thinking. This concept was discussed in Chapter 2 as a feature of constructivist views about learning. There we pointed out that when students acquire experience in building their own knowledge, they also become skilled both at knowing how they learn, and at knowing whether they have learned something well. These are two defining qualities of metacognition, but they are part of critical thinking as well. In fostering critical thinking, a teacher is really fostering a student’s ability to construct or control his or her own thinking and to avoid being controlled by ideas unreflectively.",
+          "highlightQuotes": [
+            "Notice that in both of these research studies, as in others like them, what made the thinking “critical” was students’ use of metacognition—strategies for thinking about thinking and for monitoring the success and quality of one’s own thinking.",
+            "These are two defining qualities of metacognition, but they are part of critical thinking as well."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "학교 상담실에서 만나는 많은 학업 부진 및 학습 무기력 학생들은 책상에 오래 앉아 교과서를 여러 번 읽고 형광펜으로 빽빽하게 밑줄을 긋거나 깜지를 쓰는데도 성적이 오르지 않아 '나는 머리가 나쁜가 봐요'라며 내적·안정적·통제불가능한 능력 귀인으로 무너진다. 이는 첫째, 눈앞에 펼쳐진 텍스트의 시각적 친숙성(Perceptual Fluency)을 장기기억 내 지식 습득으로 오인하는 '유창성 착각(Illusion of Compete…"
+        }
+      ]
+    },
+    "mod4-theory-bandura-meichenbaum-casel": {
+      "nodeId": "mod4-theory-bandura-meichenbaum-casel",
+      "moduleId": "mod4",
+      "nodeKind": "theory",
+      "titleKo": "반두라의 삼원적 상호결정론·자기효능감, 마이켄바움의 자기교수법(CBM) 및 정서적 자기조절(CASEL)",
+      "titleEn": "Bandura's Triadic Reciprocal Determinism & Self-Efficacy, Meichenbaum's Self-Instruction & CASEL SEL",
+      "sourceCitation": "Woolfolk Ch.11 (pp. 402-432) / Seifert & Sutton Ch.2, 6",
+      "excerpts": [
+        {
+          "id": "mod4-theory-bandura-meichenbaum-casel-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 11 · Social Cognitive Views Of Learning And Motivation",
+          "sectionHeading": "Point/Counterpoint: Are High Levels Of Teacher Efficacy Beneficial?",
+          "pageLabel": "p. 455",
+          "verbatimExcerpt": "When some psychologists were studying a behavior modification approach called self-management— using reinforcement and punishment to manage your own behavior—Donald Meichenbaum (1977) was having success teaching impulsive students to “talk themselves through” tasks. Meichenbaum called his method cognitive behavior modification (B. H. Manning & Payne, 1996). Cognitive behavior modification focuses on self-talk to regulate behavior.",
+          "highlightQuotes": [
+            "Meichenbaum called his method cognitive behavior modification (B.",
+            "Cognitive behavior modification focuses on self-talk to regulate behavior."
+          ],
+          "glossaryEntry": "Self-efficacy: A person’s sense of being able to deal effectively with a particular task. Beliefs about personal competence in a particular situation. (Woolfolk Glossary, p. 662)",
+          "koreanContextGuide": "반두라(Bandura)의 삼원적 상호결정론(Triadic Reciprocal Determinism): 인간의 학습과 적응 행동은 환경적 자극에 일방적으로 지배당하는 것도, 개인 내적 성향만으로 결정되는 것도 아닌 ① 개인적 요인(Personal: 자기효능감, 기대, 목표, 초인지, 정서적 각성), ② 행동적 요인(Behavioral: 과제 선택, 노력 투입, 지속성, 자기관찰 반응), ③ 환경적 요인(Environmental: 교사의 피드백 방식, 또래 모델, 학급 구조, 스캐폴딩)의 세 축이 끊임없이 양방향으로 영향을 주고받으며 결정된다."
+        },
+        {
+          "id": "mod4-theory-bandura-meichenbaum-casel-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 11 · Social Cognitive Views Of Learning And Motivation",
+          "sectionHeading": "Self-Efficacy And Agency",
+          "pageLabel": "p. 445",
+          "verbatimExcerpt": "Bandura identified four sources of self-efficacy expectations: mastery experiences, physiological and emotional arousal, vicarious experiences, and social persuasion. Mastery experiences are our own direct experiences—usually the most powerful source of efficacy information. Successes raise efficacy beliefs, while failures lower efficacy. Level of arousal affects self-efficacy, depending on how the arousal is interpreted. As you face the task, are you anxious and worried (lowers efficacy) or excited and “psyched” (raises efficacy) (Bandura, 1997; Schunk et al., 2014; Usher & Pajares, 2009)?",
+          "highlightQuotes": [
+            "Bandura identified four sources of self-efficacy expectations: mastery experiences, physiological and emotional arousal, vicarious experiences, and social persuasion.",
+            "Level of arousal affects self-efficacy, depending on how the arousal is interpreted."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "자기효능감(Self-Efficacy)은 특정 맥락의 과제를 성공적으로 조직하고 실행해 낼 수 있다는 자신의 역량에 대한 미래지향적·과제특수적 신념으로, 전반적 자기 가치감인 자존감(Self-Esteem)과 구별된다. 4대 핵심 원천은 ① 직접적인 성취경험(Mastery Experiences: 가장 강력한 원천으로, 세분화된 하위 목표의 실제 성공 경험), ② 대리경험(Vicarious Experiences: 자신과 유사한 또래 모델의 성공 관찰), ③ 사회적·언어적 설득(Social Persuasion: 구체적 전략 피드백이 담긴 격려), ④ 생리적·정서적 각성 상태의 긍정적 재해석(Physiological/Emotional Arousal: 시험 전 두근거림을 공포가 아닌 '집중 준비 상태'로 재명명)이다."
+        },
+        {
+          "id": "mod4-theory-bandura-meichenbaum-casel-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 6 · Student Motivation",
+          "sectionHeading": "Chapter 6 · Student Motivation",
+          "pageLabel": "p. 120",
+          "verbatimExcerpt": "In addition to being influenced by their goals, interests, and attributions, students’ motives are affected by specific beliefs about the student’s personal capacities. In self-efficacy theory the beliefs become a primary, explicit explanation for motivation (Bandura, 1977, 1986, 1997). Self-efficacy is the belief that you are capable of carrying out a specific task or of reaching a specific goal. Note that the belief and the action or goal are specific. Self- efficacy is a belief that you can write an acceptable term paper, for example, or repair an automobile, or make friends with the new student in class. These are relatively specific beliefs and tasks. Self-efficacy is not about whether you believe that you are intelligent in general, whether you always like working with mechanical things, or think that you are generally a likeable person.",
+          "highlightQuotes": [
+            "In self-efficacy theory the beliefs become a primary, explicit explanation for motivation (Bandura, 1977, 1986, 1997).",
+            "Self-efficacy is the belief that you are capable of carrying out a specific task or of reaching a specific goal."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "교실에서 충동적으로 화를 내거나 어려운 과제 앞에서 시작조차 못 하고 회피하는 학생에게 '침착해라', '생각 좀 하고 행동해라', 또는 '저기 우등생 친구 좀 본받아라'라고 다그치는 것은 사회인지이론과 발달정신병리학 관점에서 이중의 실패를 자초한다. 첫째, 자신과 격차가 너무 큰 완벽한 우등생(숙달 모델 Mastery Model)과의 사회적 비교는 대리경험을 통한 효능감 증진どころか 오히려 상대적 박탈감과 회피 동기를 가중시킨…"
+        }
+      ]
+    },
+    "mod4-fc-baddeley-wm": {
+      "nodeId": "mod4-fc-baddeley-wm",
+      "moduleId": "mod4",
+      "nodeKind": "flashcard",
+      "titleKo": "배들리의 다중요소 작업기억 (음운루프·시공간잡기장·중앙집행기)",
+      "titleEn": "Baddeley's Multi-component Working Memory (Phonological Loop, Visuospatial Sketchpad, Central Executive)",
+      "sourceCitation": "Woolfolk p. 324 · Woolfolk p. 324",
+      "excerpts": [
+        {
+          "id": "mod4-fc-baddeley-wm-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 324",
+          "verbatimExcerpt": "The phonological loop and visuospatial sketchpad are short-term memory storage for sounds and images, so they are like what was considered short-term memory in earlier information processing models. The phonological loop, visuospatial sketchpad, and episodic buffer do some lower-level work for the central executive—holding on to and combining information. Baddeley also said there may be other lower-level worker/storage systems for different information, but phonological loop, visuospatial sketchpad, and episodic buffer are the ones we know about Figure 8.4 shows the working memory system.",
+          "highlightQuotes": [
+            "Baddeley also said there may be other lower-level worker/storage systems for different information, but phonological loop, visuospatial sketchpad, and episodic buffer are the ones we know about Figure 8.4 shows the working memory system.",
+            "The phonological loop, visuospatial sketchpad, and episodic buffer do some lower-level work for the central executive—holding on to and combining information."
+          ],
+          "glossaryEntry": "Phonological loop: Part of working memory. A speech- and sound-related system for holding and rehearsing (refreshing) words and sounds in short-term memory for about 1.5 to 2 seconds. (Woolfolk Glossary, p. 661)",
+          "koreanContextGuide": "작업기억을 단일 저장소가 아닌 주의 배분과 전략 통제를 담당하는 중앙집행기, 언어·소리 정보를 유지하는 음운루프, 시각·공간 이미지를 조작하는 시공간잡기장, 장기기억과 정보를 통합하는 일화완충기의 4대 하위 체계로 설명한 모형. (현장 적용: 교사가 말로만 복잡한 도형 성질을 설명하면 음운루프만 과부하되므로, 칠판에 색깔별 도형 회전 그림(시공간잡기장)을 함께 제시하는 이중부호화 전략으로 작업기억 처리 효율을 극대화한다.)"
+        },
+        {
+          "id": "mod4-fc-baddeley-wm-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 324",
+          "verbatimExcerpt": "Alan Baddeley and his colleagues are responsible for the model of working memory that is central to our current understanding of human cognition (Baddeley, 2007; Eysenck, 2012; Jarrold, Tam, Baddeley, & Harvey, 2011). In this model, working memory is composed of at least four elements: the central executive that controls attention and other mental resources (the “worker” of working memory), the phonological loop that holds verbal and acoustical (sound) information, the visuospatial sketchpad for visual and spatial information, and the episodic buffer where information from the phonological loop, visuospatial sketchpad, and long-term memory is integrated together to create representations based on verbal, spatial, and visual information.",
+          "highlightQuotes": [
+            "Alan Baddeley and his colleagues are responsible for the model of working memory that is central to our current understanding of human cognition (Baddeley, 2007; Eysenck, 2012; Jarrold, Tam, Baddeley, & Harvey, 2011)."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "작업기억을 단일 저장소가 아닌 주의 배분과 전략 통제를 담당하는 중앙집행기, 언어·소리 정보를 유지하는 음운루프, 시각·공간 이미지를 조작하는 시공간잡기장, 장기기억과 정보를 통합하는 일화완충기의 4대 하위 체계로 설명한 모형. (현장 적용: 교사가 말로만 복잡한 도형 성질을 설명하면 음운루프만 과부하되므로, 칠판에 색깔별 도형 회전 그림(시공간잡기장)을 함께 제시하는 이중부호화 전략으로 작업기억 처리 효율을 극대화한다.)"
+        }
+      ]
+    },
+    "mod4-fc-clt-three-loads": {
+      "nodeId": "mod4-fc-clt-three-loads",
+      "moduleId": "mod4",
+      "nodeKind": "flashcard",
+      "titleKo": "내재적·외재적·본유적 인지부하",
+      "titleEn": "Intrinsic, Extraneous, and Germane Cognitive Load",
+      "sourceCitation": "Woolfolk p. 326 · Woolfolk p. 326",
+      "excerpts": [
+        {
+          "id": "mod4-fc-clt-three-loads-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 326",
+          "verbatimExcerpt": "Intrinsic cognitive load is unavoidable—it is the amount of cognitive processing required to figure out the material. That amount depends on how many elements you have to take into account, how complicated the interactions among the elements are, and your level of expertise in the problem area (Antonenko, Paas, Grabner, & van Gog, 2010). Even though working memory can hold 5 to 9 new bits of information, it can process only about 2 to 4 at a time, so if you have to understand how many separate elements interact in a complex system, such as grasping the structure and function of DNA, you will be in trouble unless you already understand some of the parts: vocabulary, concepts, procedures, and so on (van Merriënboer & Sweller, 2005). Intrinsic cognitive load is essential to the task— it cannot be eliminated.",
+          "highlightQuotes": [
+            "Intrinsic cognitive load is unavoidable—it is the amount of cognitive processing required to figure out the material.",
+            "Intrinsic cognitive load is essential to the task— it cannot be eliminated."
+          ],
+          "glossaryEntry": "Intrinsic cognitive load: The resources required by the task itself, regardless of other stimuli. (Woolfolk Glossary, p. 659)",
+          "koreanContextGuide": "스웰러(Sweller)의 인지부하이론에서 과제 자체의 요소 간 복잡성에 따른 부하가 내재적 부하, 잘못된 교수 제시나 주의분산으로 낭비되는 부하가 외재적 부하, 스키마 형성과 정교화에 쓰이는 생산적 정신 노력이 본유적 부하이다. (현장 적용: 활동지 한쪽에 그림을 두고 다른 쪽에 설명문을 두어 시선을 왕복하게 만드는 '주의분산 효과(Split-Attention Effect)'를 수정해 그림 안에 설명 라벨을 통합함으로써 외재적 인지부하를 제거한다.)"
+        },
+        {
+          "id": "mod4-fc-clt-three-loads-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 326",
+          "verbatimExcerpt": "Extraneous cognitive load is the cognitive capacity you use to deal with problems not related to the learning task, like trying to get your roommate (spouse, children, partner) to quit interrupting you or struggling with a disorganized lecture or a poorly written textbook (not this one of course!). Instruction can help manage extraneous load by providing supports, focusing attention on the main ideas, and generally supplying scaffolding (see Chapter 2).",
+          "highlightQuotes": [
+            "Extraneous cognitive load is the cognitive capacity you use to deal with problems not related to the learning task, like trying to get your roommate (spouse, children, partner) to quit interrupting you or struggling with a disorganized lecture or a poorly written textbook (not this one of course!)."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "스웰러(Sweller)의 인지부하이론에서 과제 자체의 요소 간 복잡성에 따른 부하가 내재적 부하, 잘못된 교수 제시나 주의분산으로 낭비되는 부하가 외재적 부하, 스키마 형성과 정교화에 쓰이는 생산적 정신 노력이 본유적 부하이다. (현장 적용: 활동지 한쪽에 그림을 두고 다른 쪽에 설명문을 두어 시선을 왕복하게 만드는 '주의분산 효과(Split-Attention Effect)'를 수정해 그림 안에 설명 라벨을 통합함으로써 외재적 인지부하를 제거한다.)"
+        }
+      ]
+    },
+    "mod4-fc-schema-chunking": {
+      "nodeId": "mod4-fc-schema-chunking",
+      "moduleId": "mod4",
+      "nodeKind": "flashcard",
+      "titleKo": "스키마 자동화와 청킹(의미 덩어리 짓기)",
+      "titleEn": "Schema Automatization & Chunking",
+      "sourceCitation": "Woolfolk p. 328 · Woolfolk p. 339",
+      "excerpts": [
+        {
+          "id": "mod4-fc-schema-chunking-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Gaining And Maintaining Attention",
+          "pageLabel": "p. 328",
+          "verbatimExcerpt": "The limited capacity of working memory can also be somewhat circumvented by the process of chunking. Because the number of bits of information, not the size of each bit, is a limitation for working memory, you can retain more information if you can group individual bits of information.",
+          "highlightQuotes": [
+            "The limited capacity of working memory can also be somewhat circumvented by the process of chunking.",
+            "Because the number of bits of information, not the size of each bit, is a limitation for working memory, you can retain more information if you can group individual bits of information."
+          ],
+          "glossaryEntry": "Chunking: Grouping individual bits of data into meaningful larger units. (Woolfolk Glossary, p. 656)",
+          "koreanContextGuide": "청킹은 낱개의 정보들을 의미 있는 상위 단위로 묶어 작업기억 용량 한계를 넓히는 전략이며, 스키마 자동화는 장기기억 내 지식·절차 도식을 반복 연습해 의식적 노력이나 작업기억 소모 없이 즉각 인출·실행되게 만드는 과정이다. (현장 적용: 글자 해독(Decoding)과 구구단 연산이 완전히 스키마 자동화된 학생은 작업기억 용량을 철자·단순 계산에 빼앗기지 않고 문맥 추론과 문장제 해결(본유적 부하)에 온전히 사용할 수 있다.)"
+        },
+        {
+          "id": "mod4-fc-schema-chunking-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 8 · Cognitive Views Of Learning",
+          "sectionHeading": "Guidelines: Family And Community Partnerships—Organizing Learning",
+          "pageLabel": "p. 339",
+          "verbatimExcerpt": "Organization is a second element of processing that improves learning. Material that is well organized is easier to learn and to remember than bits and pieces of information, especially if the material is complex or extensive. Chunking is one kind of organization—putting small bits of information into larger, more meaningful chunks. Placing a concept in a structure also will help you learn and remember both general definitions and specific examples. The structure serves as a guide back to the information when you need it. For example, Table 8.2 organizes information about types of knowledge and Figure 8.6 organizes my knowledge about reinforcement. The Guidelines: Family and Community Partnerships gives ideas for working with families to give all your students more support and practice in organizing learning.",
+          "highlightQuotes": [
+            "Chunking is one kind of organization—putting small bits of information into larger, more meaningful chunks."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "청킹은 낱개의 정보들을 의미 있는 상위 단위로 묶어 작업기억 용량 한계를 넓히는 전략이며, 스키마 자동화는 장기기억 내 지식·절차 도식을 반복 연습해 의식적 노력이나 작업기억 소모 없이 즉각 인출·실행되게 만드는 과정이다. (현장 적용: 글자 해독(Decoding)과 구구단 연산이 완전히 스키마 자동화된 학생은 작업기억 용량을 철자·단순 계산에 빼앗기지 않고 문맥 추론과 문장제 해결(본유적 부하)에 온전히 사용할 수 있다.)"
+        }
+      ]
+    },
+    "mod4-fc-worked-examples": {
+      "nodeId": "mod4-fc-worked-examples",
+      "moduleId": "mod4",
+      "nodeKind": "flashcard",
+      "titleKo": "완결된 예제와 부분 완성 문제",
+      "titleEn": "Worked Examples & Completion Problems",
+      "sourceCitation": "Woolfolk p. 370 · Woolfolk p. 370",
+      "excerpts": [
+        {
+          "id": "mod4-fc-worked-examples-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 9 · Complex Cognitive Processes",
+          "sectionHeading": "Problem Solving",
+          "pageLabel": "p. 370",
+          "verbatimExcerpt": "Another way to use worked examples is to have students compare examples that reach a right answer but are worked out in different ways. What is the same about each solution? What is different? Why? (Rittle-Johnson & Star, 2007). Also, worked-out examples should deal with one source of information at a time rather than having students move between text passages, graphs, tables, and so on. The cognitive load will be too heavy for beginners if they have to integrate many sources of information to make sense of the worked examples (Marcus, Cooper, & Sweller, 1996).",
+          "highlightQuotes": [
+            "The cognitive load will be too heavy for beginners if they have to integrate many sources of information to make sense of the worked examples (Marcus, Cooper, & Sweller, 1996).",
+            "Another way to use worked examples is to have students compare examples that reach a right answer but are worked out in different ways."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "초보 학습자의 작업기억 과부하를 막기 위해 문제 해결의 모든 단계가 명시된 '완결된 예제'를 먼저 학습하게 한 뒤, 일부 단계만 빈칸으로 남겨둔 '부분 완성 문제'를 거쳐 독립적 문제 해결로 이행하게 하는 인지부하 축소 기법. (현장 적용: 방정식을 처음 배우는 학생에게 곧바로 10문제를 풀게 하는 대신, 풀이 과정이 단계별로 적힌 완결된 예제와 빈칸 1~2개만 채우는 부분 완성 문제를 나란히 배치한 학습지를 제공한다.)"
+        },
+        {
+          "id": "mod4-fc-worked-examples-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 9 · Complex Cognitive Processes",
+          "sectionHeading": "Problem Solving",
+          "pageLabel": "p. 370",
+          "verbatimExcerpt": "Worked examples can serve as analogies or models for solving new problems. But beware. Without explanations and coaching, novices may remember the surface features of a worked example or case instead of the deeper meaning or the structure. It is the meaning or structure, not the surface similarities, that helps in solving new, analogous problems (Gentner, Loewenstein, & Thompson, 2003; Goldstone & Day, 2012). I have heard students complain that the test preparation problems in their math classes were about boats and river currents, but the test asked about airplanes and wind speed.",
+          "highlightQuotes": [
+            "Worked examples can serve as analogies or models for solving new problems.",
+            "Without explanations and coaching, novices may remember the surface features of a worked example or case instead of the deeper meaning or the structure."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "초보 학습자의 작업기억 과부하를 막기 위해 문제 해결의 모든 단계가 명시된 '완결된 예제'를 먼저 학습하게 한 뒤, 일부 단계만 빈칸으로 남겨둔 '부분 완성 문제'를 거쳐 독립적 문제 해결로 이행하게 하는 인지부하 축소 기법. (현장 적용: 방정식을 처음 배우는 학생에게 곧바로 10문제를 풀게 하는 대신, 풀이 과정이 단계별로 적힌 완결된 예제와 빈칸 1~2개만 채우는 부분 완성 문제를 나란히 배치한 학습지를 제공한다.)"
+        }
+      ]
+    },
+    "mod4-fc-metacognition-conditional": {
+      "nodeId": "mod4-fc-metacognition-conditional",
+      "moduleId": "mod4",
+      "nodeKind": "flashcard",
+      "titleKo": "초인지(메타인지)와 조건적 지식",
+      "titleEn": "Metacognition & Conditional Knowledge",
+      "sourceCitation": "Woolfolk p. 355 · Seifert & Sutton p. 38",
+      "excerpts": [
+        {
+          "id": "mod4-fc-metacognition-conditional-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 9 · Complex Cognitive Processes",
+          "sectionHeading": "Metacognition",
+          "pageLabel": "p. 355",
+          "verbatimExcerpt": "Metacognition involves all three kinds of knowledge we discussed earlier: (1) declarative knowledge about yourself as a learner, the factors that influence your learning and memory, and the skills, strategies, and resources needed to perform a task—knowing what to do; (2) procedural knowledge or knowing how to use the strategies; and (3) self-regulatory knowledge to ensure the completion of the task—knowing the conditions, when and why, to apply the procedures and strategies (Bruning et al., 2011). Metacognition is the strategic application of this declarative, procedural, and self-regulatory knowledge to accomplish goals and solve problems (Schunk, 2012). Metacognition also includes knowledge about the value of applying cognitive strategies in learning (Pressley & Harris, 2006).",
+          "highlightQuotes": [
+            "Metacognition is the strategic application of this declarative, procedural, and self-regulatory knowledge to accomplish goals and solve problems (Schunk, 2012).",
+            "Metacognition also includes knowledge about the value of applying cognitive strategies in learning (Pressley & Harris, 2006)."
+          ],
+          "glossaryEntry": "Metacognition: Knowledge about our own thinking processes. (Woolfolk Glossary, p. 660)",
+          "koreanContextGuide": "자신의 인지 과정을 계획·점검·조절하는 상위 인지 능력으로, 특히 어떤 학습 전략이 무엇인지(선언적), 어떻게 쓰는지(절차적)를 넘어 '언제, 왜' 그 전략을 사용해야 하는지 아는 조건적 지식이 전략 전이의 핵심이다. (현장 적용: 개념 간의 위계를 파악할 때는 마인드맵을 쓰고, 역사적 사건의 선후 관계를 정리할 때는 연대표를 써야 한다는 '상황별 전략 선택 기준(조건적 지식)'을 명시적으로 가르친다.)"
+        },
+        {
+          "id": "mod4-fc-metacognition-conditional-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 2 · The Learning Process",
+          "sectionHeading": "Chapter 2 · The Learning Process",
+          "pageLabel": "p. 38",
+          "verbatimExcerpt": "The other major psychological perspective—constructivism—describes how individuals build or “construct” knowledge by engaging actively with their experiences. The psychological version of constructivism emphasizes the learners’ individual responses to experience—their tendency both to assimilate it and to accommodate to it. The social version of constructivism emphasizes how other, more expert individuals can create opportunities for the learner to construct new knowledge. Social constructivism suggests that a teacher’s role must include deliberate instructional planning, such as facilitated by Bloom’s taxonomy of learning objectives, but also that teachers need to encourage metacognition, which is students’ ability to monitor their own learning.",
+          "highlightQuotes": [
+            "Social constructivism suggests that a teacher’s role must include deliberate instructional planning, such as facilitated by Bloom’s taxonomy of learning objectives, but also that teachers need to encourage metacognition, which is students’ ability to monitor their own learning."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "자신의 인지 과정을 계획·점검·조절하는 상위 인지 능력으로, 특히 어떤 학습 전략이 무엇인지(선언적), 어떻게 쓰는지(절차적)를 넘어 '언제, 왜' 그 전략을 사용해야 하는지 아는 조건적 지식이 전략 전이의 핵심이다."
+        }
+      ]
+    },
+    "mod4-fc-triadic-reciprocal": {
+      "nodeId": "mod4-fc-triadic-reciprocal",
+      "moduleId": "mod4",
+      "nodeKind": "flashcard",
+      "titleKo": "삼원적 상호결정론",
+      "titleEn": "Triadic Reciprocal Determinism",
+      "sourceCitation": "Woolfolk p. 439 · Seifert & Sutton p. 111",
+      "excerpts": [
+        {
+          "id": "mod4-fc-triadic-reciprocal-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 11 · Social Cognitive Views Of Learning And Motivation",
+          "sectionHeading": "Social Cognitive Theory",
+          "pageLabel": "p. 439",
+          "verbatimExcerpt": "I claimed that social cognitive theory describes a system. This system, called triarchic reciprocal causality, is the dynamic interplay among three kinds of influences: personal, environmental, and behavioral, as shown in Figure 11.1. Personal factors (beliefs, expectations, cognitive abilities, motivation, attitudes, and knowledge), the physical and social environment (resources, consequences of actions, other people, models and teachers, and physical settings), and behavior (individual actions, choices, and verbal statements) all influence and are influenced by each other.",
+          "highlightQuotes": [
+            "This system, called triarchic reciprocal causality, is the dynamic interplay among three kinds of influences: personal, environmental, and behavioral, as shown in Figure 11.1.",
+            "Personal factors (beliefs, expectations, cognitive abilities, motivation, attitudes, and knowledge), the physical and social environment (resources, consequences of actions, other people, models and teachers, and physical settings), and behavior (individual actions, choices, and verbal statements) all influence and are influenced by each other."
+          ],
+          "glossaryEntry": "Social cognitive theory: Theory that adds concern with cognitive factors such as beliefs, self-perceptions, and expectations to social learning theory. (Woolfolk Glossary, p. 663)",
+          "koreanContextGuide": "반두라(Bandura)의 사회인지이론 핵심 원리로, 인간의 학습과 행동은 개인 내적 요인(인지·신념·정서), 행동적 요인(성취 행동·지속성), 환경적 요인(교실 구조·피드백·모델) 3자가 양방향으로 서로 영향을 주고받으며 결정된다는 관점. (현장 적용: 낮은 자기효능감(개인)이 과제 회피(행동)를 낳고 이것이 교사의 질책(환경)을 불러와 다시 효능감을 깎는 악순환을 끊기 위해, 환경(과제 세분화·성공 피드백)과 행동(작은 착수)을 동시에 개입한다.)"
+        },
+        {
+          "id": "mod4-fc-triadic-reciprocal-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 6 · Student Motivation",
+          "sectionHeading": "Chapter 6 · Student Motivation",
+          "pageLabel": "p. 111",
+          "verbatimExcerpt": "The most common version of the behavioral perspective on motivation is the theory of operant conditioning associated with B. F. Skinner (1938, 1957), which we discussed in Chapter 1 (“Learning process”). The description in that chapter focused on behavioral learning, but the same operant model can be transformed into an account of motivation. In the operant model, you may recall, a behavior being learned (the “operant”) increases in frequency or likelihood because performing it makes a reinforcement available. To understand this model in terms of motivation, think of the likelihood of response as the motivation and the reinforcement as the motivator.",
+          "highlightQuotes": [
+            "The most common version of the behavioral perspective on motivation is the theory of operant conditioning associated with B.",
+            "The description in that chapter focused on behavioral learning, but the same operant model can be transformed into an account of motivation."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "반두라(Bandura)의 사회인지이론 핵심 원리로, 인간의 학습과 행동은 개인 내적 요인(인지·신념·정서), 행동적 요인(성취 행동·지속성), 환경적 요인(교실 구조·피드백·모델) 3자가 양방향으로 서로 영향을 주고받으며 결정된다는 관점."
+        }
+      ]
+    },
+    "mod4-fc-self-efficacy-sources": {
+      "nodeId": "mod4-fc-self-efficacy-sources",
+      "moduleId": "mod4",
+      "nodeKind": "flashcard",
+      "titleKo": "자기효능감의 4대 원천과 대처 모델(Coping Model)",
+      "titleEn": "Four Sources of Self-Efficacy & Coping Model",
+      "sourceCitation": "Woolfolk p. 445 · Seifert & Sutton p. 123",
+      "excerpts": [
+        {
+          "id": "mod4-fc-self-efficacy-sources-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 11 · Social Cognitive Views Of Learning And Motivation",
+          "sectionHeading": "Self-Efficacy And Agency",
+          "pageLabel": "p. 445",
+          "verbatimExcerpt": "Bandura identified four sources of self-efficacy expectations: mastery experiences, physiological and emotional arousal, vicarious experiences, and social persuasion. Mastery experiences are our own direct experiences—usually the most powerful source of efficacy information. Successes raise efficacy beliefs, while failures lower efficacy. Level of arousal affects self-efficacy, depending on how the arousal is interpreted. As you face the task, are you anxious and worried (lowers efficacy) or excited and “psyched” (raises efficacy) (Bandura, 1997; Schunk et al., 2014; Usher & Pajares, 2009)?",
+          "highlightQuotes": [
+            "Bandura identified four sources of self-efficacy expectations: mastery experiences, physiological and emotional arousal, vicarious experiences, and social persuasion.",
+            "Mastery experiences are our own direct experiences—usually the most powerful source of efficacy information."
+          ],
+          "glossaryEntry": "Self-efficacy: A person’s sense of being able to deal effectively with a particular task. Beliefs about personal competence in a particular situation. (Woolfolk Glossary, p. 662)",
+          "koreanContextGuide": "자기효능감은 성취경험(가장 강력), 대리경험, 사회적 설득, 생리·정서적 상태 해석으로 형성되며, 특히 대리경험에서는 처음부터 완벽히 해내는 숙달 모델보다 오류를 겪지만 전략으로 극복하는 '대처 모델'이 부진 학생에게 훨씬 효과적이다. (현장 적용: 발표 불안이 큰 학생에게 처음부터 유창한 우등생 영상을 보여주는 대신, 처음엔 떨리고 실수하지만 메모 카드를 보며 차분히 끝까지 발표해 내는 또래 대처 모델(Coping Model)을 보여준다.)"
+        },
+        {
+          "id": "mod4-fc-self-efficacy-sources-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 6 · Student Motivation",
+          "sectionHeading": "Chapter 6 · Student Motivation",
+          "pageLabel": "p. 123",
+          "verbatimExcerpt": "Psychologists who study self-efficacy have identified four major sources of self-efficacy beliefs (Pajares & Schunk, 2001, 2002). In order of importance they are (1) prior experiences of mastering tasks, (2) watching others’ mastering tasks, (3) messages or “persuasion” from others, and (4) emotions related to stress and discomfort. Fortunately the first three can be influenced by teachers directly, and even the fourth can sometimes be influenced indirectly by appropriate interpretive comments from the teacher or others.",
+          "highlightQuotes": [
+            "Psychologists who study self-efficacy have identified four major sources of self-efficacy beliefs (Pajares & Schunk, 2001, 2002)."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "자기효능감은 성취경험(가장 강력), 대리경험, 사회적 설득, 생리·정서적 상태 해석으로 형성되며, 특히 대리경험에서는 처음부터 완벽히 해내는 숙달 모델보다 오류를 겪지만 전략으로 극복하는 '대처 모델'이 부진 학생에게 훨씬 효과적이다."
+        }
+      ]
+    },
+    "mod4-fc-meichenbaum-cbm": {
+      "nodeId": "mod4-fc-meichenbaum-cbm",
+      "moduleId": "mod4",
+      "nodeKind": "flashcard",
+      "titleKo": "마이켄바움의 인지행동수정 (5단계 자기교수법)",
+      "titleEn": "Meichenbaum's Cognitive Behavior Modification (Self-Instructional Training)",
+      "sourceCitation": "Woolfolk p. 455 · Woolfolk p. 455",
+      "excerpts": [
+        {
+          "id": "mod4-fc-meichenbaum-cbm-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 11 · Social Cognitive Views Of Learning And Motivation",
+          "sectionHeading": "Point/Counterpoint: Are High Levels Of Teacher Efficacy Beneficial?",
+          "pageLabel": "p. 455",
+          "verbatimExcerpt": "When some psychologists were studying a behavior modification approach called self-management— using reinforcement and punishment to manage your own behavior—Donald Meichenbaum (1977) was having success teaching impulsive students to “talk themselves through” tasks. Meichenbaum called his method cognitive behavior modification (B. H. Manning & Payne, 1996). Cognitive behavior modification focuses on self-talk to regulate behavior.",
+          "highlightQuotes": [
+            "Meichenbaum called his method cognitive behavior modification (B.",
+            "When some psychologists were studying a behavior modification approach called self-management— using reinforcement and punishment to manage your own behavior—Donald Meichenbaum (1977) was having success teaching impulsive students to “talk themselves through” tasks."
+          ],
+          "glossaryEntry": "Cognitive behavior modification: Procedures based on both behavioral and cognitive learning principles for changing your own behavior by using self-talk and self-instruction. (Woolfolk Glossary, p. 656)",
+          "koreanContextGuide": "충동적이거나 과제 착수가 어려운 아동에게 ① 성인의 인지적 모델링(사고 구술) → ② 외현적 외적 안내 → ③ 아동의 외현적 자기안내(큰 소리 혼잣말) → ④ 속삭이는 자기안내(용암) → ⑤ 내현적 자기교수(내적 언어)의 5단계로 자기조절을 훈련하는 기법. (현장 적용: 문제를 끝까지 읽지 않고 찍어버리는 초등학생에게 '잠깐! 문제에서 구하라는 것에 동그라미부터 치자 → 하나씩 대입해 보자 → 잘했어!'라는 자기대화 카드를 주고 소리 내어 말하며 풀게 한 뒤 점차 속삭임과 속마음 말하기로 내면화시킨다.)"
+        },
+        {
+          "id": "mod4-fc-meichenbaum-cbm-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 11 · Social Cognitive Views Of Learning And Motivation",
+          "sectionHeading": "Point/Counterpoint: Are High Levels Of Teacher Efficacy Beneficial?",
+          "pageLabel": "p. 455",
+          "verbatimExcerpt": "You may remember from Chapter 2 that there is a stage in cognitive development when young children seem to guide themselves through a task using private speech (Vygotsky, 1987a). They talk to themselves, often repeating the words of a parent or teacher. In cognitive behavior modification, students are taught directly how to use this self-instruction.",
+          "highlightQuotes": [
+            "In cognitive behavior modification, students are taught directly how to use this self-instruction.",
+            "You may remember from Chapter 2 that there is a stage in cognitive development when young children seem to guide themselves through a task using private speech (Vygotsky, 1987a)."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "충동적이거나 과제 착수가 어려운 아동에게 ① 성인의 인지적 모델링(사고 구술) → ② 외현적 외적 안내 → ③ 아동의 외현적 자기안내(큰 소리 혼잣말) → ④ 속삭이는 자기안내(용암) → ⑤ 내현적 자기교수(내적 언어)의 5단계로 자기조절을 훈련하는 기법. (현장 적용: 문제를 끝까지 읽지 않고 찍어버리는 초등학생에게 '잠깐! 문제에서 구하라는 것에 동그라미부터 치자 → 하나씩 대입해 보자 → 잘했어!'라는 자기대화 카드를 주고 소리 내어 말하며 풀게 한 뒤 점차 속삭임과 속마음 말하기로 내면화시킨다.)"
+        }
+      ]
+    },
+    "mod4-fc-zimmerman-srl": {
+      "nodeId": "mod4-fc-zimmerman-srl",
+      "moduleId": "mod4",
+      "nodeKind": "flashcard",
+      "titleKo": "지머만의 순환적 자기조절학습 3단계",
+      "titleEn": "Zimmerman's Cyclical Phases of Self-Regulated Learning",
+      "sourceCitation": "Woolfolk p. 453 · Seifert & Sutton p. 114",
+      "excerpts": [
+        {
+          "id": "mod4-fc-zimmerman-srl-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 11 · Social Cognitive Views Of Learning And Motivation",
+          "sectionHeading": "Point/Counterpoint: Are High Levels Of Teacher Efficacy Beneficial?",
+          "pageLabel": "p. 453",
+          "verbatimExcerpt": "Clearly, Tracy is unlikely to do well on the test. What would help? For an answer, let’s consider Zimmerman’s cycle of self-regulated learning. His cycle has three phases—forethought, performance, reflection—and is consistent with the Winne and Hadwin model just described. In Zimmerman’s phase 1, the forethought phase (like Winne and Hadwin’s steps 1 and 2 of analyzing the task and setting goals), Tracy needs to set clear, reasonable goals and plan a few strategies for accomplishing those goals. And Tracy’s beliefs about motivation make a difference at this point, too.",
+          "highlightQuotes": [
+            "His cycle has three phases—forethought, performance, reflection—and is consistent with the Winne and Hadwin model just described.",
+            "In Zimmerman’s phase 1, the forethought phase (like Winne and Hadwin’s steps 1 and 2 of analyzing the task and setting goals), Tracy needs to set clear, reasonable goals and plan a few strategies for accomplishing those goals."
+          ],
+          "glossaryEntry": "Self-regulated learning: A view of learning as skills and will applied to analyzing learning tasks, setting goals and planning how to do the task, applying skills, and especially making adjustments about how learning is carried out. (Woolfolk Glossary, p. 663)",
+          "koreanContextGuide": "자기조절학습을 ① 계획 단계(과제 분석, 목표 설정, 자기동기화 신념) → ② 수행 단계(자기통제, 자기교수, 초인지적 자기점검) → ③ 자기성찰 단계(자기평가, 통제 가능한 전략 귀인, 적응적 수정)의 순환 고리로 설명한 모형. (현장 적용: 시험 실패 원인을 '머리가 나빠서(통제 불가능 능력 귀인)'로 돌리는 학생에게 성찰 단계에서 '인출 연습 없이 눈으로만 읽은 전략 부족(통제 가능 전략 귀인)'으로 재해석하게 하여 다음 계획 단계의 전략 수정을 유도한다.)"
+        },
+        {
+          "id": "mod4-fc-zimmerman-srl-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 6 · Student Motivation",
+          "sectionHeading": "Chapter 6 · Student Motivation",
+          "pageLabel": "p. 114",
+          "verbatimExcerpt": "As you might imagine, mastery, performance, and performance-avoidance goals often are not experienced in pure form, but in combinations. If you play the clarinet in the school band, you might want to improve your technique simply because you enjoy playing as well as possible—essentially a mastery orientation. But you might also want to look talented in the eyes of classmates—a performance orientation. Another part of what you may wish, at least privately, is to avoid looking like a complete failure at playing the clarinet. One of these motives may predominate over the others, but they all may be present.",
+          "highlightQuotes": [
+            "As you might imagine, mastery, performance, and performance-avoidance goals often are not experienced in pure form, but in combinations.",
+            "But you might also want to look talented in the eyes of classmates—a performance orientation."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "자기조절학습을 ① 계획 단계(과제 분석, 목표 설정, 자기동기화 신념) → ② 수행 단계(자기통제, 자기교수, 초인지적 자기점검) → ③ 자기성찰 단계(자기평가, 통제 가능한 전략 귀인, 적응적 수정)의 순환 고리로 설명한 모형."
+        }
+      ]
+    },
+    "mod4-fc-casel-sel": {
+      "nodeId": "mod4-fc-casel-sel",
+      "moduleId": "mod4",
+      "nodeKind": "flashcard",
+      "titleKo": "CASEL 사회정서학습 5대 핵심 역량",
+      "titleEn": "CASEL 5 Core Competencies of Social-Emotional Learning (SEL)",
+      "sourceCitation": "Woolfolk p. 458 · Woolfolk p. 459",
+      "excerpts": [
+        {
+          "id": "mod4-fc-casel-sel-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 11 · Social Cognitive Views Of Learning And Motivation",
+          "sectionHeading": "Guidelines: Encouraging Emotional Self-Regulation",
+          "pageLabel": "p. 458",
+          "verbatimExcerpt": "• Self-awareness—accurately assessing your feelings, interests, values, and strengths; maintaining a well-grounded sense of self-confidence • Self-management—regulating your emotions to handle stress, control impulses, and persevere in overcoming obstacles; setting and monitoring progress toward personal and academic goals; expressing emotions appropriately • Social awareness—taking the perspective of and empathizing with others; recognizing and appreciating individual and group similarities and differences; recognizing and using family, school, and community resources • Relationship skills—establishing and maintaining healthy and rewarding relationships based on cooperation; resisting inappropriate social pressure; preventing, managing, and resolving interpersonal conflict; seeking help when needed • Responsible decision making—making decisions based on consideration of ethical standards, safety concerns, appropriate social norms, respect for others, and likely consequences of various actions; applying decision-making skills to academic and social situations; contributing to the well-being of one’s school and community (casel.org/why-it-matters/what-is-sel/skills-competencies/)",
+          "highlightQuotes": [
+            "• Self-awareness—accurately assessing your feelings, interests, values, and strengths; maintaining a well-grounded sense of self-confidence • Self-management—regulating your emotions to handle stress, control impulses, and persevere in overcoming obstacles; setting and monitoring progress toward personal and academic goals; expressing emotions appropriately • Social awareness—taking the perspective of and empathizing with others; recognizing and appreciating individual and group similarities and differences; recognizing and using family, school, and community resources • Relationship skills—establishing and maintaining healthy and rewarding relationships based on cooperation; resisting inappropriate social pressure; preventing, managing, and resolving interpersonal conflict; seeking help when needed • Responsible decision making—making decisions based on consideration of ethical standards, safety concerns, appropriate social norms, respect for others, and likely consequences of various actions; applying decision-making skills to academic and social situations; contributing to the well-being of one’s school and community (casel.org/why-it-matters/what-is-sel/skills-competencies/)"
+          ],
+          "glossaryEntry": "Self-regulation: Process of activating and sustaining thoughts, behaviors, and emotions in order to reach goals. (Woolfolk Glossary, p. 663)",
+          "koreanContextGuide": "학업과 삶의 성공을 뒷받침하는 정서·사회적 자기조절 역량으로, 자기인식(Self-Awareness), 자기관리(Self-Management), 사회적 인식(Social Awareness), 관계 기술(Relationship Skills), 책임 있는 의사결정(Responsible Decision-Making)의 5요소로 구성된다. (현장 적용: 아침 조회 시간 '오늘 나의 감정 온도계 체크하기(자기인식)'와 갈등 상황에서의 '신호등 멈춤-생각-선택 기법(자기관리·책임 있는 의사결정)'을 학급 전체 Tier 1 교육과정에 통합한다.)"
+        },
+        {
+          "id": "mod4-fc-casel-sel-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 11 · Social Cognitive Views Of Learning And Motivation",
+          "sectionHeading": "Teaching Toward Self-Efficacy And Self-Regulated Learning",
+          "pageLabel": "p. 459",
+          "verbatimExcerpt": "For example, Carlos Valiente and his colleagues (2010) followed almost 300 students through kindergarten to assess the relations between effortful self-control, emotionality, and academic achievement. They found that students’ anger, sadness, and shyness were negatively related to achievement and that self-control was positively related to achievement, particularly for students who showed lower levels of negative emotions. So helping students develop emotional self-regulation can set them on a good path for learning in school, increase their resilience, and probably can help them in social relations with their peers as well. How can teachers help students develop these skills? The Guidelines: Encouraging Emotional Self-Regulation gives some ideas.",
+          "highlightQuotes": [
+            "So helping students develop emotional self-regulation can set them on a good path for learning in school, increase their resilience, and probably can help them in social relations with their peers as well.",
+            "The Guidelines: Encouraging Emotional Self-Regulation gives some ideas."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "학업과 삶의 성공을 뒷받침하는 정서·사회적 자기조절 역량으로, 자기인식(Self-Awareness), 자기관리(Self-Management), 사회적 인식(Social Awareness), 관계 기술(Relationship Skills), 책임 있는 의사결정(Responsible Decision-Making)의 5요소로 구성된다. (현장 적용: 아침 조회 시간 '오늘 나의 감정 온도계 체크하기(자기인식)'와 갈등 상황에서의 '신호등 멈춤-생각-선택 기법(자기관리·책임 있는 의사결정)'을 학급 전체 Tier 1 교육과정에 통합한다.)"
+        }
+      ]
+    }
+  }
+}

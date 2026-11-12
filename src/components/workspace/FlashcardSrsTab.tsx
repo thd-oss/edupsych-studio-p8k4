@@ -4,6 +4,7 @@ import {
   ArrowLeftRight,
   ArrowRight,
   Bookmark,
+  BookOpen,
   BookOpenCheck,
   CheckCircle2,
   Grid,
@@ -30,6 +31,7 @@ interface FlashcardSrsTabProps {
   onToggleBookmark: (cardId: string) => void;
   onCreateFlashcard: (moduleId: ModuleId, item: Flashcard) => Promise<void>;
   onJumpToConceptContext: (nodeId: string) => void;
+  onOpenTextbookPassage: (nodeId: string) => void;
 }
 
 export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
@@ -41,7 +43,8 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
   onUpdateStatus,
   onToggleBookmark,
   onCreateFlashcard,
-  onJumpToConceptContext
+  onJumpToConceptContext,
+  onOpenTextbookPassage
 }) => {
   const [displayMode, setDisplayMode] = useState<'deck' | 'grid'>('deck');
   const [direction, setDirection] = useState<'ko-to-en' | 'en-to-ko'>(
@@ -478,8 +481,22 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
 
               <div
                 onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1.5"
+                className="flex flex-wrap items-center gap-1.5"
               >
+                <button
+                  type="button"
+                  aria-haspopup="dialog"
+                  onClick={() => onOpenTextbookPassage(activeCard.id)}
+                  className={`inline-flex min-h-[32px] items-center gap-1 rounded-xl px-2.5 py-1 text-xs font-extrabold border ${
+                    isDeckFlipped
+                      ? 'bg-amber-400/15 text-amber-200 border-amber-300/30 hover:bg-amber-400/25'
+                      : 'bg-amber-50 text-amber-950 border-amber-200 hover:bg-amber-100'
+                  }`}
+                >
+                  <BookOpen className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  <span>원문 발췌</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={() => onJumpToConceptContext(activeCard.id)}
@@ -650,17 +667,28 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
                 }`}
               >
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="rounded bg-indigo-600 px-2 py-0.5 text-[10px] font-extrabold text-white uppercase tabular-nums">
                       {card.moduleId.toUpperCase()} · {card.status}
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => onJumpToConceptContext(card.id)}
-                      className="rounded-lg bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 text-[11px] font-bold text-indigo-800"
-                    >
-                      관련 개념학습
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        aria-haspopup="dialog"
+                        onClick={() => onOpenTextbookPassage(card.id)}
+                        className="rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 px-2.5 py-1 text-[11px] font-bold text-amber-950 inline-flex items-center gap-1"
+                      >
+                        <BookOpen className="w-3 h-3 shrink-0" aria-hidden="true" />
+                        <span>원문 발췌</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onJumpToConceptContext(card.id)}
+                        className="rounded-lg bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 text-[11px] font-bold text-indigo-800"
+                      >
+                        관련 개념학습
+                      </button>
+                    </div>
                   </div>
 
                   <div

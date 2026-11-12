@@ -1,6 +1,7 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   ArrowUpRight,
+  BookOpen,
   Brain,
   Cpu,
   Gauge,
@@ -26,6 +27,7 @@ interface SharedStageProps {
   nodeMap: Record<string, KnowledgeGraphNode>;
   masteryMap: Record<string, MasteryState>;
   onNavigateNode: (nodeId: string) => void;
+  onOpenTextbookPassage?: (nodeId: string) => void;
 }
 
 interface TheoryInlineStageProps extends SharedStageProps {
@@ -492,7 +494,8 @@ const CaseInlineStage: React.FC<CaseInlineStageProps> = ({
   classroomCase,
   adjacency,
   nodeMap,
-  onNavigateNode
+  onNavigateNode,
+  onOpenTextbookPassage
 }) => {
   const lensTabBaseId = useId();
   const [selectedLens, setSelectedLens] = useState<CaseLensTabId>('matrix');
@@ -564,6 +567,17 @@ const CaseInlineStage: React.FC<CaseInlineStageProps> = ({
                 <span>{th.titleKo}</span>
               </button>
             ))}
+            {onOpenTextbookPassage && (
+              <button
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() => onOpenTextbookPassage(classroomCase.id)}
+                className="inline-flex min-h-[28px] shrink-0 items-center gap-1 rounded-[10px] bg-[var(--accent-subtle)] hover:bg-[#0071e3]/15 border border-[#0071e3]/20 px-2.5 py-1 text-[11px] font-semibold text-[var(--accent-solid)] whitespace-nowrap transition-colors"
+              >
+                <BookOpen className="w-3 h-3 shrink-0" aria-hidden="true" />
+                <span>근거 원문</span>
+              </button>
+            )}
           </div>
         )}
 

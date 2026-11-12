@@ -1,0 +1,620 @@
+{
+  "moduleId": "mod3",
+  "generatedAt": "2026-11-12T12:53:46.699199+00:00",
+  "entries": {
+    "mod3-theory-operant-punishment": {
+      "nodeId": "mod3-theory-operant-punishment",
+      "moduleId": "mod3",
+      "nodeKind": "theory",
+      "titleKo": "조작적 조건형성: 정적·부적 강화의 원리와 수여·박탈 벌(Punishment)의 심리학적 한계",
+      "titleEn": "Operant Conditioning: Positive/Negative Reinforcement & Limitations of Presentation/Removal Punishment",
+      "sourceCitation": "Woolfolk Ch.7 (pp. 250-261) / Seifert & Sutton Ch.2",
+      "excerpts": [
+        {
+          "id": "mod3-theory-operant-punishment-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Operant Conditioning: Trying New Responses",
+          "pageLabel": "p. 284",
+          "verbatimExcerpt": "Like reinforcement, punishment may take one of two forms. The first type has been called Type I punishment, but this name isn’t very informative, so I use the term presentation punishment. It occurs when presenting or adding a stimulus following the behavior suppresses or decreases the behavior. When teachers reprimand students, assign extra work, or make students run extra laps, and so on, they are using presentation punishment. I call the other type of punishment (Type II punishment) removal punishment because it involves removing a stimulus. When teachers or parents take away privileges after a young person has behaved inappropriately, they are applying removal punishment. With both types, the effect is to decrease the behavior that led to the punishment. Figure 7.1 summarizes the processes of reinforcement and punishment.",
+          "highlightQuotes": [
+            "The first type has been called Type I punishment, but this name isn’t very informative, so I use the term presentation punishment.",
+            "When teachers reprimand students, assign extra work, or make students run extra laps, and so on, they are using presentation punishment."
+          ],
+          "glossaryEntry": "Negative reinforcement: Strengthening behavior by removing an aversive stimulus when the behavior occurs. (Woolfolk Glossary, p. 660)",
+          "koreanContextGuide": "스키너(B. F. Skinner)의 조작적 조건형성(Operant Conditioning)은 인간의 자발적 행동(Operant)이 선행사건(Antecedent: 변별자극 SD) - 행동(Behavior) - 후속결과(Consequence)라는 A-B-C 3항 유관(Three-Term Contingency)의 환경적 함수 관계에 의해 습득·유지·변화된다고 규명한다."
+        },
+        {
+          "id": "mod3-theory-operant-punishment-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Operant Conditioning: Trying New Responses",
+          "pageLabel": "p. 283",
+          "verbatimExcerpt": "When the consequence that strengthens a behavior is the presentation (addition) of a new stimulus, the situation is defined as positive reinforcement. In contrast, when the consequence that strengthens a behavior is the removal (subtraction) of a stimulus, the process is called negative reinforcement. So, negative reinforcement is the contingent removal of an aversive (unpleasant) stimulus right after a response that increases the future rate of the response (Alberto & Troutman, 2102). If a particular action leads to avoiding or escaping an aversive situation, the action is likely to be repeated in a similar situation. A common example is the car seatbelt buzzer. As soon as you put on your seatbelt, the irritating buzzer stops.",
+          "highlightQuotes": [
+            "So, negative reinforcement is the contingent removal of an aversive (unpleasant) stimulus right after a response that increases the future rate of the response (Alberto & Troutman, 2102).",
+            "In contrast, when the consequence that strengthens a behavior is the removal (subtraction) of a stimulus, the process is called negative reinforcement."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "정적 강화(Positive Reinforcement)는 표적 행동 직후 아동이 선호하는 자극(구체적 행동 칭찬, 학급 특권, 활동 기회 등)을 즉각 제시하여 미래 행동 발생 빈도를 증가시키는 원리이며, 부적 강화(Negative Reinforcement)는 행동 직후 불쾌하거나 혐오스러운 자극을 제거·감소(도피 Escape 또는 회피 Avoidance)시켜 주어 행동 빈도를 증가시키는 원리이다."
+        },
+        {
+          "id": "mod3-theory-operant-punishment-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 2 · The Learning Process",
+          "sectionHeading": "Chapter 2 · The Learning Process",
+          "pageLabel": "p. 30",
+          "verbatimExcerpt": "Operant conditioning and students’ learning: As with respondent conditioning, it is important to ask whether operant conditioning also describes learning in human beings, and especially in students in classrooms. On this point the answer seems to be clearly “yes”. There are countless classroom examples of consequences affecting students’ behavior in ways that resemble operant conditioning, although the process certainly does not account for all forms of student learning (Alberto & Troutman, 2005). Consider the following examples.",
+          "highlightQuotes": [
+            "There are countless classroom examples of consequences affecting students’ behavior in ways that resemble operant conditioning, although the process certainly does not account for all forms of student learning (Alberto & Troutman, 2005).",
+            "Operant conditioning and students’ learning: As with respondent conditioning, it is important to ask whether operant conditioning also describes learning in human beings, and especially in students in classrooms."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "문제행동의 원인을 아동 내면의 고정된 성향이나 특질(Trait; 예: '원래 반항적이고 산만한 아이', '의지가 박약한 학생')로 설명하는 것은 관찰된 행동을 명명한 뒤 다시 그것을 원인으로 삼는 동어반복적 순환논리(Circular Reasoning)에 불과하다. 과학자-실무자(Scientist-Practitioner) 관점은 추상적 꼬리표 대신 관찰 가능한 행동 레퍼토리와 A-B-C 환경 변인 간의 기능적 관계(Functio…"
+        }
+      ]
+    },
+    "mod3-theory-premack-shaping-task": {
+      "nodeId": "mod3-theory-premack-shaping-task",
+      "moduleId": "mod3",
+      "nodeKind": "theory",
+      "titleKo": "프리맥 원리(Premack Principle), 조형(Shaping)과 과제분석(Task Analysis) 및 토큰 강화",
+      "titleEn": "Premack Principle, Shaping, Task Analysis & Token Economy Systems",
+      "sourceCitation": "Woolfolk Ch.7 (pp. 261-269) / Seifert & Sutton Ch.2",
+      "excerpts": [
+        {
+          "id": "mod3-theory-premack-shaping-task-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Putting It All Together To Apply Operant Conditioning: Applied Behavior Analysis",
+          "pageLabel": "p. 289",
+          "verbatimExcerpt": "As we discussed earlier, to encourage behavior is to reinforce it. There are several specific ways to encourage existing behaviors or teach new ones. These include teacher attention and praise, the Premack principle, shaping, and positive practice.",
+          "highlightQuotes": [
+            "These include teacher attention and praise, the Premack principle, shaping, and positive practice."
+          ],
+          "glossaryEntry": "Premack principle: Principle stating that a more-preferred activity can serve as a reinforcer for a less-preferred activity. (Woolfolk Glossary, p. 661)",
+          "koreanContextGuide": "프리맥 원리(Premack Principle, 일명 '할머니의 법칙'): 강화물을 고정된 사물이 아닌 상대적 행동 확률로 재정의한 원리로, 아동이 자유 시간 동안 자발적으로 자주 수행하는 고빈도 선호 행동(High-probability behavior; 예: 보드게임, 칠판 지우기, 태블릿 탐색)을 상대적으로 잘 하지 않는 저빈도 목표 행동(Low-probability behavior; 예: 수학 연산 3문제 완수, 사물함 정리) 수행 직후의 후속 유관('먼저 [저빈도 과제]를 끝내면, 그다음에 [고빈도 선호 활동]을 한다')으로 배치하여 저빈도 행동을 강화한다."
+        },
+        {
+          "id": "mod3-theory-premack-shaping-task-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 291",
+          "verbatimExcerpt": "In both situations, the students are receiving no reinforcement for their work because the end product of their efforts is not good enough. A safe prediction is that the students will soon learn to dislike the class, the subject, and perhaps the teacher and school in general. One way to prevent this problem is the strategy of shaping, also called successive approximations. Shaping involves reinforcing progress instead of waiting for perfection.",
+          "highlightQuotes": [
+            "One way to prevent this problem is the strategy of shaping, also called successive approximations.",
+            "Shaping involves reinforcing progress instead of waiting for perfection."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "과제분석(Task Analysis)과 연쇄화(Chaining): 복합적이고 거대한 최종 목표 기술이나 학업 과제를 학생의 현재 수행 수준에서 진입 가능한 논리적·위계적 미시 하위 단계(Sub-skills)들로 세분화하는 절차이며, 순방향 연쇄(Forward Chaining) 또는 마지막 성공 단계부터 역으로 성취감을 맛보게 하는 역방향 연쇄(Backward Chaining)를 통해 하나의 통합된 행동 계열로 확립한다."
+        },
+        {
+          "id": "mod3-theory-premack-shaping-task-w-3",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 291",
+          "verbatimExcerpt": "A task analysis gives a picture of the logical sequence of steps leading toward the final goal. An awareness of this sequence can help teachers make sure that students have the necessary skills before they move to the next step. In addition, when students have difficulty, the teacher can pinpoint problem areas. Many behaviors can be improved through shaping, especially the acquisition of skills that involve persistence, endurance, increased accuracy, greater speed, or extensive practice to master. Because shaping is a time-consuming process, however, it should not be used if success can be attained through simpler methods such as cueing.",
+          "highlightQuotes": [
+            "Many behaviors can be improved through shaping, especially the acquisition of skills that involve persistence, endurance, increased accuracy, greater speed, or extensive practice to master.",
+            "Because shaping is a time-consuming process, however, it should not be used if success can be attained through simpler methods such as cueing."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "조형(Shaping, 행동형성): 학생의 현재 행동 레퍼토리에 목표 행동이 전혀 존재하지 않아 자연 발생 확률이 0에 가까울 때, 완성된 행동이 나올 때까지 기다리지 않고 최종 목표 행동에 가까워지는 점진적 접근(Successive Approximations) 단계마다 체계적으로 차별강화하고 이전 단계는 소거함으로써 목표 행동을 빚어내는 기법이다."
+        }
+      ]
+    },
+    "mod3-theory-aba-differential": {
+      "nodeId": "mod3-theory-aba-differential",
+      "moduleId": "mod3",
+      "nodeKind": "theory",
+      "titleKo": "응용행동분석(ABA): 자극 통제, 차별강화(DRA·DRI·DRO)와 소거 폭발(Extinction Burst) 관리",
+      "titleEn": "Applied Behavior Analysis (ABA), Differential Reinforcement & Managing Extinction Bursts",
+      "sourceCitation": "Woolfolk Ch.7 (pp. 265-276) / Seifert & Sutton Ch.2",
+      "excerpts": [
+        {
+          "id": "mod3-theory-aba-differential-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Operant Conditioning: Trying New Responses",
+          "pageLabel": "p. 286",
+          "verbatimExcerpt": "EXTINCTION. In classical conditioning, the CR is extinguished (disappears) when the CS appears, but the US does not follow (sound, but no food). In operant conditioning, a person or an animal will not persist in a certain behavior if the usual reinforcer is withheld long enough. The behavior will eventually be extinguished (stop). For example, if you repeatedly e-mail a professor but never get a reply, you may give up. Removal of reinforcement altogether leads to extinction. The process may take a while, however, as you know if you have tried to extinguish a child’s tantrums by withholding your attention. Often the child wins—because you give up ignoring her—and instead of extinction, intermittent reinforcement occurs. This, of course, may encourage even more persistent tantrums in the future.",
+          "highlightQuotes": [
+            "Often the child wins—because you give up ignoring her—and instead of extinction, intermittent reinforcement occurs.",
+            "Removal of reinforcement altogether leads to extinction."
+          ],
+          "glossaryEntry": "Applied behavior analysis: The application of behavioral learning principles to understand and change behavior. (Woolfolk Glossary, p. 655)",
+          "koreanContextGuide": "응용행동분석(ABA: Applied Behavior Analysis)은 실험적으로 검증된 학습 원리를 체계적으로 적용하여 사회적으로 유의미한 행동을 개선하는 과학적 방법론으로, 표적 행동의 객관적·조작적 정의 → 기초선(Baseline, A) 측정 → 중재(Intervention, B) 투입 → 단일대상 설계(ABAB 반전 설계, 다중기초선 설계)를 통한 인과적 효과 검증의 엄격한 데이터 기반 절차를 따른다."
+        },
+        {
+          "id": "mod3-theory-aba-differential-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Putting It All Together To Apply Operant Conditioning: Applied Behavior Analysis",
+          "pageLabel": "p. 288",
+          "verbatimExcerpt": "Ideally, applied behavior analysis requires clear specification of the behavior to be changed; careful measurement of the behavior; analysis of the antecedents and reinforcers that might be maintaining inappropriate or undesirable behavior; interventions based on behavioral principles to change the behavior; and careful measurement of changes. In research on applied behavior analysis, an ABAB design (described in Chapter 1) is common. That is, researchers take a baseline measurement of the behavior (A), then apply the intervention (B), then stop the intervention to see if the behavior goes back to the baseline level (A), and then reintroduce the intervention (B).",
+          "highlightQuotes": [
+            "Ideally, applied behavior analysis requires clear specification of the behavior to be changed; careful measurement of the behavior; analysis of the antecedents and reinforcers that might be maintaining inappropriate or undesirable behavior; interventions based on behavioral principles to change the behavior; and careful measurement of changes.",
+            "In research on applied behavior analysis, an ABAB design (described in Chapter 1) is common."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "선행사건 자극 통제(Stimulus Control)와 촉구·용암(Prompting & Fading): 바람직한 행동이 강화받을 수 있는 시점과 맥락을 알리는 변별자극(SD) 및 환경 단서(Cueing)를 명확히 배치하고, 행동 발생을 돕는 시각·언어·신체적 촉구(Prompt)를 제공한 뒤 학생의 수행이 독립화됨에 따라 촉구를 최소 수준으로 점진 철회(Fading)한다."
+        },
+        {
+          "id": "mod3-theory-aba-differential-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 2 · The Learning Process",
+          "sectionHeading": "Chapter 2 · The Learning Process",
+          "pageLabel": "p. 28",
+          "verbatimExcerpt": "Extinction can also happen with negative examples of classical conditioning. If Mr Horrible leaves mid-year (perhaps because no one could stand working with him any longer!), then the child’s negative responses (cringing, eyes widening, heart beat racing, and so on) will also extinguish eventually. Note, though, that whether the conditioned stimulus is positive or negative, extinction does not happen suddenly or immediately, but unfolds over time. This fact can sometimes obscure the process if you are a busy teacher attending to many students.",
+          "highlightQuotes": [
+            "Extinction can also happen with negative examples of classical conditioning.",
+            "Note, though, that whether the conditioned stimulus is positive or negative, extinction does not happen suddenly or immediately, but unfolds over time."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "현장 교사들이 관심 끌기 목적의 문제행동에 '계획적 무시(소거)'를 시도했다가 실패하고 '행동주의 이론은 교실에서 통하지 않는다'고 오해하는 결정적 원인은 바로 '소거 폭발(Extinction Burst)' 구간에서의 굴복 때문이다. 평소 3번 소리 질러 관심을 얻던 아이가 소거 도입 후 10번을 더 큰 소리로 책상을 치며 소리 지를 때(소거 폭발 정점) 교사가 참지 못하고 다가가 달래거나 야단을 치면, 아동의 신경계는 '아,…"
+        }
+      ]
+    },
+    "mod3-theory-fba-pbs": {
+      "nodeId": "mod3-theory-fba-pbs",
+      "moduleId": "mod3",
+      "nodeKind": "theory",
+      "titleKo": "기능적 행동평가(FBA: A-B-C 관찰과 4대 행동 기능)와 긍정적 행동지원(PBS: 사전교정과 대체행동 교수)",
+      "titleEn": "Functional Behavioral Assessment (FBA) & Positive Behavior Support (PBS: Precorrection & FCT)",
+      "sourceCitation": "Woolfolk Ch.7 (pp. 276-285) / Seifert & Sutton Ch.2, 7",
+      "excerpts": [
+        {
+          "id": "mod3-theory-fba-pbs-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Contemporary Applications: Functional Behavioral Assessment, Positive Behavior Supports, And Self-Management",
+          "pageLabel": "p. 300",
+          "verbatimExcerpt": "The process of understanding the “why” of a problem behavior is known as functional behavioral assessment (FBA). Using a wide range of procedures to map the A–B–Cs of the situation (antecedents– behaviors–consequences), teachers try to identify the reason for the behavior (Barnhill, 2005). Figure 7.4 summarizes the possible functions of many school behaviors.",
+          "highlightQuotes": [
+            "The process of understanding the “why” of a problem behavior is known as functional behavioral assessment (FBA).",
+            "Using a wide range of procedures to map the A–B–Cs of the situation (antecedents– behaviors–consequences), teachers try to identify the reason for the behavior (Barnhill, 2005)."
+          ],
+          "glossaryEntry": "Functional behavioral assessment (FBA): Procedures used to obtain information about antecedents, behaviors, and consequences to determine the reason or function of the behavior. (Woolfolk Glossary, p. 658)",
+          "koreanContextGuide": "기능적 행동평가(FBA: Functional Behavioral Assessment)는 모든 문제행동이 아동 나름의 환경적 요구를 해결하려는 '목적 지향적 의사소통 수단'이라는 전제 아래, 원격 배경사건(Setting Events: 수면 부족, 약물 미복용, 가정 내 갈등) - 직전 선행사건(Antecedent) - 표적 행동(Behavior) - 후속결과(Consequence)의 연쇄를 직접 관찰·척도·면담으로 분석하여 행동의 기능(Function) 가설을 수립하는 절차이다."
+        },
+        {
+          "id": "mod3-theory-fba-pbs-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Contemporary Applications: Functional Behavioral Assessment, Positive Behavior Supports, And Self-Management",
+          "pageLabel": "p. 301",
+          "verbatimExcerpt": "The same behaviors may serve different functions for different students. For example, an FBA of three preschool students found that two of the students were aggressive and uncooperative in order to gain the teacher’s attention, but the third child actually was trying to escape or avoid teacher attention (Dufrene, Doggett, Henington, & Watson, 2007). With information from an FBA, teachers developed an intervention package, including positive behavior supports (PBS) for each child. Two students met specific standards to get the teacher attention they wanted, but the third child got to be “left alone” as long as he met certain standards.",
+          "highlightQuotes": [
+            "With information from an FBA, teachers developed an intervention package, including positive behavior supports (PBS) for each child."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "문제행동의 4대 핵심 기능(Four Functions of Behavior): ① 사회적 관심 획득(Attention: 교사의 질책·설득이나 또래의 웃음·주목 유발 - 사회적 정적 강화), ② 선호 물건·활동 획득(Tangible: 특정 교구, 컴퓨터 사용권, 자리 독점 - 정적 강화), ③ 과제 및 혐오 자극 회피/도피(Escape/Avoidance: 인지부하가 높은 학업 과제, 지루한 활동, 발표 불안으로부터의 탈출 - 사회적 부적 강화), ④ 내적 감각 자극 추구 및 각성 조절(Sensory/Automatic: 상동행동, 신체 흔들기 등 외적 유관과 무관한 자동 강화)."
+        },
+        {
+          "id": "mod3-theory-fba-pbs-w-3",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Contemporary Applications: Functional Behavioral Assessment, Positive Behavior Supports, And Self-Management",
+          "pageLabel": "p. 301",
+          "verbatimExcerpt": "The Individuals with Disabilities Education Act (IDEA, 2004) discussed in Chapter 4 requires PBS for students with disabilities and those at risk for special education placement. Positive behavior supports are the actual interventions designed to replace problem behaviors with new actions that serve the same purpose for the student.",
+          "highlightQuotes": [
+            "Positive behavior supports are the actual interventions designed to replace problem behaviors with new actions that serve the same purpose for the student."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "사전교정(Precorrection)과 선행사건 생태계 재설계: 문제행동이 터진 뒤 사후에 처벌하는 방식에서 벗어나, 문제행동이 빈발하는 특정 전환 시간이나 고난도 과제 제시 직전(선행사건 A)에 기대 행동을 미리 구체적으로 상기·시연(Rehearsal)시키고, 과제 난이도 조정·선택권 부여·시각적 일과표를 선제 투입하여 문제행동의 확립조작(EO) 자체를 무력화하는 예방 전략이다."
+        }
+      ]
+    },
+    "mod3-fc-negative-reinforcement": {
+      "nodeId": "mod3-fc-negative-reinforcement",
+      "moduleId": "mod3",
+      "nodeKind": "flashcard",
+      "titleKo": "부적 강화 vs. 벌(처벌)",
+      "titleEn": "Negative Reinforcement vs. Punishment",
+      "sourceCitation": "Woolfolk p. 296 · Woolfolk p. 284",
+      "excerpts": [
+        {
+          "id": "mod3-fc-negative-reinforcement-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 296",
+          "verbatimExcerpt": "NEGATIVE REINFORCEMENT. Recall the basic principle of negative reinforcement: If an action stops or avoids something unpleasant, then that action is likely to occur again in similar situations. Negative reinforcement was operating in Elizabeth’s classroom. When they moaned and complained, her students escaped the test, so negative reinforcement probably increased the frequency of complaining in the future.",
+          "highlightQuotes": [
+            "When they moaned and complained, her students escaped the test, so negative reinforcement probably increased the frequency of complaining in the future.",
+            "Recall the basic principle of negative reinforcement: If an action stops or avoids something unpleasant, then that action is likely to occur again in similar situations."
+          ],
+          "glossaryEntry": "Negative reinforcement: Strengthening behavior by removing an aversive stimulus when the behavior occurs. (Woolfolk Glossary, p. 660)",
+          "koreanContextGuide": "부적 강화는 행동 직후 학생이 싫어하는 혐오 자극(어려운 과제, 잔소리 등)이 제거됨으로써 그 행동의 미래 발생 빈도가 '증가'하는 원리이며, 벌은 혐오 자극 부여(수여 벌)나 특권 박탈(박탈 벌)을 통해 행동 빈도를 '감소'시키는 원리이다. (현장 적용: 수학 서술형 문제 풀이 시간마다 배가 아프다며 보건실에 가는 학생에게 과제를 면제해 주면, 혐오 자극(어려운 수학 과제)이 제거되는 부적 강화가 작동하여 다음 수학 시간에도 복통 호소 행동이 증가한다.)"
+        },
+        {
+          "id": "mod3-fc-negative-reinforcement-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Operant Conditioning: Trying New Responses",
+          "pageLabel": "p. 284",
+          "verbatimExcerpt": "Consider our opening case student who continually “gets sick” right before a test or oral presentation and then is sent to the nurse’s office. This behavior allows him to escape aversive situations—tests—so getting “sick” is being maintained, in part, through negative reinforcement. It is negative because getting sick removed the unpleasant stimulus (the test or report); it is reinforcement because the behavior that removed the stimulus (getting “sick”) increases or repeats in the future. It is also possible that classical conditioning plays a role. The student may have been conditioned to experience unpleasant physiological reactions to tests.",
+          "highlightQuotes": [
+            "This behavior allows him to escape aversive situations—tests—so getting “sick” is being maintained, in part, through negative reinforcement."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "부적 강화는 행동 직후 학생이 싫어하는 혐오 자극(어려운 과제, 잔소리 등)이 제거됨으로써 그 행동의 미래 발생 빈도가 '증가'하는 원리이며, 벌은 혐오 자극 부여(수여 벌)나 특권 박탈(박탈 벌)을 통해 행동 빈도를 '감소'시키는 원리이다. (현장 적용: 수학 서술형 문제 풀이 시간마다 배가 아프다며 보건실에 가는 학생에게 과제를 면제해 주면, 혐오 자극(어려운 수학 과제)이 제거되는 부적 강화가 작동하여 다음 수학 시간에도 복통 호소 행동이 증가한다.)"
+        }
+      ]
+    },
+    "mod3-fc-presentation-removal-punishment": {
+      "nodeId": "mod3-fc-presentation-removal-punishment",
+      "moduleId": "mod3",
+      "nodeKind": "flashcard",
+      "titleKo": "수여 벌(1형 벌)과 박탈 벌(2형 벌)",
+      "titleEn": "Presentation Punishment (Type I) & Removal Punishment (Type II)",
+      "sourceCitation": "Woolfolk p. 284 · Woolfolk p. 297",
+      "excerpts": [
+        {
+          "id": "mod3-fc-presentation-removal-punishment-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Operant Conditioning: Trying New Responses",
+          "pageLabel": "p. 284",
+          "verbatimExcerpt": "Like reinforcement, punishment may take one of two forms. The first type has been called Type I punishment, but this name isn’t very informative, so I use the term presentation punishment. It occurs when presenting or adding a stimulus following the behavior suppresses or decreases the behavior. When teachers reprimand students, assign extra work, or make students run extra laps, and so on, they are using presentation punishment. I call the other type of punishment (Type II punishment) removal punishment because it involves removing a stimulus. When teachers or parents take away privileges after a young person has behaved inappropriately, they are applying removal punishment. With both types, the effect is to decrease the behavior that led to the punishment. Figure 7.1 summarizes the processes of reinforcement and punishment.",
+          "highlightQuotes": [
+            "I call the other type of punishment (Type II punishment) removal punishment because it involves removing a stimulus.",
+            "The first type has been called Type I punishment, but this name isn’t very informative, so I use the term presentation punishment."
+          ],
+          "glossaryEntry": "Presentation punishment: Decreasing the chances that a behavior will occur again by presenting an aversive stimulus following the behavior; also called Type I punishment. (Woolfolk Glossary, p. 661)",
+          "koreanContextGuide": "문제행동을 감소시키기 위해 불쾌한 자극(꾸중, 반성문, 추가 과제)을 부과하는 것이 수여 벌이며, 학생이 누리던 정적 강화물이나 특권(자유시간, 토큰)을 회수하는 것이 박탈 벌(반응대가·타임아웃)이다. (현장 적용: 감정적 체벌이나 공개적 질책(수여 벌)은 교사에 대한 공포와 공격성을 조건화하므로 지양하고, 사전 합의된 규칙 위반 시 토큰 1개를 차감하는 반응대가(박탈 벌)를 대체행동 강화와 병행해 제한적으로 사용한다.)"
+        },
+        {
+          "id": "mod3-fc-presentation-removal-punishment-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 297",
+          "verbatimExcerpt": "SOME CAUTIONS ABOUT PUNISHMENT. Remember the “no more points” chant I described under group consequences? The teacher actually was using a punishmentbased system—removal punishment to be exact. For every rule-breaking point, the class had 5 minutes of recess removed. The system led to rejection of the main rule breaker. Unfortunately, punishment seems to be a very common part of parenting and schooling. I say unfortunately because study after study shows that punishment by itself, as usually practiced in homes and schools, just doesn’t work. It tells children what to stop doing (often, they knew that already), but it does not teach them what to do instead (Kazdin, 2008). Whenever you consider the use of punishment, you should make it part of a two-pronged attack. The first goal is to carry out the punishment and suppress the undesirable behavior.",
+          "highlightQuotes": [
+            "The teacher actually was using a punishmentbased system—removal punishment to be exact.",
+            "The first goal is to carry out the punishment and suppress the undesirable behavior."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "문제행동을 감소시키기 위해 불쾌한 자극(꾸중, 반성문, 추가 과제)을 부과하는 것이 수여 벌이며, 학생이 누리던 정적 강화물이나 특권(자유시간, 토큰)을 회수하는 것이 박탈 벌(반응대가·타임아웃)이다. (현장 적용: 감정적 체벌이나 공개적 질책(수여 벌)은 교사에 대한 공포와 공격성을 조건화하므로 지양하고, 사전 합의된 규칙 위반 시 토큰 1개를 차감하는 반응대가(박탈 벌)를 대체행동 강화와 병행해 제한적으로 사용한다.)"
+        }
+      ]
+    },
+    "mod3-fc-premack": {
+      "nodeId": "mod3-fc-premack",
+      "moduleId": "mod3",
+      "nodeKind": "flashcard",
+      "titleKo": "프리맥 원리 (할머니의 법칙)",
+      "titleEn": "Premack Principle (Grandma's Rule)",
+      "sourceCitation": "Woolfolk p. 290 · Woolfolk p. 291",
+      "excerpts": [
+        {
+          "id": "mod3-fc-premack-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 290",
+          "verbatimExcerpt": "A helpful guide for choosing the most effective reinforcers is the Premack principle, named for David Premack (1965). According to the Premack principle, a high-frequency behavior (a preferred activity) can be an effective reinforcer for a low-frequency behavior (a less-preferred activity). This is sometimes referred to as “Grandma’s rule”: First, do what I want you to do, and then you may do what you want to do. Elizabeth used this principle in her class when she told them they could work together on their Civil War news program after they quietly completed the first section of the worksheet on their own.",
+          "highlightQuotes": [
+            "According to the Premack principle, a high-frequency behavior (a preferred activity) can be an effective reinforcer for a low-frequency behavior (a less-preferred activity).",
+            "A helpful guide for choosing the most effective reinforcers is the Premack principle, named for David Premack (1965)."
+          ],
+          "glossaryEntry": "Premack principle: Principle stating that a more-preferred activity can serve as a reinforcer for a less-preferred activity. (Woolfolk Glossary, p. 661)",
+          "koreanContextGuide": "아동이 자발적으로 자주 행하는 고빈도 선호 행동을 상대적으로 꺼리는 저빈도 목표 행동의 후속 강화물로 유관 배치하여 저빈도 행동의 발생 빈도를 높이는 조작적 조건형성 원리. (현장 적용: '먼저(First) 국어 빈칸 학습지 3문항을 완성하면, 그다음에(Then) 학급 보드게임 코너에서 친구와 10분간 루미큐브를 할 수 있다'는 [먼저-그다음(First-Then) 시각 보드]를 활용한다.)"
+        },
+        {
+          "id": "mod3-fc-premack-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 291",
+          "verbatimExcerpt": "For the Premack principle to be effective, the low-frequency (less-preferred) behavior must happen first. In the following dialogue, observe how the teacher loses a perfect opportunity to use the Premack principle:",
+          "highlightQuotes": [
+            "For the Premack principle to be effective, the low-frequency (less-preferred) behavior must happen first.",
+            "In the following dialogue, observe how the teacher loses a perfect opportunity to use the Premack principle:"
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "아동이 자발적으로 자주 행하는 고빈도 선호 행동을 상대적으로 꺼리는 저빈도 목표 행동의 후속 강화물로 유관 배치하여 저빈도 행동의 발생 빈도를 높이는 조작적 조건형성 원리. (현장 적용: '먼저(First) 국어 빈칸 학습지 3문항을 완성하면, 그다음에(Then) 학급 보드게임 코너에서 친구와 10분간 루미큐브를 할 수 있다'는 [먼저-그다음(First-Then) 시각 보드]를 활용한다.)"
+        }
+      ]
+    },
+    "mod3-fc-shaping-task-analysis": {
+      "nodeId": "mod3-fc-shaping-task-analysis",
+      "moduleId": "mod3",
+      "nodeKind": "flashcard",
+      "titleKo": "조형(점진적 접근법)과 과제분석",
+      "titleEn": "Shaping (Successive Approximations) & Task Analysis",
+      "sourceCitation": "Woolfolk p. 291 · Woolfolk p. 291",
+      "excerpts": [
+        {
+          "id": "mod3-fc-shaping-task-analysis-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 291",
+          "verbatimExcerpt": "In both situations, the students are receiving no reinforcement for their work because the end product of their efforts is not good enough. A safe prediction is that the students will soon learn to dislike the class, the subject, and perhaps the teacher and school in general. One way to prevent this problem is the strategy of shaping, also called successive approximations. Shaping involves reinforcing progress instead of waiting for perfection.",
+          "highlightQuotes": [
+            "One way to prevent this problem is the strategy of shaping, also called successive approximations.",
+            "Shaping involves reinforcing progress instead of waiting for perfection."
+          ],
+          "glossaryEntry": "Shaping: Reinforcing each small step of progress toward a desired goal or behavior. (Woolfolk Glossary, p. 663)",
+          "koreanContextGuide": "과제분석은 복잡한 목표 행동을 위계적인 작은 하위 단계로 쪼개는 절차이며, 조형은 목표 행동이 학생의 현재 행동 레퍼토리에 전혀 없을 때 최종 목표에 가까워지는 점진적 접근 단계마다 차별강화하여 행동을 형성하는 기법이다. (현장 적용: 40분 내내 자리를 이탈하는 초등 2학년 학생에게 처음부터 40분 착석을 요구하는 대신, 5분 착석 → 10분 착석 → 15분 착석 후 과제 1문제 풀이 순으로 기준을 점진적으로 높여가며 강화한다.)"
+        },
+        {
+          "id": "mod3-fc-shaping-task-analysis-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 291",
+          "verbatimExcerpt": "To use shaping, the teacher must take the final complex behavior the student is expected to master and break it down into a number of small, manageable steps. One approach that identifies the small steps is task analysis, originally developed by R. B. Miller (1962) to help the armed services train personnel. Miller’s system begins with a definition of the final performance requirement—what the trainee (or student) must be able to do at the end of the program or unit. Then, the steps that will lead to the final goal are specified. The procedure simply breaks skills and processes down into subskills and subprocesses—small steps to success.",
+          "highlightQuotes": [
+            "One approach that identifies the small steps is task analysis, originally developed by R.",
+            "To use shaping, the teacher must take the final complex behavior the student is expected to master and break it down into a number of small, manageable steps."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "과제분석은 복잡한 목표 행동을 위계적인 작은 하위 단계로 쪼개는 절차이며, 조형은 목표 행동이 학생의 현재 행동 레퍼토리에 전혀 없을 때 최종 목표에 가까워지는 점진적 접근 단계마다 차별강화하여 행동을 형성하는 기법이다. (현장 적용: 40분 내내 자리를 이탈하는 초등 2학년 학생에게 처음부터 40분 착석을 요구하는 대신, 5분 착석 → 10분 착석 → 15분 착석 후 과제 1문제 풀이 순으로 기준을 점진적으로 높여가며 강화한다.)"
+        }
+      ]
+    },
+    "mod3-fc-extinction-burst": {
+      "nodeId": "mod3-fc-extinction-burst",
+      "moduleId": "mod3",
+      "nodeKind": "flashcard",
+      "titleKo": "소거와 소거 폭발",
+      "titleEn": "Extinction & Extinction Burst",
+      "sourceCitation": "Woolfolk p. 286 · Seifert & Sutton p. 32",
+      "excerpts": [
+        {
+          "id": "mod3-fc-extinction-burst-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Operant Conditioning: Trying New Responses",
+          "pageLabel": "p. 286",
+          "verbatimExcerpt": "EXTINCTION. In classical conditioning, the CR is extinguished (disappears) when the CS appears, but the US does not follow (sound, but no food). In operant conditioning, a person or an animal will not persist in a certain behavior if the usual reinforcer is withheld long enough. The behavior will eventually be extinguished (stop). For example, if you repeatedly e-mail a professor but never get a reply, you may give up. Removal of reinforcement altogether leads to extinction. The process may take a while, however, as you know if you have tried to extinguish a child’s tantrums by withholding your attention. Often the child wins—because you give up ignoring her—and instead of extinction, intermittent reinforcement occurs. This, of course, may encourage even more persistent tantrums in the future.",
+          "highlightQuotes": [
+            "Often the child wins—because you give up ignoring her—and instead of extinction, intermittent reinforcement occurs.",
+            "In classical conditioning, the CR is extinguished (disappears) when the CS appears, but the US does not follow (sound, but no food)."
+          ],
+          "glossaryEntry": "Reinforcement: Use of consequences to strengthen behavior. (Woolfolk Glossary, p. 662)",
+          "koreanContextGuide": "소거는 문제행동을 유지하던 강화 유관을 완전히 차단하여 행동을 줄이는 기법이며, 소거 폭발은 소거 도입 직후 학생이 기존 보상을 얻어내기 위해 일시적으로 문제행동의 빈도·강도·공격성을 급격히 높이는 현상이다. (현장 적용: 교사의 관심을 끌기 위해 소리 지르는 행동을 계획적으로 무시(소거)하기 시작하자 첫 3일간 소리 지르기가 더 커지는 소거 폭발이 나타났으나, 굴복하지 않고 손들기(대체행동)에만 즉각 반응하여 1주일 뒤 소음을 소거시켰다.)"
+        },
+        {
+          "id": "mod3-fc-extinction-burst-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 2 · The Learning Process",
+          "sectionHeading": "Cue Not applicable Stimulus prior to the operant that",
+          "pageLabel": "p. 32",
+          "verbatimExcerpt": "In both respondent and operant conditioning, extinction refers to the disappearance of “something”. In operant conditioning, what disappears is the operant behavior because of a lack of reinforcement. A student who stops receiving gold stars or compliments for prolific reading of library books, for example, may extinguish (i.e. decrease or stop) book-reading behavior. In respondent conditioning, on the other hand, what disappears is association between the conditioned stimulus (the CS) and the conditioned response (CR). If you stop smiling at a student, then the student may extinguish her association between you and her pleasurable response to your smile, or between your classroom and the student’s pleasurable response to your smile.",
+          "highlightQuotes": [
+            "In both respondent and operant conditioning, extinction refers to the disappearance of “something”.",
+            "In operant conditioning, what disappears is the operant behavior because of a lack of reinforcement."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "소거는 문제행동을 유지하던 강화 유관을 완전히 차단하여 행동을 줄이는 기법이며, 소거 폭발은 소거 도입 직후 학생이 기존 보상을 얻어내기 위해 일시적으로 문제행동의 빈도·강도·공격성을 급격히 높이는 현상이다."
+        }
+      ]
+    },
+    "mod3-fc-differential-reinforcement": {
+      "nodeId": "mod3-fc-differential-reinforcement",
+      "moduleId": "mod3",
+      "nodeKind": "flashcard",
+      "titleKo": "차별강화 (대체행동·상반행동·타행동 차별강화)",
+      "titleEn": "Differential Reinforcement (DRA / DRI / DRO)",
+      "sourceCitation": "Woolfolk p. 289 · Woolfolk p. 292",
+      "excerpts": [
+        {
+          "id": "mod3-fc-differential-reinforcement-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Putting It All Together To Apply Operant Conditioning: Applied Behavior Analysis",
+          "pageLabel": "p. 289",
+          "verbatimExcerpt": "REINFORCING WITH TEACHER ATTENTION. Many psychologists advise teachers to “accentuate the positive”—praise students for good behavior, while ignoring misbehavior. Some researchers believe that “the systematic application of praise and attention may be the most powerful motivational and classroom management tool available to teachers” (Alber & Heward, 1997, p. 277; Alber & Heward, 2000). A related strategy is differential reinforcement, or ignoring inappropriate behaviors, while being sure to reinforce appropriate behaviors as soon as they occur. For example, if a student is prone to making irrelevant comments (“When is the game this Friday?”), you should ignore the off-task comment, but recognize a task-related contribution as soon as it occurs (Landrum & Kauffman, 2006).",
+          "highlightQuotes": [
+            "A related strategy is differential reinforcement, or ignoring inappropriate behaviors, while being sure to reinforce appropriate behaviors as soon as they occur.",
+            "REINFORCING WITH TEACHER ATTENTION."
+          ],
+          "glossaryEntry": "Positive practice: Practicing correct responses immediately after errors. (Woolfolk Glossary, p. 661)",
+          "koreanContextGuide": "문제행동에는 강화를 철회(소거)하면서 동시에 바람직한 대체행동(DRA), 문제행동과 물리적으로 동시에 일어날 수 없는 상반행동(DRI), 또는 일정 시간 문제행동이 없었던 상태(DRO)를 집중적으로 정적 강화하는 기법. (현장 적용: 수업 중 돌아다니는 행동(자리 이탈)을 줄이기 위해 의자에 엉덩이를 붙이고 바르게 앉아 있는 상반행동(DRI)과 발언권 카드를 드는 대체행동(DRA)에 즉각 칭찬 스티커를 부여한다.)"
+        },
+        {
+          "id": "mod3-fc-differential-reinforcement-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 292",
+          "verbatimExcerpt": "POSITIVE PRACTICE. In positive practice, students replace one behavior with another. This approach is especially appropriate for dealing with academic errors. When students make a mistake, they must correct it as soon as possible and practice the correct response. The same principle can be applied when students break classroom rules. Instead of being punished, the student might be required to practice the correct alternative action; for example, entering the room and immediately putting backpacks in assigned places. This process sometimes is called positive practice overcorrection because the correct behavior is practiced until it becomes almost automatic (G. A. Cole, Montgomery, Wilson, & Milan, 2000; Marvin, Rapp, Stenske, Rojas, Swanson, & Bartlett, 2010).",
+          "highlightQuotes": [
+            "This process sometimes is called positive practice overcorrection because the correct behavior is practiced until it becomes almost automatic (G.",
+            "In positive practice, students replace one behavior with another."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "문제행동에는 강화를 철회(소거)하면서 동시에 바람직한 대체행동(DRA), 문제행동과 물리적으로 동시에 일어날 수 없는 상반행동(DRI), 또는 일정 시간 문제행동이 없었던 상태(DRO)를 집중적으로 정적 강화하는 기법. (현장 적용: 수업 중 돌아다니는 행동(자리 이탈)을 줄이기 위해 의자에 엉덩이를 붙이고 바르게 앉아 있는 상반행동(DRI)과 발언권 카드를 드는 대체행동(DRA)에 즉각 칭찬 스티커를 부여한다.)"
+        }
+      ]
+    },
+    "mod3-fc-fba": {
+      "nodeId": "mod3-fc-fba",
+      "moduleId": "mod3",
+      "nodeKind": "flashcard",
+      "titleKo": "기능적 행동평가와 A-B-C 관찰",
+      "titleEn": "Functional Behavioral Assessment (FBA: A-B-C Analysis)",
+      "sourceCitation": "Woolfolk p. 300 · Woolfolk p. 282",
+      "excerpts": [
+        {
+          "id": "mod3-fc-fba-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Contemporary Applications: Functional Behavioral Assessment, Positive Behavior Supports, And Self-Management",
+          "pageLabel": "p. 300",
+          "verbatimExcerpt": "The process of understanding the “why” of a problem behavior is known as functional behavioral assessment (FBA). Using a wide range of procedures to map the A–B–Cs of the situation (antecedents– behaviors–consequences), teachers try to identify the reason for the behavior (Barnhill, 2005). Figure 7.4 summarizes the possible functions of many school behaviors.",
+          "highlightQuotes": [
+            "Using a wide range of procedures to map the A–B–Cs of the situation (antecedents– behaviors–consequences), teachers try to identify the reason for the behavior (Barnhill, 2005).",
+            "The process of understanding the “why” of a problem behavior is known as functional behavioral assessment (FBA)."
+          ],
+          "glossaryEntry": "Functional behavioral assessment (FBA): Procedures used to obtain information about antecedents, behaviors, and consequences to determine the reason or function of the behavior. (Woolfolk Glossary, p. 658)",
+          "koreanContextGuide": "문제행동 전후의 선행사건(Antecedent)-행동(Behavior)-후속결과(Consequence) 맥락을 체계적으로 관찰·기록하여, 해당 행동이 수행하는 4대 기능(관심 획득, 실물 획득, 과제/혐오 회피, 감각 자극)을 규명하는 증거기반 평가 절차. (현장 적용: 모둠 활동 시간마다 친구의 학용품을 빼앗고 시비를 거는 행동을 A-B-C로 기록한 결과, 내면의 반사회적 성향 때문이 아니라 또래 집단에 끼고 싶은 '사회적 관심 획득' 기능이 미숙하게 표출된 것임을 밝혀낸다.)"
+        },
+        {
+          "id": "mod3-fc-fba-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Operant Conditioning: Trying New Responses",
+          "pageLabel": "p. 282",
+          "verbatimExcerpt": "Behavior, like response or action, is simply a word for what a person does in a particular situation. Conceptually, we may think of a behavior as sandwiched between two sets of environmental influences: those that precede it (its antecedents) and those that follow it (its consequences) (Skinner, 1950). This relationship can be shown very simply as antecedent–behavior–consequence, or A–B–C (Kazdin, 2008). As behavior is ongoing, a given consequence becomes an antecedent for the next A–B–C sequence. Research in operant conditioning shows that operant behavior can be altered by changes in the antecedents, the consequences, or both. Early work focused on consequences, often using rats or pigeons as subjects.",
+          "highlightQuotes": [
+            "Conceptually, we may think of a behavior as sandwiched between two sets of environmental influences: those that precede it (its antecedents) and those that follow it (its consequences) (Skinner, 1950).",
+            "Research in operant conditioning shows that operant behavior can be altered by changes in the antecedents, the consequences, or both."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "문제행동 전후의 선행사건(Antecedent)-행동(Behavior)-후속결과(Consequence) 맥락을 체계적으로 관찰·기록하여, 해당 행동이 수행하는 4대 기능(관심 획득, 실물 획득, 과제/혐오 회피, 감각 자극)을 규명하는 증거기반 평가 절차. (현장 적용: 모둠 활동 시간마다 친구의 학용품을 빼앗고 시비를 거는 행동을 A-B-C로 기록한 결과, 내면의 반사회적 성향 때문이 아니라 또래 집단에 끼고 싶은 '사회적 관심 획득' 기능이 미숙하게 표출된 것임을 밝혀낸다.)"
+        }
+      ]
+    },
+    "mod3-fc-precorrection": {
+      "nodeId": "mod3-fc-precorrection",
+      "moduleId": "mod3",
+      "nodeKind": "flashcard",
+      "titleKo": "사전교정 (선행사건 수정)",
+      "titleEn": "Precorrection (Antecedent Modification)",
+      "sourceCitation": "Woolfolk p. 287 · Seifert & Sutton p. 139",
+      "excerpts": [
+        {
+          "id": "mod3-fc-precorrection-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Operant Conditioning: Trying New Responses",
+          "pageLabel": "p. 287",
+          "verbatimExcerpt": "CUEING. By definition, cueing is the act of providing an antecedent stimulus just before a specific behavior is supposed to take place. Cueing is particularly useful in setting the stage for behaviors that must occur at a given time but are easily forgotten. In working with young people, teachers often find themselves correcting behaviors after the fact, asking students, “When are you going to start remembering to . . . ?” These reminders often lead to irritation. The mistake is already made, and the young person is left with only two choices: to promise to try harder or to think, “Why don’t you leave me alone?” Neither response is very satisfying. Presenting a nonjudgmental cue can help prevent such negative confrontations.",
+          "highlightQuotes": [
+            "By definition, cueing is the act of providing an antecedent stimulus just before a specific behavior is supposed to take place.",
+            "Cueing is particularly useful in setting the stage for behaviors that must occur at a given time but are easily forgotten."
+          ],
+          "glossaryEntry": "Precorrection: A tool for positive behavior support that involves identifying the context for a student’s misbehavior, clearly specifying the alternative expected behavior, modifying the situation to make the problem behavior less likely, then rehearsing the expected positive (Woolfolk Glossary, p. 661)",
+          "koreanContextGuide": "문제행동이 반복해서 발생하는 예측 가능한 시간·장소·전환 상황(선행사건 A) 직전에, 기대 행동을 미리 구체적으로 상기·연습시키고 환경적 단서를 조정하여 문제행동 발생 자체를 선제적으로 예방하는 전략. (현장 적용: 체육관 이동 수업 때마다 복도에서 뛰고 장난치는 학생에게 이동 줄을 서기 직전 '복도 보행 안전 대장' 역할을 부여하고 기대 행동 2가지를 구두로 먼저 리허설하게 한다.)"
+        },
+        {
+          "id": "mod3-fc-precorrection-s-1",
+          "bookId": "seifert",
+          "bookTitle": "Seifert & Sutton · Educational Psychology (Open Textbook)",
+          "chapterLabel": "Chapter 7 · Classroom Management and the Learning Environment",
+          "sectionHeading": "Chapter 7 · Classroom Management and the Learning Environment",
+          "pageLabel": "p. 139",
+          "verbatimExcerpt": "Another reason that managing the environment is challenging is because a teacher can not predict everything that will happen in a class. A well-planned lesson may fall flat on its face, or take less time than expected, and you find yourself improvising to fill class time. On the other hand an unplanned moment may become a wonderful, sustained exchange among students, and prompt you to drop previous plans and follow the flow of discussion. Interruptions happen continually: a fire drill, a drop-in visit from another teacher or the principal, a call on the intercom from the office. An activity may indeed turn out well, but also rather differently than you intended; you therefore have to decide how, if at all, to adjust the next day's lesson to allow for this surprise.",
+          "highlightQuotes": [
+            "On the other hand an unplanned moment may become a wonderful, sustained exchange among students, and prompt you to drop previous plans and follow the flow of discussion."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "문제행동이 반복해서 발생하는 예측 가능한 시간·장소·전환 상황(선행사건 A) 직전에, 기대 행동을 미리 구체적으로 상기·연습시키고 환경적 단서를 조정하여 문제행동 발생 자체를 선제적으로 예방하는 전략."
+        }
+      ]
+    },
+    "mod3-fc-fct": {
+      "nodeId": "mod3-fc-fct",
+      "moduleId": "mod3",
+      "nodeKind": "flashcard",
+      "titleKo": "기능적 의사소통 훈련",
+      "titleEn": "Functional Communication Training (FCT)",
+      "sourceCitation": "Woolfolk p. 301 · Woolfolk p. 301",
+      "excerpts": [
+        {
+          "id": "mod3-fc-fct-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Contemporary Applications: Functional Behavioral Assessment, Positive Behavior Supports, And Self-Management",
+          "pageLabel": "p. 301",
+          "verbatimExcerpt": "The Individuals with Disabilities Education Act (IDEA, 2004) discussed in Chapter 4 requires PBS for students with disabilities and those at risk for special education placement. Positive behavior supports are the actual interventions designed to replace problem behaviors with new actions that serve the same purpose for the student.",
+          "highlightQuotes": [
+            "Positive behavior supports are the actual interventions designed to replace problem behaviors with new actions that serve the same purpose for the student."
+          ],
+          "glossaryEntry": "Positive behavior supports (PBS): Interventions designed to replace problem behaviors with new actions that serve the same purpose for the student. (Woolfolk Glossary, p. 661)",
+          "koreanContextGuide": "기능적 행동평가(FBA)로 밝혀진 문제행동의 기능(관심 요청, 도움 요청, 휴식/회피 요청 등)과 동일한 목적을 달성하면서도 사회적으로 수용 가능하고 노력이 적게 드는 의사소통 대체행동(언어 표현, 신호 카드 등)을 가르치는 기법. (현장 적용: 어려운 수학 문제가 나오면 시험지를 찢으며 울던 초등학생에게 책상 모서리의 [선생님 힌트 요청 카드(노란색)]와 [2분 숨고르기 카드(초록색)]를 뒤집어 의사소통하는 법을 훈련시킨다.)"
+        },
+        {
+          "id": "mod3-fc-fct-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Contemporary Applications: Functional Behavioral Assessment, Positive Behavior Supports, And Self-Management",
+          "pageLabel": "p. 301",
+          "verbatimExcerpt": "Positive behavior supports can help students with disabilities succeed in inclusion classrooms. For example, the disruptive behavior of a 5-year-old boy with an intellectual disability was nearly eliminated in a relatively short time through a PBS intervention that was based on an FBA conducted by the general education teaching staff and the special education teacher. The intervention included making sure the tasks assigned were at the right difficulty level, providing assistance with these tasks, teaching the student how to request assistance, and teaching the student how to request a break from assigned work (Soodak & McCarthy, 2006; Umbreit, 1995).",
+          "highlightQuotes": [
+            "Positive behavior supports can help students with disabilities succeed in inclusion classrooms.",
+            "The intervention included making sure the tasks assigned were at the right difficulty level, providing assistance with these tasks, teaching the student how to request assistance, and teaching the student how to request a break from assigned work (Soodak & McCarthy, 2006; Umbreit, 1995)."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "기능적 행동평가(FBA)로 밝혀진 문제행동의 기능(관심 요청, 도움 요청, 휴식/회피 요청 등)과 동일한 목적을 달성하면서도 사회적으로 수용 가능하고 노력이 적게 드는 의사소통 대체행동(언어 표현, 신호 카드 등)을 가르치는 기법. (현장 적용: 어려운 수학 문제가 나오면 시험지를 찢으며 울던 초등학생에게 책상 모서리의 [선생님 힌트 요청 카드(노란색)]와 [2분 숨고르기 카드(초록색)]를 뒤집어 의사소통하는 법을 훈련시킨다.)"
+        }
+      ]
+    },
+    "mod3-fc-token-response-cost": {
+      "nodeId": "mod3-fc-token-response-cost",
+      "moduleId": "mod3",
+      "nodeKind": "flashcard",
+      "titleKo": "토큰 강화 체제와 반응대가",
+      "titleEn": "Token Economy & Response Cost",
+      "sourceCitation": "Woolfolk p. 294 · Woolfolk p. 294",
+      "excerpts": [
+        {
+          "id": "mod3-fc-token-response-cost-w-1",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 294",
+          "verbatimExcerpt": "Often, it is difficult to provide positive consequences for all the students who deserve them. A token reinforcement system can help solve this problem by allowing all students to earn tokens for both academic work and positive classroom behavior. The tokens may be points, checks, holes punched in a card, chips, play money, or anything else that is easily identified as the student’s property. Periodically, the students exchange the tokens they have earned for some desired reward (Alberto & Troutman, 2012; Kazdin, 2001).",
+          "highlightQuotes": [
+            "A token reinforcement system can help solve this problem by allowing all students to earn tokens for both academic work and positive classroom behavior.",
+            "The tokens may be points, checks, holes punched in a card, chips, play money, or anything else that is easily identified as the student’s property."
+          ],
+          "glossaryEntry": "Token reinforcement system: System in which tokens earned for academic work and positive classroom behavior can be exchanged for some desired reward. (Woolfolk Glossary, p. 664)",
+          "koreanContextGuide": "목표 행동 수행 시 즉각 상징적 토큰을 부여해 추후 백업 강화물과 교환하게 하는 체계가 토큰 강화이며, 문제행동 발생 시 보유한 토큰을 일정량 차감하는 박탈 벌 기법이 반응대가이다. (현장 적용: 학급 토큰 경제 운영 시 반응대가(감점) 비율이 정적 강화(득점)보다 높아지면 학생이 파산 상태에 빠져 체제를 포기하므로, 반드시 긍정적 강화와 교정 피드백의 비율을 최소 4:1 이상으로 유지한다.)"
+        },
+        {
+          "id": "mod3-fc-token-response-cost-w-2",
+          "bookId": "woolfolk",
+          "bookTitle": "Woolfolk · Educational Psychology (13th Global Ed.)",
+          "chapterLabel": "Chapter 7 · Behavioral Views Of Learning",
+          "sectionHeading": "Guidelines: Applying Operant Conditioning: Using Praise Appropriately",
+          "pageLabel": "p. 294",
+          "verbatimExcerpt": "STOP & THINK Have you ever participated in a program where you earned points or credits that you could exchange for a reward? Are you a member of a frequent flyer club, or do you get points on your credit card? Do you get one free coffee for every 10 coffee purchases or a free smoothie when you fill a punch card? Does being a part of such a program affect your buying habits? How? I know I pay for everything I can with my credit card to get the points and always try to fly on one airline for the same reason. I am participating in a token reinforcement system.",
+          "highlightQuotes": [
+            "STOP & THINK Have you ever participated in a program where you earned points or credits that you could exchange for a reward?",
+            "I am participating in a token reinforcement system."
+          ],
+          "glossaryEntry": null,
+          "koreanContextGuide": "목표 행동 수행 시 즉각 상징적 토큰을 부여해 추후 백업 강화물과 교환하게 하는 체계가 토큰 강화이며, 문제행동 발생 시 보유한 토큰을 일정량 차감하는 박탈 벌 기법이 반응대가이다. (현장 적용: 학급 토큰 경제 운영 시 반응대가(감점) 비율이 정적 강화(득점)보다 높아지면 학생이 파산 상태에 빠져 체제를 포기하므로, 반드시 긍정적 강화와 교정 피드백의 비율을 최소 4:1 이상으로 유지한다.)"
+        }
+      ]
+    }
+  }
+}

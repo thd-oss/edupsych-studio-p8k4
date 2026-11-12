@@ -1,6 +1,7 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   Bookmark,
+  BookOpen,
   BookOpenCheck,
   CheckCircle2,
   Eye,
@@ -41,6 +42,7 @@ interface InterviewDefenseTabProps {
     item: InterviewQuestion
   ) => Promise<void>;
   onJumpToConceptContext: (nodeId: string) => void;
+  onOpenTextbookPassage: (nodeId: string) => void;
 }
 
 const DEFAULT_TIMER_SECONDS = 90;
@@ -58,7 +60,8 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
   onToggleBookmark,
   onSaveDraft,
   onCreateQuestion,
-  onJumpToConceptContext
+  onJumpToConceptContext,
+  onOpenTextbookPassage
 }) => {
   const baseId = useId();
 
@@ -431,6 +434,16 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
                     >
                       <BookOpenCheck className="w-3.5 h-3.5 shrink-0" />
                       <span>관련 개념학습 보기</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      aria-haspopup="dialog"
+                      onClick={() => onOpenTextbookPassage(q.id)}
+                      className="inline-flex min-h-[32px] items-center gap-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 px-2.5 py-1 text-xs font-extrabold text-amber-950 transition-colors"
+                    >
+                      <BookOpen className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                      <span>원문 발췌</span>
                     </button>
 
                     <button
