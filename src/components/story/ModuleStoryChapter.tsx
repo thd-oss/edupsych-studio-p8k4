@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   ArrowRight,
+  ArrowUpRight,
   Bookmark,
   BookOpen,
   Brain,
@@ -226,14 +227,14 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
             </p>
           </div>
 
-          {/* 모듈 간 전이 브릿지 캡슐 */}
+          {/* 모듈 간 전이 브릿지 구조화 카드 (Concentric Radius + keep-all 조판) */}
           {moduleBridgeEdges.length > 0 && (
-            <div className="pt-4 border-t border-black/[0.06] space-y-2">
+            <div className="pt-4 border-t border-black/[0.06] space-y-2.5">
               <span className="text-xs font-semibold text-[#6e6e73] flex items-center gap-1.5">
                 <Network className="w-3.5 h-3.5 text-[var(--accent-solid)] shrink-0" />
                 <span>타 모듈과 연결되는 전이 브릿지 ({moduleBridgeEdges.length})</span>
               </span>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                 {moduleBridgeEdges.map((edge) => {
                   const isOutgoing = nodeMap[edge.source]?.moduleId === mod.id;
                   const otherNodeId = isOutgoing ? edge.target : edge.source;
@@ -247,14 +248,19 @@ export const ModuleStoryChapter: React.FC<ModuleStoryChapterProps> = ({
                         onJumpToStoryNode(otherNode.moduleId, otherNode.id)
                       }
                       title={edge.rationaleKo}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-[#f5f5f7] hover:bg-[var(--accent-subtle)] px-3 py-1.5 text-xs font-semibold text-[#1d1d1f] hover:text-[var(--accent-solid)] text-left transition-colors"
+                      className="group rounded-[16px] bg-[#f5f5f7] hover:bg-[var(--accent-subtle)] border border-black/[0.05] hover:border-[#0071e3]/20 px-4 py-3 text-left flex flex-col gap-1.5 transition-colors"
                     >
-                      <span className="text-[11px] font-bold text-[var(--accent-solid)]">
-                        {isOutgoing ? '심화 전이' : '선수 기반'}
-                      </span>
-                      <span>{otherNode.titleKo}</span>
-                      <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-[#6e6e73] uppercase tabular-nums">
-                        {otherNode.moduleId}
+                      <div className="flex items-center justify-between gap-2 w-full">
+                        <span className="shrink-0 whitespace-nowrap inline-flex items-center rounded-full bg-white px-2.5 py-0.5 text-[11px] font-bold text-[var(--accent-solid)] shadow-2xs">
+                          {isOutgoing ? '심화 전이' : '선수 기반'}
+                        </span>
+                        <span className="shrink-0 whitespace-nowrap inline-flex items-center gap-0.5 rounded-full bg-white px-2.5 py-0.5 text-[10.5px] font-bold text-[#6e6e73] group-hover:text-[var(--accent-solid)] uppercase tabular-nums">
+                          <span>{otherNode.moduleId}</span>
+                          <ArrowUpRight className="w-3 h-3 shrink-0" aria-hidden="true" />
+                        </span>
+                      </div>
+                      <span className="text-xs sm:text-[13px] font-semibold text-[#1d1d1f] group-hover:text-[var(--accent-solid)] leading-snug korean-keep-all min-w-0">
+                        {otherNode.titleKo}
                       </span>
                     </button>
                   );

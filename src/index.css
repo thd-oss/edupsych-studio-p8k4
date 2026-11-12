@@ -103,7 +103,8 @@
   h4,
   h5,
   h6,
-  .keep-words {
+  .keep-words,
+  .korean-keep-all {
     letter-spacing: -0.018em;
     line-height: 1.36;
     word-break: keep-all;
@@ -365,6 +366,55 @@
 }
 
 .comparison-carousel-track > * {
+  flex: 0 0 100%;
+  min-inline-size: 0;
+  scroll-snap-align: center;
+}
+
+/* 플로팅 도식 카드 데크 모달(<dialog class="visual-deck-dialog">) & 가로 스와이프 트랙 (modern-web-guidance: dialog, carousel) */
+dialog.visual-deck-dialog {
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  scrollbar-width: none;
+  width: min(94vw, 42.5rem);
+  max-width: min(94vw, 42.5rem);
+  max-height: min(88dvh, 48rem);
+}
+
+dialog.visual-deck-dialog::-webkit-scrollbar {
+  display: none;
+}
+
+dialog.visual-deck-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.visual-deck-track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  touch-action: manipulation;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.visual-deck-track::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .visual-deck-track {
+    scroll-behavior: smooth;
+  }
+}
+
+.visual-deck-track > * {
   flex: 0 0 100%;
   min-inline-size: 0;
   scroll-snap-align: center;

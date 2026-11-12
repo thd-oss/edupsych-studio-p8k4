@@ -447,27 +447,44 @@ async function handleRequest(req, res) {
         const model = String(body.model || 'gemini-3.8-flash');
         const systemInstruction = String(body.systemInstruction || '');
         const input = String(body.input || '');
-        const schema = body.schema ?? {};
+        const hasValidSchema =
+          body.schema &&
+          typeof body.schema === 'object' &&
+          Object.keys(body.schema).length > 0;
         const enableGoogleSearch = Boolean(body.enableGoogleSearch);
 
-        const ai = new GoogleGenAI({ apiKey: serverKey });
-        const interaction = await ai.interactions.create({
-          model,
-          system_instruction: systemInstruction,
-          input,
-          ...(enableGoogleSearch ? { tools: [{ type: 'google_search' }] } : {}),
-          response_format: {
-            type: 'text',
-            mime_type: 'application/json',
-            schema
-          },
-          store: false
-        });
+        try {
+          const ai = new GoogleGenAI({ apiKey: serverKey });
+          const interaction = await ai.interactions.create({
+            model,
+            system_instruction: systemInstruction,
+            input,
+            ...(enableGoogleSearch ? { tools: [{ type: 'google_search' }] } : {}),
+            ...(hasValidSchema
+              ? {
+                  response_format: {
+                    type: 'text',
+                    mime_type: 'application/json',
+                    schema: body.schema
+                  }
+                }
+              : {}),
+            store: false
+          });
 
-        sendJson(res, 200, {
-          outputText: interaction.output_text ?? '',
-          steps: interaction.steps ?? []
-        });
+          sendJson(res, 200, {
+            outputText: interaction.output_text ?? '',
+            steps: interaction.steps ?? []
+          });
+        } catch (aiErr) {
+          const statusCode =
+            typeof aiErr?.statusCode === 'number' ? aiErr.statusCode : 500;
+          sendJson(res, statusCode, {
+            statusCode,
+            error: aiErr instanceof Error ? aiErr.message : 'AI Proxy Error',
+            errorBody: aiErr?.body ?? null
+          });
+        }
         return;
       }
 

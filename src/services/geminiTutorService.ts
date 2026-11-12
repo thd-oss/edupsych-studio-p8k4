@@ -1,5 +1,6 @@
 import {
   GeminiTutorModelId,
+  NormalizedTutorApiError,
   TutorChatMessage,
   TutorCoverageStatus,
   TutorPassOneSchemaPayload,
@@ -20,6 +21,14 @@ export const DEFAULT_GEMINI_TUTOR_MODEL: GeminiTutorModelId = 'gemini-3.8-flash'
 
 const MAX_RECENT_HISTORY_TURNS = 4;
 const MAX_WEB_SOURCES_DISPLAY = 5;
+const MAX_KEY_ACADEMIC_POINTS = 4;
+const KEY_PING_MAX_OUTPUT_TOKENS = 8;
+
+const HTTP_BAD_REQUEST = 400;
+const HTTP_UNAUTHORIZED = 401;
+const HTTP_FORBIDDEN = 403;
+const HTTP_NOT_FOUND = 404;
+const HTTP_TOO_MANY_REQUESTS = 429;
 
 export const GEMINI_TUTOR_MODEL_OPTIONS: Array<{
   id: GeminiTutorModelId;
@@ -42,6 +51,252 @@ export const GEMINI_TUTOR_MODEL_OPTIONS: Array<{
     description: '복합 이론 비교 및 압박 면접 방어 논리 정교화'
   }
 ];
+
+export class TutorServiceError extends Error {
+  public readonly normalized: NormalizedTutorApiError;
+
+  constructor(normalized: NormalizedTutorApiError) {
+    super(`${normalized.titleKo}: ${normalized.messageKo}`);
+    this.name = 'TutorServiceError';
+    this.normalized = normalized;
+  }
+}
+
+interface GoogleRpcErrorDetail {
+  '@type'?: string;
+  reason?: string;
+  domain?: string;
+  metadata?: Record<string, string>;
+}
+
+interface GoogleRpcErrorBody {
+  code?: number;
+  message?: string;
+  status?: string;
+  details?: GoogleRpcErrorDetail[];
+}
+
+export function sanitizeGeminiApiKey(raw: string): string {
+  return raw
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    .replace(/^['"`]+|['"`]+$/g, '')
+    .replace(/\s+/g, '')
+    .trim();
+}
+
+function extractRpcErrorEnvelope(rawBody: unknown): GoogleRpcErrorBody | null {
+  if (!rawBody) return null;
+
+  let parsed: unknown = rawBody;
+  if (typeof rawBody === 'string') {
+    const trimmed = rawBody.trim();
+    if (!trimmed) return null;
+    try {
+      parsed = JSON.parse(trimmed);
+    } catch {
+      return null;
+    }
+  }
+
+  // Google /v1beta/interactions 엔드포인트는 오류를 최상위 JSON 배열 [{ error: {...} }]로 반환함
+  if (Array.isArray(parsed) && parsed.length > 0) {
+    const first = parsed[0] as { error?: GoogleRpcErrorBody } | undefined;
+    if (first && typeof first === 'object' && first.error) {
+      return first.error;
+    }
+  }
+
+  if (parsed && typeof parsed === 'object') {
+    const obj = parsed as {
+      error?: GoogleRpcErrorBody | string;
+      errorBody?: unknown;
+    };
+    if (obj.errorBody) {
+      const nested = extractRpcErrorEnvelope(obj.errorBody);
+      if (nested) return nested;
+    }
+    if (obj.error && typeof obj.error === 'object') {
+      return obj.error;
+    }
+  }
+
+  return null;
+}
+
+export function normalizeGeminiApiError(err: unknown): NormalizedTutorApiError {
+  if (err instanceof TutorServiceError) {
+    return err.normalized;
+  }
+
+  const sdkErr = err as {
+    statusCode?: number;
+    status?: number;
+    body?: unknown;
+    message?: string;
+    name?: string;
+  } | null;
+
+  const rpcError = extractRpcErrorEnvelope(sdkErr?.body);
+  const httpStatus =
+    typeof rpcError?.code === 'number'
+      ? rpcError.code
+      : typeof sdkErr?.statusCode === 'number'
+        ? sdkErr.statusCode
+        : typeof sdkErr?.status === 'number'
+          ? sdkErr.status
+          : null;
+
+  const rpcReason =
+    rpcError?.details?.find((d) => typeof d.reason === 'string')?.reason ??
+    rpcError?.status;
+  const rpcMessage = (rpcError?.message ?? '').trim();
+  const rawErrMessage =
+    typeof sdkErr?.message === 'string' ? sdkErr.message.trim() : '';
+
+  const combinedLower = `${rpcReason ?? ''} ${rpcMessage} ${rawErrMessage}`.toLowerCase();
+
+  // 1. API 키 누락
+  if (combinedLower.includes('키가 설정되지 않았습니다')) {
+    return {
+      code: 'API_KEY_MISSING',
+      httpStatus,
+      titleKo: 'Gemini API 키가 아직 등록되지 않았습니다',
+      messageKo: '질문을 전송하려면 먼저 개인 Gemini API 키를 연결해야 합니다.',
+      actionHintKo:
+        '상단 [API 키 설정] 버튼을 눌러 Google AI Studio에서 발급한 키(AIza...)를 저장해 주세요.',
+      requiresKeyReconfig: true,
+      suggestLiteModel: false,
+      rawReason: rpcReason
+    };
+  }
+
+  // 2. 잘못되었거나 만료·오타가 포함된 API 키 (API_KEY_INVALID)
+  if (
+    rpcReason === 'API_KEY_INVALID' ||
+    combinedLower.includes('api key not valid') ||
+    combinedLower.includes('api_key_invalid') ||
+    combinedLower.includes('api key expired') ||
+    httpStatus === HTTP_UNAUTHORIZED
+  ) {
+    return {
+      code: 'API_KEY_INVALID',
+      httpStatus: httpStatus ?? HTTP_BAD_REQUEST,
+      titleKo: '유효하지 않은 Gemini API 키입니다',
+      messageKo:
+        '현재 브라우저에 저장된 API 키가 오타·공백을 포함하고 있거나 Google AI Studio에서 비활성화·만료되었습니다.',
+      actionHintKo:
+        'Google AI Studio(aistudio.google.com/apikey)에서 새 API 키를 복사한 뒤 [API 키 설정]에 다시 저장해 주세요.',
+      requiresKeyReconfig: true,
+      suggestLiteModel: false,
+      rawReason: rpcReason ?? 'API_KEY_INVALID'
+    };
+  }
+
+  // 3. HTTP 리퍼러(웹사이트 도메인) 제한 또는 서비스 차단 (403 PERMISSION_DENIED)
+  if (
+    rpcReason === 'API_KEY_HTTP_REFERRER_BLOCKED' ||
+    rpcReason === 'API_KEY_SERVICE_BLOCKED' ||
+    combinedLower.includes('referer') ||
+    combinedLower.includes('referrer') ||
+    httpStatus === HTTP_FORBIDDEN
+  ) {
+    return {
+      code: 'REFERRER_RESTRICTED',
+      httpStatus: httpStatus ?? HTTP_FORBIDDEN,
+      titleKo: 'API 키의 도메인(HTTP 리퍼러) 제한으로 차단되었습니다',
+      messageKo:
+        'Google Cloud / AI Studio에서 이 API 키에 웹사이트 제한이 설정되어 현재 도메인에서의 호출이 거부되었습니다.',
+      actionHintKo:
+        'API 키 설정에서 애플리케이션 제한을 [없음]으로 두거나 허용 웹사이트에 https://thd-oss.github.io/* 를 추가해 주세요.',
+      requiresKeyReconfig: true,
+      suggestLiteModel: false,
+      rawReason: rpcReason
+    };
+  }
+
+  // 4. 할당량 초과 / 분당 호출 한도 (429 RESOURCE_EXHAUSTED)
+  if (
+    httpStatus === HTTP_TOO_MANY_REQUESTS ||
+    rpcError?.status === 'RESOURCE_EXHAUSTED' ||
+    combinedLower.includes('quota') ||
+    combinedLower.includes('rate limit') ||
+    combinedLower.includes('resource_exhausted')
+  ) {
+    return {
+      code: 'QUOTA_EXCEEDED',
+      httpStatus: httpStatus ?? HTTP_TOO_MANY_REQUESTS,
+      titleKo: 'API 호출 한도(할당량)를 초과했습니다',
+      messageKo:
+        '무료 티어 분당/일일 요청 한도에 도달했거나 선택한 모델의 잔여 쿼터가 부족합니다.',
+      actionHintKo:
+        '잠시 후 다시 질문하거나, [API 키 설정]에서 경량 모델(Gemini 3.5 Flash-Lite)로 전환해 보세요.',
+      requiresKeyReconfig: false,
+      suggestLiteModel: true,
+      rawReason: rpcReason ?? rpcError?.status
+    };
+  }
+
+  // 5. 네트워크 단절 / 오프라인 / CORS 차단
+  if (
+    combinedLower.includes('failed to fetch') ||
+    combinedLower.includes('networkerror') ||
+    combinedLower.includes('load failed')
+  ) {
+    return {
+      code: 'NETWORK_ERROR',
+      httpStatus: null,
+      titleKo: '네트워크 연결을 확인할 수 없습니다',
+      messageKo:
+        '인터넷 연결이 불안정하거나 사내·학교 방화벽에서 Gemini API(generativelanguage.googleapis.com) 접속을 차단했습니다.',
+      actionHintKo: 'Wi-Fi 또는 모바일 데이터 연결 상태를 확인한 뒤 다시 전송해 주세요.',
+      requiresKeyReconfig: false,
+      suggestLiteModel: false
+    };
+  }
+
+  // 6. 모델 미지원 또는 요청 파라미터 오류 (400 / 404)
+  if (
+    httpStatus === HTTP_BAD_REQUEST ||
+    httpStatus === HTTP_NOT_FOUND ||
+    rpcError?.status === 'INVALID_ARGUMENT' ||
+    rpcError?.status === 'NOT_FOUND'
+  ) {
+    const cleanServerDetail = rpcMessage
+      ? ` (서버 상세: ${rpcMessage})`
+      : '';
+    return {
+      code: 'MODEL_OR_PARAM_ERROR',
+      httpStatus: httpStatus ?? HTTP_BAD_REQUEST,
+      titleKo: 'AI 모델 요청 처리 중 형식 오류가 발생했습니다',
+      messageKo: `선택한 모델 또는 API 키 권한에서 요청을 처리하지 못했습니다.${cleanServerDetail}`,
+      actionHintKo:
+        '[API 키 설정]에서 등록된 키가 정상인지 다시 확인하거나 기본 권장 모델(Gemini 3.8 Flash)로 전환해 보세요.',
+      requiresKeyReconfig: true,
+      suggestLiteModel: true,
+      rawReason: rpcReason ?? rpcError?.status
+    };
+  }
+
+  // 7. 기타 예외 (절대 빈 {"httpMeta":...} 문자열을 그대로 노출하지 않음)
+  const sanitizedFallback =
+    rpcMessage ||
+    (rawErrMessage.includes('{"httpMeta"')
+      ? 'Gemini API 서버에서 오류 응답이 반환되었습니다.'
+      : rawErrMessage) ||
+    '질문 처리 중 일시적인 오류가 발생했습니다.';
+
+  return {
+    code: 'UNKNOWN_API_ERROR',
+    httpStatus,
+    titleKo: 'AI 응답 생성에 실패했습니다',
+    messageKo: sanitizedFallback,
+    actionHintKo:
+      '상단 [API 키 설정]에서 키 연결 상태를 점검한 뒤 다시 시도해 주세요.',
+    requiresKeyReconfig: false,
+    suggestLiteModel: false,
+    rawReason: rpcReason
+  };
+}
 
 const PASS_ONE_JSON_SCHEMA: Record<string, unknown> = {
   type: 'object',
@@ -69,7 +324,8 @@ const PASS_ONE_JSON_SCHEMA: Record<string, unknown> = {
         },
         oneLineDefinition: {
           type: 'string',
-          description: '핵심 개념을 1문장으로 압축한 정의 (교재 미수록 시 교재 미수록 사실 명시)'
+          description:
+            '핵심 개념을 1문장으로 압축한 정의 (교재 미수록 시 교재 미수록 사실 명시)'
         }
       },
       required: ['termKo', 'termEn', 'oneLineDefinition']
@@ -126,23 +382,6 @@ const PASS_ONE_JSON_SCHEMA: Record<string, unknown> = {
   ]
 };
 
-const PASS_TWO_JSON_SCHEMA: Record<string, unknown> = {
-  type: 'object',
-  properties: {
-    supplementBody: {
-      type: 'string',
-      description:
-        'Google Search 학술·공신력 근거를 바탕으로 교재에 없거나 부족했던 개념·정의·비교 맥락을 명확하고 간결하게 보충 설명 (한국어, 3~5문장)'
-    },
-    keyAcademicPoints: {
-      type: 'array',
-      items: { type: 'string' },
-      description: '외부 검색으로 확인된 핵심 학술 포인트 2~3개 요약 불릿'
-    }
-  },
-  required: ['supplementBody', 'keyAcademicPoints']
-};
-
 const PASS_ONE_SYSTEM_INSTRUCTION = `당신은 학교상담·교육심리 대학원 입시 스튜디오(EduPsych Interactive Studio)의 '교재 우선 탐색 AI 튜터'입니다.
 반드시 아래의 엄격한 스키마 원칙을 준수하여 JSON으로 응답하세요:
 
@@ -154,9 +393,14 @@ const PASS_ONE_SYSTEM_INSTRUCTION = `당신은 학교상담·교육심리 대학
    - 질문한 용어가 <TEXTBOOK_CORPUS>와 직접 관련이 없거나 미수록 개념이면 coverageStatus = "NOT_IN_TEXTBOOK", externalSearchDirective.needed = true로 설정하고, textbookSection.summary에는 "현재 앱에 수록된 Woolfolk · Seifert & Sutton 핵심 코퍼스에는 직접 등장하지 않는 개념입니다."라고 투명하게 안내하세요.
 4. citedNodeIds에는 실제로 참조한 <PASSAGE>의 정확한 nodeId 속성값만 기입하세요.`;
 
+// Pass 2는 Google Search 도구와 JSON Schema 제약 디코딩 간 충돌(400 INVALID_ARGUMENT)을 원천 방지하기 위해
+// 스키마 제약 없이 텍스트 계약(본문 단락 + '• ' 핵심 포인트 불릿)으로 응답받아 결정론적으로 파싱합니다.
 const PASS_TWO_SYSTEM_INSTRUCTION = `당신은 교육심리학·상담심리학 전문 학술 연구 보조 AI입니다.
 사용자의 질문 중 수록 교재 코퍼스만으로는 답변할 수 없어 불가피하게 요청된 보충 영역만 Google Search 도구를 사용해 검증된 학술·전문 자료 기반으로 한국어로 명쾌하게 보충하세요.
-이미 1단계 교재 섹션에서 다룬 내용을 불필요하게 반복하지 말고, 교재에 빠져 있던 핵심 정의·학자·구분 기준을 정확히 보완하세요.`;
+이미 1단계 교재 섹션에서 다룬 내용을 불필요하게 반복하지 말고, 반드시 아래 출력 형식을 지켜 작성하세요:
+
+1. 첫 번째 단락(3~5문장): 교재에 빠져 있던 핵심 정의·대표 학자·진단/구분 기준을 자연스러운 줄글로 명확히 서술합니다(마크다운 제목 기호 # 사용 금지).
+2. 줄바꿈 후 핵심 학술 포인트 2~3개를 각각 '• ' 기호로 시작하는 한 줄 요약 불릿으로 정리합니다.`;
 
 interface RawInteractionStep {
   type?: string;
@@ -179,24 +423,27 @@ interface RawInteractionResult {
 export function loadStoredGeminiApiKey(): string {
   if (typeof window === 'undefined') return '';
   try {
-    return (window.localStorage.getItem(GEMINI_API_KEY_STORAGE_KEY) ?? '').trim();
+    return sanitizeGeminiApiKey(
+      window.localStorage.getItem(GEMINI_API_KEY_STORAGE_KEY) ?? ''
+    );
   } catch {
     return '';
   }
 }
 
-export function saveStoredGeminiApiKey(apiKey: string): void {
-  if (typeof window === 'undefined') return;
+export function saveStoredGeminiApiKey(apiKey: string): string {
+  const sanitized = sanitizeGeminiApiKey(apiKey);
+  if (typeof window === 'undefined') return sanitized;
   try {
-    const trimmed = apiKey.trim();
-    if (trimmed) {
-      window.localStorage.setItem(GEMINI_API_KEY_STORAGE_KEY, trimmed);
+    if (sanitized) {
+      window.localStorage.setItem(GEMINI_API_KEY_STORAGE_KEY, sanitized);
     } else {
       window.localStorage.removeItem(GEMINI_API_KEY_STORAGE_KEY);
     }
   } catch {
     // storage quota or private mode fallback
   }
+  return sanitized;
 }
 
 export function loadStoredGeminiModel(): GeminiTutorModelId {
@@ -237,13 +484,47 @@ export async function checkLocalServerAiStatus(): Promise<boolean> {
   }
 }
 
-async function runInteractionCall(params: {
+export async function verifyGeminiApiKeyConnection(params: {
+  apiKey: string;
+  model: GeminiTutorModelId;
+}): Promise<{ ok: true } | { ok: false; error: NormalizedTutorApiError }> {
+  const cleanKey = sanitizeGeminiApiKey(params.apiKey);
+  if (!cleanKey) {
+    return {
+      ok: false,
+      error: normalizeGeminiApiError(
+        new Error('Gemini API 키가 설정되지 않았습니다.')
+      )
+    };
+  }
+
+  try {
+    const { GoogleGenAI } = await import('@google/genai');
+    const client = new GoogleGenAI({ apiKey: cleanKey });
+    await client.interactions.create({
+      model: params.model,
+      input: 'ping',
+      generation_config: {
+        max_output_tokens: KEY_PING_MAX_OUTPUT_TOKENS
+      },
+      store: false
+    });
+    return { ok: true };
+  } catch (err) {
+    return {
+      ok: false,
+      error: normalizeGeminiApiError(err)
+    };
+  }
+}
+
+async function executeProxyOrSdkInteraction(params: {
   apiKey: string;
   useServerProxy: boolean;
   model: GeminiTutorModelId;
   systemInstruction: string;
   input: string;
-  schema: Record<string, unknown>;
+  schema: Record<string, unknown> | null;
   enableGoogleSearch: boolean;
 }): Promise<RawInteractionResult> {
   const {
@@ -256,54 +537,116 @@ async function runInteractionCall(params: {
     enableGoogleSearch
   } = params;
 
-  if (!apiKey && useServerProxy) {
-    const response = await fetch('/api/ai/interact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model,
-        systemInstruction,
-        input,
-        schema,
-        enableGoogleSearch
-      })
-    });
+  const cleanKey = sanitizeGeminiApiKey(apiKey);
+
+  if (!cleanKey && useServerProxy) {
+    let response: Response;
+    try {
+      response = await fetch('/api/ai/interact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model,
+          systemInstruction,
+          input,
+          schema,
+          enableGoogleSearch
+        })
+      });
+    } catch (netErr) {
+      throw new TutorServiceError(normalizeGeminiApiError(netErr));
+    }
+
     if (!response.ok) {
       const errPayload = (await response.json().catch(() => ({}))) as {
         error?: string;
+        errorBody?: unknown;
+        statusCode?: number;
       };
-      throw new Error(
-        errPayload.error || `로컬 AI 프록시 호출 실패 (HTTP ${response.status})`
+      throw new TutorServiceError(
+        normalizeGeminiApiError({
+          statusCode: errPayload.statusCode ?? response.status,
+          body: errPayload.errorBody ?? errPayload,
+          message:
+            errPayload.error ||
+            `로컬 AI 프록시 호출 실패 (HTTP ${response.status})`
+        })
       );
     }
     return (await response.json()) as RawInteractionResult;
   }
 
-  if (!apiKey) {
-    throw new Error(
-      'Gemini API 키가 설정되지 않았습니다. 상단 [API 키 설정]에서 개인 키를 등록해 주세요.'
+  if (!cleanKey) {
+    throw new TutorServiceError(
+      normalizeGeminiApiError(
+        new Error('Gemini API 키가 설정되지 않았습니다.')
+      )
     );
   }
 
-  const { GoogleGenAI } = await import('@google/genai');
-  const client = new GoogleGenAI({ apiKey });
-  const interaction = await client.interactions.create({
-    model,
-    system_instruction: systemInstruction,
-    input,
-    ...(enableGoogleSearch ? { tools: [{ type: 'google_search' as const }] } : {}),
-    response_format: {
-      type: 'text',
-      mime_type: 'application/json',
-      schema
-    },
-    store: false
-  });
+  try {
+    const { GoogleGenAI } = await import('@google/genai');
+    const client = new GoogleGenAI({ apiKey: cleanKey });
+    const interaction = await client.interactions.create({
+      model,
+      system_instruction: systemInstruction,
+      input,
+      ...(enableGoogleSearch
+        ? { tools: [{ type: 'google_search' as const }] }
+        : {}),
+      ...(schema
+        ? {
+            response_format: {
+              type: 'text',
+              mime_type: 'application/json',
+              schema
+            }
+          }
+        : {}),
+      store: false
+    });
 
-  return {
-    outputText: interaction.output_text ?? '',
-    steps: (interaction.steps ?? []) as unknown as RawInteractionStep[]
-  };
+    return {
+      outputText: interaction.output_text ?? '',
+      steps: (interaction.steps ?? []) as unknown as RawInteractionStep[]
+    };
+  } catch (sdkErr) {
+    throw new TutorServiceError(normalizeGeminiApiError(sdkErr));
+  }
+}
+
+async function runPassOneStructuredCall(params: {
+  apiKey: string;
+  useServerProxy: boolean;
+  model: GeminiTutorModelId;
+  input: string;
+}): Promise<RawInteractionResult> {
+  return executeProxyOrSdkInteraction({
+    apiKey: params.apiKey,
+    useServerProxy: params.useServerProxy,
+    model: params.model,
+    systemInstruction: PASS_ONE_SYSTEM_INSTRUCTION,
+    input: params.input,
+    schema: PASS_ONE_JSON_SCHEMA,
+    enableGoogleSearch: false
+  });
+}
+
+async function runPassTwoSearchGroundingCall(params: {
+  apiKey: string;
+  useServerProxy: boolean;
+  model: GeminiTutorModelId;
+  input: string;
+}): Promise<RawInteractionResult> {
+  return executeProxyOrSdkInteraction({
+    apiKey: params.apiKey,
+    useServerProxy: params.useServerProxy,
+    model: params.model,
+    systemInstruction: PASS_TWO_SYSTEM_INSTRUCTION,
+    input: params.input,
+    schema: null,
+    enableGoogleSearch: true
+  });
 }
 
 function parseJsonSafely<T>(rawText: string): T {
@@ -326,6 +669,68 @@ function parseJsonSafely<T>(rawText: string): T {
     }
     throw new Error('AI 구조화 스키마(JSON) 파싱에 실패했습니다.');
   }
+}
+
+function parseGroundedSupplementOutput(rawText: string): TutorPassTwoSchemaPayload {
+  const trimmed = rawText.trim();
+  if (!trimmed) {
+    return {
+      supplementBody: '외부 학술 검색 응답이 비어 있습니다.',
+      keyAcademicPoints: []
+    };
+  }
+
+  // 혹시 JSON 포맷으로 반환된 경우 하위 호환 파싱
+  if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+    try {
+      const parsed = JSON.parse(trimmed) as Partial<TutorPassTwoSchemaPayload>;
+      if (typeof parsed.supplementBody === 'string') {
+        return {
+          supplementBody: parsed.supplementBody.trim(),
+          keyAcademicPoints: Array.isArray(parsed.keyAcademicPoints)
+            ? parsed.keyAcademicPoints
+                .map((s) => String(s).trim())
+                .filter(Boolean)
+                .slice(0, MAX_KEY_ACADEMIC_POINTS)
+            : []
+        };
+      }
+    } catch {
+      // 텍스트 파서로 진행
+    }
+  }
+
+  const lines = trimmed
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const paragraphLines: string[] = [];
+  const bulletPoints: string[] = [];
+
+  for (const line of lines) {
+    const bulletMatch = line.match(/^(?:[•\-*]|\d+[.)])\s+(.+)$/);
+    if (bulletMatch && bulletMatch[1]) {
+      const cleanedBullet = bulletMatch[1]
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        .trim();
+      if (cleanedBullet) {
+        bulletPoints.push(cleanedBullet);
+      }
+    } else if (!line.startsWith('#')) {
+      paragraphLines.push(line.replace(/\*\*([^*]+)\*\*/g, '$1').trim());
+    }
+  }
+
+  const supplementBody =
+    paragraphLines.join('\n\n').trim() ||
+    bulletPoints.join(' ') ||
+    trimmed;
+
+  return {
+    supplementBody,
+    keyAcademicPoints: bulletPoints.slice(0, MAX_KEY_ACADEMIC_POINTS)
+  };
 }
 
 function extractWebCitationsFromSteps(
@@ -443,14 +848,11 @@ export async function askTextbookFirstTutor(params: {
     `\n<USER_QUESTION>\n${question.trim()}\n</USER_QUESTION>`
   ].join('');
 
-  const passOneRaw = await runInteractionCall({
+  const passOneRaw = await runPassOneStructuredCall({
     apiKey,
     useServerProxy,
     model,
-    systemInstruction: PASS_ONE_SYSTEM_INSTRUCTION,
-    input: passOnePrompt,
-    schema: PASS_ONE_JSON_SCHEMA,
-    enableGoogleSearch: false
+    input: passOnePrompt
   });
 
   const passOneParsed = parseJsonSafely<TutorPassOneSchemaPayload>(
@@ -505,28 +907,14 @@ export async function askTextbookFirstTutor(params: {
       `위 검색어와 질문을 바탕으로, 교재에 없거나 부족한 부분만 검증된 학술 정의·특징 위주로 명확히 보충해 주세요.`
     ].join('\n\n');
 
-    const passTwoRaw = await runInteractionCall({
+    const passTwoRaw = await runPassTwoSearchGroundingCall({
       apiKey,
       useServerProxy,
       model,
-      systemInstruction: PASS_TWO_SYSTEM_INSTRUCTION,
-      input: passTwoInput,
-      schema: PASS_TWO_JSON_SCHEMA,
-      enableGoogleSearch: true
+      input: passTwoInput
     });
 
-    let passTwoParsed: TutorPassTwoSchemaPayload;
-    try {
-      passTwoParsed = parseJsonSafely<TutorPassTwoSchemaPayload>(
-        passTwoRaw.outputText
-      );
-    } catch {
-      passTwoParsed = {
-        supplementBody: passTwoRaw.outputText.trim(),
-        keyAcademicPoints: []
-      };
-    }
-
+    const passTwoParsed = parseGroundedSupplementOutput(passTwoRaw.outputText);
     const webSources = extractWebCitationsFromSteps(passTwoRaw.steps);
 
     externalSupplement = {

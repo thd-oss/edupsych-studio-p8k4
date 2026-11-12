@@ -456,10 +456,10 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
       </div>
 
       {/* 하단 1-Hop Ego-Subgraph 리본 (파생 용어 · 적용 사례 · 모듈 간 브릿지 점프) */}
-      <div className="space-y-2 pt-0.5">
+      <div className="space-y-2.5 pt-0.5">
         {egoLinks.termNodes.length > 0 && (
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-semibold text-[#6e6e73] mr-0.5">
+            <span className="text-[11px] font-semibold text-[#6e6e73] mr-0.5 shrink-0 whitespace-nowrap">
               파생 학술 용어:
             </span>
             {egoLinks.termNodes.map((fcNode) => {
@@ -469,7 +469,7 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
                   key={fcNode.id}
                   type="button"
                   onClick={() => onInspectNode(fcNode.id)}
-                  className="inline-flex min-h-[28px] items-center gap-1.5 rounded-full bg-white hover:bg-black/[0.04] border border-black/[0.06] px-2.5 py-1 text-[11px] font-semibold text-[#1d1d1f] transition-colors"
+                  className="inline-flex min-h-[28px] items-center gap-1.5 rounded-full bg-white hover:bg-black/[0.04] border border-black/[0.06] px-2.5 py-1 text-[11px] font-semibold text-[#1d1d1f] transition-colors whitespace-nowrap"
                 >
                   <span
                     className="w-2 h-2 rounded-full shrink-0"
@@ -483,9 +483,8 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
           </div>
         )}
 
-        {(egoLinks.crossBridgeItems.length > 0 ||
-          egoLinks.appliedAndQuestionNodes.length > 0) && (
-          <div className="flex flex-wrap items-center gap-1.5">
+        {egoLinks.crossBridgeItems.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {egoLinks.crossBridgeItems.map((bridge) => (
               <button
                 key={`${theory.id}-bridge-${bridge.otherNode.id}`}
@@ -497,28 +496,38 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
                   )
                 }
                 title={bridge.rationaleKo}
-                className="inline-flex min-h-[28px] items-center gap-1 rounded-full bg-[var(--accent-subtle)] hover:bg-[#0071e3]/16 px-2.5 py-1 text-[11px] font-semibold text-[var(--accent-solid)] transition-colors"
+                className="group rounded-[14px] bg-[var(--accent-subtle)] hover:bg-[#0071e3]/15 border border-[#0071e3]/15 px-3 py-2 text-left flex flex-col gap-1 transition-colors"
               >
-                <span>
-                  {bridge.directionLabel} ·{' '}
-                  {bridge.otherNode.moduleId.toUpperCase()}{' '}
+                <div className="flex items-center justify-between gap-2 w-full">
+                  <span className="shrink-0 whitespace-nowrap text-[10.5px] font-bold text-[var(--accent-solid)]">
+                    {bridge.directionLabel}
+                  </span>
+                  <span className="shrink-0 whitespace-nowrap inline-flex items-center gap-0.5 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold text-[var(--accent-solid)] uppercase tabular-nums">
+                    <span>{bridge.otherNode.moduleId}</span>
+                    <ArrowUpRight className="w-3 h-3 shrink-0" aria-hidden="true" />
+                  </span>
+                </div>
+                <span className="text-[11.5px] font-semibold text-[#1d1d1f] leading-snug korean-keep-all min-w-0">
                   {bridge.otherNode.titleKo}
                 </span>
-                <ArrowUpRight className="w-3 h-3 shrink-0" aria-hidden="true" />
               </button>
             ))}
+          </div>
+        )}
 
+        {egoLinks.appliedAndQuestionNodes.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5">
             {egoLinks.appliedAndQuestionNodes.map((relNode) => (
               <button
                 key={relNode.id}
                 type="button"
                 onClick={() => onInspectNode(relNode.id)}
-                className="inline-flex min-h-[28px] items-center gap-1 rounded-full bg-white/80 hover:bg-white border border-black/[0.06] px-2.5 py-1 text-[11px] font-medium text-[#424245] transition-colors"
+                className="inline-flex min-h-[28px] max-w-full items-center gap-1.5 rounded-[10px] bg-white/90 hover:bg-white border border-black/[0.06] px-2.5 py-1 text-[11px] font-medium text-[#424245] text-left transition-colors"
               >
-                <span className="text-[10px] font-bold text-[#6e6e73]">
+                <span className="shrink-0 whitespace-nowrap rounded bg-[#f5f5f7] px-1.5 py-0.5 text-[10px] font-bold text-[#6e6e73]">
                   {relNode.kind === 'case' ? '사례' : '면접'}
                 </span>
-                <span className="truncate max-w-[180px]">{relNode.titleKo}</span>
+                <span className="truncate max-w-[220px]">{relNode.titleKo}</span>
               </button>
             ))}
           </div>
@@ -558,7 +567,7 @@ const CaseInlineStage: React.FC<CaseInlineStageProps> = ({
       {/* 원천 처방 이론 역추적 배지 + 3중 렌즈 세그먼트 피커 */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-1.5 min-w-0">
-          <span className="text-[11px] font-semibold text-[#6e6e73] mr-0.5">
+          <span className="text-[11px] font-semibold text-[#6e6e73] mr-0.5 shrink-0 whitespace-nowrap">
             처방 근거 이론:
           </span>
           {sourceTheories.map((th) => (
@@ -566,7 +575,7 @@ const CaseInlineStage: React.FC<CaseInlineStageProps> = ({
               key={th.id}
               type="button"
               onClick={() => onInspectNode(th.id)}
-              className="inline-flex min-h-[28px] items-center gap-1 rounded-full bg-[#f5f5f7] hover:bg-black/[0.07] px-2.5 py-1 text-[11px] font-semibold text-[#1d1d1f] transition-colors"
+              className="inline-flex min-h-[28px] max-w-full items-center gap-1 rounded-[10px] bg-[#f5f5f7] hover:bg-black/[0.07] px-2.5 py-1 text-[11px] font-semibold text-[#1d1d1f] text-left korean-keep-all transition-colors"
             >
               <span>{th.titleKo}</span>
             </button>

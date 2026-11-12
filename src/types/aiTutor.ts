@@ -10,6 +10,32 @@ export type GeminiTutorModelId =
   | 'gemini-3.5-flash-lite'
   | 'gemini-4-argon';
 
+export type ApiKeyConnectionState =
+  | 'unconfigured'
+  | 'validating'
+  | 'verified'
+  | 'invalid';
+
+export type TutorApiErrorCode =
+  | 'API_KEY_MISSING'
+  | 'API_KEY_INVALID'
+  | 'REFERRER_RESTRICTED'
+  | 'QUOTA_EXCEEDED'
+  | 'MODEL_OR_PARAM_ERROR'
+  | 'NETWORK_ERROR'
+  | 'UNKNOWN_API_ERROR';
+
+export interface NormalizedTutorApiError {
+  code: TutorApiErrorCode;
+  httpStatus: number | null;
+  titleKo: string;
+  messageKo: string;
+  actionHintKo: string;
+  requiresKeyReconfig: boolean;
+  suggestLiteModel: boolean;
+  rawReason?: string;
+}
+
 export interface TextbookPassage {
   nodeId: string;
   moduleId: ModuleId;
@@ -105,6 +131,7 @@ export interface TutorChatMessage {
   contextNodeTitle: string | null;
   answer?: TutorStructuredAnswer;
   errorMessage?: string;
+  errorDetail?: NormalizedTutorApiError;
   isPending?: boolean;
   pendingStageLabel?: string;
   createdAt: string;
