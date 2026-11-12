@@ -259,12 +259,11 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
       </div>
 
       {/* 본문 스테이지 뷰포트 */}
-      <div className="rounded-[18px] bg-white p-3.5 sm:p-5 border border-black/[0.05] shadow-2xs">
-        {subView === 'diagram' ? (
-          <TheoryVisualRenderer blueprint={blueprint} />
-        ) : (
-          <div className="space-y-4 tabular-nums">
-            <div className="flex flex-wrap items-center justify-between gap-2">
+      {subView === 'diagram' ? (
+        <TheoryVisualRenderer blueprint={blueprint} frameless />
+      ) : (
+        <div className="rounded-[18px] bg-white p-3.5 sm:p-5 border border-black/[0.05] shadow-2xs space-y-4 tabular-nums">
+          <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent-subtle)] px-3 py-1 text-xs font-semibold text-[var(--accent-solid)]">
                 <Cpu className="w-3.5 h-3.5 shrink-0" />
                 <span>작업기억 병목(WM Bottleneck) 및 환경적 보철 실험기</span>
@@ -451,9 +450,8 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
                 </p>
               </button>
             </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* 하단 1-Hop Ego-Subgraph 리본 (파생 용어 · 적용 사례 · 모듈 간 브릿지 점프) */}
       <div className="space-y-2.5 pt-0.5">

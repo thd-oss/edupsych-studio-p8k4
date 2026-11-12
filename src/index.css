@@ -371,50 +371,151 @@
   scroll-snap-align: center;
 }
 
-/* 플로팅 도식 카드 데크 모달(<dialog class="visual-deck-dialog">) & 가로 스와이프 트랙 (modern-web-guidance: dialog, carousel) */
-dialog.visual-deck-dialog {
-  margin: auto;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  overflow: hidden;
-  scrollbar-width: none;
-  width: min(94vw, 42.5rem);
-  max-width: min(94vw, 42.5rem);
-  max-height: min(88dvh, 48rem);
-}
-
-dialog.visual-deck-dialog::-webkit-scrollbar {
-  display: none;
-}
-
-dialog.visual-deck-dialog[open] {
+/* 인라인 가로 피크(Peek) 슬라이드 카드 트랙 & 음영 집중 카드 라이트박스(<dialog class="spotlight-card-dialog">) */
+.inline-peek-reel-track {
   display: flex;
-  flex-direction: column;
-}
-
-.visual-deck-track {
-  display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   touch-action: manipulation;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  padding-block: 0.25rem 0.5rem;
 }
 
-.visual-deck-track::-webkit-scrollbar {
+.inline-peek-reel-track::-webkit-scrollbar {
   display: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .visual-deck-track {
+  .inline-peek-reel-track {
     scroll-behavior: smooth;
   }
 }
 
-.visual-deck-track > * {
+.inline-peek-reel-card {
+  flex: 0 0 84%;
+  min-inline-size: 0;
+  scroll-snap-align: start;
+}
+
+.inline-peek-reel-card[data-single='true'] {
+  flex: 0 0 100%;
+}
+
+@media (min-width: 640px) {
+  .inline-peek-reel-card {
+    flex: 0 0 min(21.5rem, 47%);
+  }
+
+  .inline-peek-reel-card[data-single='true'] {
+    flex: 0 0 100%;
+  }
+}
+
+dialog.spotlight-card-dialog {
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  scrollbar-width: none;
+  width: min(100vw, 44rem);
+  max-width: min(100vw, 44rem);
+  max-height: 94dvh;
+  opacity: 0;
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 200ms;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.spotlight-card-dialog {
+    transform: scale(0.95);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.spotlight-card-dialog {
+    transition-duration: 100ms;
+  }
+}
+
+dialog.spotlight-card-dialog::-webkit-scrollbar {
+  display: none;
+}
+
+dialog.spotlight-card-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: scale(1);
+
+    @starting-style {
+      transform: scale(0.95);
+    }
+  }
+}
+
+dialog.spotlight-card-dialog::backdrop {
+  background-color: rgba(10, 10, 14, 0);
+  transition-property: background-color, display, overlay;
+  transition-duration: 220ms;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+}
+
+dialog.spotlight-card-dialog[open]::backdrop {
+  background-color: rgba(10, 10, 14, 0.78);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  backdrop-filter: saturate(140%) blur(14px);
+
+  @starting-style {
+    background-color: rgba(10, 10, 14, 0);
+  }
+}
+
+.spotlight-card-track {
+  display: flex;
+  align-items: stretch;
+  gap: 0.875rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  touch-action: manipulation;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-inline: 6.5vw;
+  padding-block: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .spotlight-card-track {
+    padding-inline: 3.5rem;
+    gap: 1.125rem;
+  }
+}
+
+.spotlight-card-track::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .spotlight-card-track {
+    scroll-behavior: smooth;
+  }
+}
+
+.spotlight-focus-card {
   flex: 0 0 100%;
   min-inline-size: 0;
   scroll-snap-align: center;
