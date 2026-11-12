@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState
@@ -11,114 +12,91 @@ import {
   BookOpenCheck,
   CheckCircle2,
   ChevronsDownUp,
-  ChevronsUpDown,
-  Network
+  ChevronsUpDown
 } from 'lucide-react';
 import { MODULE_CONCEPT_ANCHORS } from '../../data/curriculumGraph';
 import {
   GraphAdjacencyIndex,
-  KnowledgeGraphEdge,
   KnowledgeGraphNode,
   MasteryState,
   ModuleId,
   StoryProgressState,
-  StoryScrollRequest,
-  WorkspaceTabId
+  StoryScrollRequest
 } from '../../types/graph';
-import { FlashcardStatus, ModulePayload } from '../../types/study';
+import { ModulePayload } from '../../types/study';
 import { ModuleStoryChapter } from './ModuleStoryChapter';
 
 interface ScrollytellingViewProps {
   modules: ModulePayload[];
-  selectedModuleFilter: ModuleId | 'all';
-  onChangeModuleFilter: (mod: ModuleId | 'all') => void;
+  selectedModule: ModuleId;
+  onChangeModule: (mod: ModuleId) => void;
   initialNodeId: string | null;
   scrollRequest: StoryScrollRequest | null;
   onConsumeScrollRequest: () => void;
   onActiveNodeChange: (nodeId: string) => void;
   storyProgress: StoryProgressState;
   bookmarks: string[];
-  userNotes: Record<string, string>;
   adjacency: GraphAdjacencyIndex;
   nodeMap: Record<string, KnowledgeGraphNode>;
-  edges: KnowledgeGraphEdge[];
   masteryMap: Record<string, MasteryState>;
   onMarkBeatVisited: (beatId: string, primaryNodeId?: string) => void;
   onRecordSimulationChoice: (theoryId: string, optionIndex: number) => void;
-  onUpdateFlashcardStatus: (cardId: string, status: FlashcardStatus) => void;
   onToggleBookmark: (itemId: string) => void;
-  onUpdateItemNote: (itemId: string, note: string) => void;
   onToggleModuleCompleted: (moduleId: ModuleId) => void;
-  onInspectNode: (nodeId: string) => void;
-  onJumpToStoryNode: (moduleId: ModuleId, nodeId: string) => void;
-  onJumpToWorkspace: (
-    tab: WorkspaceTabId,
-    moduleId: ModuleId,
-    nodeId: string
-  ) => void;
+  onNavigateNode: (nodeId: string) => void;
+  onStartModuleTraining: (moduleId: ModuleId) => void;
 }
 
 const SCROLL_JUMP_DELAY_MS = 60;
-const MOBILE_MEDIA_QUERY = '(max-width: 1023px)';
 const OBSERVER_MARGIN_STANDARD = '-22% 0px -48% 0px';
-const TOTAL_STORY_BEATS_COUNT = 40;
 
 export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
   modules,
-  selectedModuleFilter,
-  onChangeModuleFilter,
+  selectedModule,
+  onChangeModule,
   initialNodeId,
   scrollRequest,
   onConsumeScrollRequest,
   onActiveNodeChange,
   storyProgress,
   bookmarks,
-  userNotes,
   adjacency,
   nodeMap,
   masteryMap,
   onMarkBeatVisited,
   onRecordSimulationChoice,
-  onUpdateFlashcardStatus,
   onToggleBookmark,
-  onUpdateItemNote,
   onToggleModuleCompleted,
-  onInspectNode,
-  onJumpToStoryNode,
-  onJumpToWorkspace
+  onNavigateNode,
+  onStartModuleTraining
 }) => {
+  const tabBaseId = useId();
   const narrativeContainerRef = useRef<HTMLDivElement | null>(null);
+  const moduleTabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  const visibleModules = useMemo(() => {
-    if (selectedModuleFilter === 'all') return modules;
-    return modules.filter((m) => m.id === selectedModuleFilter);
-  }, [modules, selectedModuleFilter]);
-
-  const [activeModuleId, setActiveModuleId] = useState<ModuleId>(() => {
-    if (selectedModuleFilter !== 'all') return selectedModuleFilter;
-    if (initialNodeId && nodeMap[initialNodeId]) {
-      return nodeMap[initialNodeId].moduleId;
-    }
-    return 'mod1';
-  });
+  const currentModule = useMemo(
+    () => modules.find((m) => m.id === selectedModule) ?? modules[0],
+    [modules, selectedModule]
+  );
 
   const [activeNodeId, setActiveNodeId] = useState<string>(() => {
-    return (
-      initialNodeId ??
-      storyProgress.lastActiveNodeId ??
-      'mod1-theory-piaget'
-    );
+    if (
+      initialNodeId &&
+      nodeMap[initialNodeId]?.moduleId === selectedModule
+    ) {
+      return initialNodeId;
+    }
+    return currentModule.theories[0]?.id ?? currentModule.id;
   });
 
   const [activeBeatId, setActiveBeatId] = useState<string | null>(
-    'mod1-beat-myth'
+    `${currentModule.id}-beat-myth`
   );
 
-  // 정독 모드(전체 원문 디스클로저 일괄 펼침/접기) 상태
+  // 전체 원문 디스클로저 일괄 펼침/접기 상태
   const [areAllDisclosuresOpen, setAreAllDisclosuresOpen] =
     useState<boolean>(false);
 
-  // 개별 <details.apple-disclosure> 열림/닫힘(⌘F 자동 열림 포함)과 마스터 정독 토글 aria-expanded 동기화
   const syncDisclosureExpansionState = useCallback(() => {
     const container = narrativeContainerRef.current;
     if (!container) return;
@@ -132,7 +110,6 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
   useEffect(() => {
     const container = narrativeContainerRef.current;
     if (!container) return;
-    // <details>의 toggle 이벤트는 버블링되지 않으므로 캡처 단계(true)에서 위임 수신
     container.addEventListener('toggle', syncDisclosureExpansionState, true);
     return () => {
       container.removeEventListener(
@@ -156,15 +133,39 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
     });
   };
 
-  // 단발성 스크롤 이동 명령(scrollRequest)이 전달되었을 때만 1회 이동 후 즉시 소비
+  // 선택된 모듈 탭이 항상 가시 영역에 들어오도록 탭 스트립 내부 스크롤 동기화
+  useEffect(() => {
+    const idx = modules.findIndex((m) => m.id === currentModule.id);
+    if (idx >= 0) {
+      moduleTabRefs.current[idx]?.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest'
+      });
+    }
+  }, [currentModule.id, modules]);
+
+  // 모듈 변경 시 활성 노드 기본값 동기화
+  useEffect(() => {
+    setActiveNodeId((prev) => {
+      const prevNode = nodeMap[prev];
+      if (prevNode && prevNode.moduleId === currentModule.id) {
+        return prev;
+      }
+      const fallbackId = currentModule.theories[0]?.id ?? currentModule.id;
+      onActiveNodeChange(fallbackId);
+      return fallbackId;
+    });
+  }, [currentModule, nodeMap, onActiveNodeChange]);
+
+  // 단발성 스크롤 이동 명령(scrollRequest) 처리
   useEffect(() => {
     if (!scrollRequest) return;
     const targetNodeId = scrollRequest.nodeId;
     const targetNode = nodeMap[targetNodeId];
-    if (targetNode) {
-      setActiveModuleId(targetNode.moduleId);
-      setActiveNodeId(targetNodeId);
+    if (targetNode && targetNode.moduleId !== currentModule.id) {
+      onChangeModule(targetNode.moduleId);
     }
+    setActiveNodeId(targetNodeId);
 
     const timerId = window.setTimeout(() => {
       const container = narrativeContainerRef.current;
@@ -173,11 +174,9 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
           container.querySelector<HTMLElement>(
             `[data-node-id="${targetNodeId}"]`
           ) ??
-          (targetNode
-            ? container.querySelector<HTMLElement>(
-                `#story-chapter-${targetNode.moduleId}`
-              )
-            : null);
+          container.querySelector<HTMLElement>(
+            `#story-chapter-${currentModule.id}`
+          );
 
         if (el) {
           const beatAttr = el.getAttribute('data-beat-id');
@@ -189,26 +188,15 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
     }, SCROLL_JUMP_DELAY_MS);
 
     return () => window.clearTimeout(timerId);
-  }, [scrollRequest, nodeMap, onConsumeScrollRequest]);
+  }, [
+    scrollRequest,
+    currentModule.id,
+    nodeMap,
+    onChangeModule,
+    onConsumeScrollRequest
+  ]);
 
-  // 모듈 필터가 단일 모듈로 변경되면 해당 모듈 첫 이론으로 활성 노드 동기화
-  useEffect(() => {
-    if (selectedModuleFilter !== 'all') {
-      setActiveModuleId(selectedModuleFilter);
-      const mod = modules.find((m) => m.id === selectedModuleFilter);
-      if (mod && mod.theories[0]) {
-        setActiveNodeId((prev) => {
-          const prevNode = nodeMap[prev];
-          if (prevNode && prevNode.moduleId === selectedModuleFilter) {
-            return prev;
-          }
-          return mod.theories[0].id;
-        });
-      }
-    }
-  }, [selectedModuleFilter, modules, nodeMap]);
-
-  // 단일 IntersectionObserver로 스크롤 비트 감지
+  // 단일 IntersectionObserver로 현재 모듈 내 비트 감지
   useEffect(() => {
     const container = narrativeContainerRef.current;
     if (!container) return;
@@ -225,13 +213,9 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
           const target = entry.target as HTMLElement;
           const beatId = target.getAttribute('data-beat-id');
           const nodeId = target.getAttribute('data-node-id');
-          const modId = target.getAttribute('data-module-id') as ModuleId | null;
 
           if (beatId) {
             setActiveBeatId(beatId);
-          }
-          if (modId) {
-            setActiveModuleId(modId);
           }
           if (nodeId) {
             setActiveNodeId(nodeId);
@@ -251,21 +235,9 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
 
     beatElements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [visibleModules, onMarkBeatVisited, onActiveNodeChange]);
-
-  const activeModule: ModulePayload = useMemo(() => {
-    return (
-      modules.find((m) => m.id === activeModuleId) ??
-      visibleModules[0] ??
-      modules[0]
-    );
-  }, [modules, visibleModules, activeModuleId]);
+  }, [currentModule, onMarkBeatVisited, onActiveNodeChange]);
 
   const handleFocusNodeManual = (nodeId: string, beatId?: string) => {
-    const node = nodeMap[nodeId];
-    if (node) {
-      setActiveModuleId(node.moduleId);
-    }
     setActiveNodeId(nodeId);
     onActiveNodeChange(nodeId);
     if (beatId) {
@@ -274,31 +246,37 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
     }
   };
 
-  const scrollToChapter = (modId: ModuleId) => {
-    if (selectedModuleFilter !== 'all' && selectedModuleFilter !== modId) {
-      onChangeModuleFilter(modId);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  const selectModuleAndScrollTop = (modId: ModuleId) => {
+    if (modId !== currentModule.id) {
+      onChangeModule(modId);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleModuleTabKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    idx: number
+  ) => {
+    let nextIdx = idx;
+    if (e.key === 'ArrowRight') {
+      nextIdx = (idx + 1) % modules.length;
+    } else if (e.key === 'ArrowLeft') {
+      nextIdx = (idx - 1 + modules.length) % modules.length;
+    } else if (e.key === 'Home') {
+      nextIdx = 0;
+    } else if (e.key === 'End') {
+      nextIdx = modules.length - 1;
+    } else {
       return;
     }
-    if (
-      typeof window !== 'undefined' &&
-      window.matchMedia(MOBILE_MEDIA_QUERY).matches
-    ) {
-      onChangeModuleFilter(modId);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    setActiveModuleId(modId);
-    const el = document.getElementById(`story-chapter-${modId}`);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    e.preventDefault();
+    const targetMod = modules[nextIdx];
+    onChangeModule(targetMod.id);
+    moduleTabRefs.current[nextIdx]?.focus();
   };
 
   const currentModuleIndex = modules.findIndex(
-    (m) =>
-      m.id ===
-      (selectedModuleFilter === 'all' ? activeModule.id : selectedModuleFilter)
+    (m) => m.id === currentModule.id
   );
   const prevModule =
     currentModuleIndex > 0 ? modules[currentModuleIndex - 1] : null;
@@ -307,202 +285,170 @@ export const ScrollytellingView: React.FC<ScrollytellingViewProps> = ({
       ? modules[currentModuleIndex + 1]
       : null;
 
-  const visitedCount = Object.keys(storyProgress.visitedBeats).length;
+  const activeTabDomId = `${tabBaseId}-${currentModule.id}`;
 
   return (
-    <div className="max-w-[1060px] mx-auto px-3.5 sm:px-6 py-5 sm:py-8 space-y-6 sm:space-y-8">
-      {/* 비고정(Non-sticky) 인라인 챕터 컨트롤 바 (content-first-noise-reduction: 상단 이중 sticky 적층 금지) */}
+    <div className="max-w-[1040px] mx-auto px-3.5 sm:px-6 py-5 sm:py-8 space-y-6 sm:space-y-8">
+      {/* 비고정(Non-sticky) 1모듈 집중 컨트롤 바 */}
       <section className="bento-tile-white p-4 sm:p-6 space-y-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="space-y-1 max-w-2xl">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="space-y-0.5">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--accent-solid)]">
-              <BookOpenCheck className="w-3.5 h-3.5 shrink-0" />
-              <span>풀와이드 스토리텔링 커리큘럼 · {visitedCount}/{TOTAL_STORY_BEATS_COUNT} 비트 탐색</span>
+              <BookOpenCheck className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+              <span>
+                개념학습 · Module 0{currentModule.number} / 0{modules.length}
+              </span>
             </span>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-[-0.022em] text-[#1d1d1f]">
-              현장의 오개념에서 출발해 과학자-실무자의 처방을 체화합니다.
+            <h1 className="text-lg sm:text-xl font-bold tracking-[-0.02em] text-[#1d1d1f] korean-keep-all">
+              통념 반박부터 핵심 이론·임상 사례까지 한 모듈씩 정독합니다.
             </h1>
           </div>
 
-          {/* 우측: [정독 모드: 전체 원문 펼치기] 마스터 토글 + 워크스페이스 이동 */}
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <button
-              type="button"
-              aria-expanded={areAllDisclosuresOpen}
-              onClick={handleToggleReadAllDisclosures}
-              className={`min-h-[36px] inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
-                areAllDisclosuresOpen
-                  ? 'bg-[var(--accent-solid)] text-white'
-                  : 'bg-[#f5f5f7] hover:bg-black/[0.07] text-[#1d1d1f]'
-              }`}
-            >
-              {areAllDisclosuresOpen ? (
-                <>
-                  <ChevronsDownUp className="w-3.5 h-3.5 shrink-0" />
-                  <span>정독 모드: 전체 원문 접기</span>
-                </>
-              ) : (
-                <>
-                  <ChevronsUpDown className="w-3.5 h-3.5 shrink-0" />
-                  <span>정독 모드: 전체 원문 펼치기</span>
-                </>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                onJumpToWorkspace('graph', activeModule.id, activeNodeId)
-              }
-              className="hidden sm:inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-[#1d1d1f] hover:bg-[#2c2c2e] px-4 py-1.5 text-xs font-semibold text-white transition-colors"
-            >
-              <Network className="w-3.5 h-3.5 shrink-0" />
-              <span>워크스페이스 열기</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            aria-expanded={areAllDisclosuresOpen}
+            onClick={handleToggleReadAllDisclosures}
+            className={`min-h-[36px] shrink-0 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+              areAllDisclosuresOpen
+                ? 'bg-[var(--accent-solid)] text-white'
+                : 'bg-[#f5f5f7] hover:bg-black/[0.07] text-[#1d1d1f]'
+            }`}
+          >
+            {areAllDisclosuresOpen ? (
+              <>
+                <ChevronsDownUp className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                <span>전체 원문 접기</span>
+              </>
+            ) : (
+              <>
+                <ChevronsUpDown className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                <span>전체 원문 펼치기</span>
+              </>
+            )}
+          </button>
         </div>
 
-        {/* 모듈 챕터 빠른 이동 캡슐 */}
-        <div className="pt-3 border-t border-black/[0.06] flex flex-wrap items-center justify-between gap-2 tabular-nums">
+        {/* 단일 행(Single-Row) M1~M5 모듈 전환 탭리스트 */}
+        <div className="pt-3 border-t border-black/[0.06]">
           <div
-            role="region"
-            aria-label="모듈 챕터 바로가기"
-            className="mobile-strip-scroll sm:flex-wrap"
+            role="tablist"
+            aria-label="개념학습 모듈 선택"
+            className="single-row-tablist pb-1"
           >
-            {modules.map((m) => {
-              const isSelected = selectedModuleFilter === m.id;
-              const isCurrent =
-                selectedModuleFilter === 'all' && activeModule.id === m.id;
+            {modules.map((m, idx) => {
+              const isSelected = currentModule.id === m.id;
               const isDone = storyProgress.completedModules.includes(m.id);
               const anchor = MODULE_CONCEPT_ANCHORS[m.id];
 
               return (
                 <button
                   key={m.id}
+                  ref={(el) => {
+                    moduleTabRefs.current[idx] = el;
+                  }}
+                  id={`${tabBaseId}-${m.id}`}
+                  role="tab"
                   type="button"
-                  onClick={() => scrollToChapter(m.id)}
-                  className={`min-h-[34px] rounded-full px-3.5 py-1.5 text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                  tabIndex={isSelected ? 0 : -1}
+                  aria-selected={isSelected}
+                  onClick={() => selectModuleAndScrollTop(m.id)}
+                  onKeyDown={(e) => handleModuleTabKeyDown(e, idx)}
+                  className={`no-press-scale min-h-[38px] rounded-[12px] px-3.5 py-1.5 text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-colors ${
                     isSelected
                       ? 'bg-[#1d1d1f] text-white'
-                      : isCurrent
-                      ? 'bg-[var(--accent-subtle)] text-[var(--accent-solid)]'
-                      : 'bg-[#f5f5f7] text-[#424245] hover:bg-black/[0.07]'
+                      : 'bg-[#f5f5f7] text-[#424245] hover:bg-black/[0.07] hover:text-[#1d1d1f]'
                   }`}
                 >
                   <span
                     className="w-2 h-2 rounded-full shrink-0"
                     style={{ backgroundColor: anchor.accentHex }}
+                    aria-hidden="true"
                   />
                   <span>
                     M{m.number}. {m.title.split(' ')[0]}
                   </span>
                   {isDone && (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    <CheckCircle2
+                      className="w-3.5 h-3.5 text-emerald-400 shrink-0"
+                      aria-hidden="true"
+                    />
                   )}
                 </button>
               );
             })}
-
-            <button
-              type="button"
-              onClick={() => onChangeModuleFilter('all')}
-              className={`min-h-[34px] rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
-                selectedModuleFilter === 'all'
-                  ? 'bg-[var(--accent-solid)] text-white'
-                  : 'bg-[#f5f5f7] text-[#424245] hover:bg-black/[0.07]'
-              }`}
-            >
-              전 모듈 연속 (M1~5)
-            </button>
           </div>
         </div>
       </section>
 
-      {/* 풀와이드 단일 컬럼 에디토리얼 서사 + 인라인 인터랙티브 스테이지 스트림 */}
+      {/* 선택된 단일 모듈 본문 패널 */}
       <div
         ref={narrativeContainerRef}
-        className="space-y-10 sm:space-y-12 min-w-0"
+        role="tabpanel"
+        aria-labelledby={activeTabDomId}
+        className="space-y-8 sm:space-y-10 min-w-0"
       >
-        {visibleModules.map((mod) => (
-          <ModuleStoryChapter
-            key={mod.id}
-            mod={mod}
-            activeBeatId={activeBeatId}
-            activeNodeId={activeNodeId}
-            isCompleted={storyProgress.completedModules.includes(mod.id)}
-            defaultExpandDisclosures={areAllDisclosuresOpen}
-            visitedBeats={storyProgress.visitedBeats}
-            simulationChoices={storyProgress.simulationChoices}
-            bookmarks={bookmarks}
-            userNotes={userNotes}
-            adjacency={adjacency}
-            nodeMap={nodeMap}
-            masteryMap={masteryMap}
-            onFocusNode={handleFocusNodeManual}
-            onInspectNode={onInspectNode}
-            onJumpToStoryNode={onJumpToStoryNode}
-            onRecordSimulationChoice={onRecordSimulationChoice}
-            onUpdateFlashcardStatus={onUpdateFlashcardStatus}
-            onToggleBookmark={onToggleBookmark}
-            onUpdateItemNote={onUpdateItemNote}
-            onToggleModuleCompleted={onToggleModuleCompleted}
-            onJumpToWorkspace={onJumpToWorkspace}
-          />
-        ))}
+        <ModuleStoryChapter
+          key={currentModule.id}
+          mod={currentModule}
+          activeBeatId={activeBeatId}
+          activeNodeId={activeNodeId}
+          isCompleted={storyProgress.completedModules.includes(
+            currentModule.id
+          )}
+          defaultExpandDisclosures={areAllDisclosuresOpen}
+          visitedBeats={storyProgress.visitedBeats}
+          simulationChoices={storyProgress.simulationChoices}
+          bookmarks={bookmarks}
+          adjacency={adjacency}
+          nodeMap={nodeMap}
+          masteryMap={masteryMap}
+          onFocusNode={handleFocusNodeManual}
+          onNavigateNode={onNavigateNode}
+          onRecordSimulationChoice={onRecordSimulationChoice}
+          onToggleBookmark={onToggleBookmark}
+          onToggleModuleCompleted={onToggleModuleCompleted}
+          onStartModuleTraining={onStartModuleTraining}
+        />
 
-        {/* 단일 모듈 집중 모드일 때 하단 빠른 이전/다음 모듈 페이저 */}
-        {selectedModuleFilter !== 'all' && (
-          <nav
-            aria-label="이전 및 다음 모듈 페이징"
-            className="bento-tile-white p-4 sm:p-5 flex flex-wrap items-center justify-between gap-2.5 tabular-nums"
-          >
-            {prevModule ? (
-              <button
-                type="button"
-                onClick={() => {
-                  onChangeModuleFilter(prevModule.id);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="min-h-[42px] inline-flex items-center gap-1.5 rounded-full bg-[#f5f5f7] hover:bg-black/[0.07] px-4 py-2 text-xs font-semibold text-[#1d1d1f] transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
-                <span>이전: M{prevModule.number}</span>
-              </button>
-            ) : (
-              <span className="text-xs font-medium text-[#6e6e73] px-2">
-                첫 번째 모듈입니다
-              </span>
-            )}
-
+        {/* 하단 이전/다음 모듈 페이저 */}
+        <nav
+          aria-label="이전 및 다음 모듈 이동"
+          className="bento-tile-white p-4 sm:p-5 flex flex-wrap items-center justify-between gap-2.5 tabular-nums"
+        >
+          {prevModule ? (
             <button
               type="button"
-              onClick={() => onChangeModuleFilter('all')}
-              className="min-h-[42px] rounded-full bg-[#f5f5f7] hover:bg-black/[0.07] px-4 py-2 text-xs font-semibold text-[#424245] transition-colors"
+              onClick={() => selectModuleAndScrollTop(prevModule.id)}
+              className="min-h-[42px] inline-flex items-center gap-1.5 rounded-full bg-[#f5f5f7] hover:bg-black/[0.07] px-4 py-2 text-xs font-semibold text-[#1d1d1f] transition-colors"
             >
-              전 모듈 연속 보기
-            </button>
-
-            {nextModule ? (
-              <button
-                type="button"
-                onClick={() => {
-                  onChangeModuleFilter(nextModule.id);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="min-h-[42px] inline-flex items-center gap-1.5 rounded-full bg-[var(--accent-solid)] hover:bg-[var(--accent-solid-hover)] px-5 py-2 text-xs font-semibold text-white transition-colors"
-              >
-                <span>
-                  다음: M{nextModule.number}. {nextModule.title.split(' ')[0]}
-                </span>
-                <ArrowRight className="w-4 h-4 shrink-0" aria-hidden="true" />
-              </button>
-            ) : (
-              <span className="text-xs font-semibold text-emerald-700 px-2">
-                마지막 모듈(M5) 완주 지점
+              <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span>
+                이전: M{prevModule.number}. {prevModule.title.split(' ')[0]}
               </span>
-            )}
-          </nav>
-        )}
+            </button>
+          ) : (
+            <span className="text-xs font-medium text-[#6e6e73] px-2">
+              첫 번째 모듈입니다
+            </span>
+          )}
+
+          {nextModule ? (
+            <button
+              type="button"
+              onClick={() => selectModuleAndScrollTop(nextModule.id)}
+              className="min-h-[42px] inline-flex items-center gap-1.5 rounded-full bg-[#1d1d1f] hover:bg-[#2c2c2e] px-5 py-2 text-xs font-semibold text-white transition-colors"
+            >
+              <span>
+                다음: M{nextModule.number}. {nextModule.title.split(' ')[0]}
+              </span>
+              <ArrowRight className="w-4 h-4 shrink-0" aria-hidden="true" />
+            </button>
+          ) : (
+            <span className="text-xs font-semibold text-emerald-700 px-2">
+              마지막 모듈(M5)입니다
+            </span>
+          )}
+        </nav>
       </div>
     </div>
   );

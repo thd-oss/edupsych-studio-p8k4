@@ -3,8 +3,6 @@ import {
   AlertTriangle,
   ArrowRight,
   CheckCircle2,
-  Compass,
-  ExternalLink,
   Filter,
   Network,
   RotateCcw,
@@ -29,8 +27,7 @@ import {
   MasteryState,
   ModuleId,
   NodeKind,
-  PrioritizedWeakNodeItem,
-  WorkspaceTabId
+  PrioritizedWeakNodeItem
 } from '../../types/graph';
 
 interface KnowledgeGraphMapProps {
@@ -46,12 +43,7 @@ interface KnowledgeGraphMapProps {
   onToggleWeakFocus: (next: boolean) => void;
   selectedNodeId: string | null;
   onSelectNode: (nodeId: string) => void;
-  onJumpToStory: (moduleId: ModuleId, nodeId: string) => void;
-  onJumpToWorkspaceTab: (
-    tab: WorkspaceTabId,
-    moduleId: ModuleId,
-    nodeId: string
-  ) => void;
+  onNavigateCanonical: (nodeId: string) => void;
 }
 
 const MASTERY_PALETTE: Record<
@@ -154,8 +146,7 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
   onToggleWeakFocus,
   selectedNodeId,
   onSelectNode,
-  onJumpToStory,
-  onJumpToWorkspaceTab
+  onNavigateCanonical
 }) => {
   const [kindFilter, setKindFilter] = useState<
     'all' | Exclude<NodeKind, 'module'>
@@ -231,13 +222,13 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
           <div className="space-y-1 min-w-0">
             <div className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent-subtle)] px-3 py-1 text-xs font-semibold text-[var(--accent-solid)]">
               <Network className="w-3.5 h-3.5 shrink-0" />
-              <span>90-Node 도메인 지식 그래프 · 곡률 스플라인 토폴로지</span>
+              <span>90-Node 도메인 지식그래프 · 곡률 스플라인 토폴로지</span>
             </div>
             <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#1d1d1f]">
-              전 모듈 90개 원자화 학습 노드(이론 20 · 플래시카드 47 · 사례 10 · 압박면접 13) 실시간 연결망
+              전 모듈 90개 원자화 학습 노드(이론 20 · 단어장 47 · 사례 10 · 90초 면접 13) 연결망
             </h3>
             <p className="text-xs sm:text-sm text-[#6e6e73]">
-              정점을 클릭하거나 Tab + Enter로 선택하면 상세 드로어가 열리며 정의·처방·꼬리질문 확인 및 <strong>스토리 맥락 복귀</strong>가 가능합니다.
+              정점을 클릭하거나 Tab + Enter로 선택하면 우측 상세 드로어가 열리며 1-Hop 연결 탐색 및 <strong>해당 학습 화면 직행</strong>이 가능합니다.
             </p>
           </div>
 
@@ -272,7 +263,6 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
 
         {/* 필터 & 취약 연결고리 하이라이트 스위치 바 */}
         <div className="pt-3 border-t border-black/[0.06] flex flex-wrap items-center justify-between gap-3">
-          {/* 좌측: 노드 유형 필터 */}
           <div className="chip-scroll-row flex items-center gap-1.5 tabular-nums min-w-0 max-w-full">
             <span className="text-xs font-semibold text-[#6e6e73] mr-1 flex items-center gap-1 shrink-0">
               <Filter className="w-3.5 h-3.5 shrink-0" />
@@ -282,9 +272,9 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
               [
                 { id: 'all', label: '전체 (90)' },
                 { id: 'theory', label: '핵심이론 (20)' },
-                { id: 'flashcard', label: '플래시카드 (47)' },
-                { id: 'case', label: '교실사례 (10)' },
-                { id: 'question', label: '압박면접 (13)' }
+                { id: 'flashcard', label: '단어장 (47)' },
+                { id: 'case', label: '임상사례 (10)' },
+                { id: 'question', label: '90초 면접 (13)' }
               ] as const
             ).map((f) => (
               <button
@@ -302,7 +292,6 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
             ))}
           </div>
 
-          {/* 우측: 취약 연결고리 서브그래프 필터 + 모듈 간 브릿지 토글 + 줌 */}
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
@@ -375,14 +364,14 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
         </div>
       </div>
 
-      {/* 메인 인터랙티브 SVG 90-Node 지식 그래프 캔버스 (Apple Obsidian #141416 + 2차 베지어 곡선 스플라인) */}
+      {/* 메인 인터랙티브 SVG 90-Node 지식 그래프 캔버스 */}
       <div className="rounded-[28px] bg-[#141416] border border-white/10 shadow-[var(--shadow-elevated)] overflow-hidden relative">
         <div className="overflow-x-auto">
           <svg
             viewBox="0 0 1360 820"
             className="w-full min-w-[860px] h-auto select-none block"
             role="group"
-            aria-label="교육심리학 90개 학습 노드 도메인 지식 그래프"
+            aria-label="교육심리학 90개 학습 노드 도메인 지식그래프"
           >
             <defs>
               <radialGradient id="clusterGlowMod1" cx="50%" cy="50%" r="50%">
@@ -406,7 +395,6 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                 <stop offset="100%" stopColor="#d97706" stopOpacity="0" />
               </radialGradient>
 
-              {/* 모듈 간 거시 브릿지 방향 화살표 마커 */}
               <marker
                 id="arrowBridge"
                 viewBox="0 0 10 10"
@@ -492,7 +480,7 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                 </g>
               )}
 
-              {/* 2. 2차 베지어 곡선 스플라인 간선(Quadratic Bézier Spline Edges) 렌더링 */}
+              {/* 2. 2차 베지어 곡선 스플라인 간선 */}
               {visibleEdges.map((edge) => {
                 const src = positionedMap[edge.source];
                 const tgt = positionedMap[edge.target];
@@ -557,7 +545,7 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                 );
               })}
 
-              {/* 3. 90개 키보드·포인터 접근 가능 노드 렌더링 */}
+              {/* 3. 90개 키보드·포인터 접근 가능 노드 */}
               {positionedNodes.map((node) => {
                 if (kindFilter !== 'all' && node.kind !== kindFilter) {
                   return null;
@@ -630,7 +618,6 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                     className="cursor-pointer focus:outline-none"
                     style={{ opacity: nodeOpacity }}
                   >
-                    {/* 선택/취약 외곽 링 */}
                     {(isSelected ||
                       isHovered ||
                       (weakFocusActive &&
@@ -647,7 +634,6 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                       />
                     )}
 
-                    {/* 노드 본체 */}
                     <circle
                       cx={node.x}
                       cy={node.y}
@@ -663,7 +649,6 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                       strokeWidth={node.kind === 'theory' ? 2.4 : 1.5}
                     />
 
-                    {/* 노드 내부 타입 약어 */}
                     {(node.kind === 'theory' || selectedModule !== 'all') && (
                       <text
                         x={node.x}
@@ -683,7 +668,6 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                       </text>
                     )}
 
-                    {/* 노드 라벨 배지 */}
                     {showLabel && (
                       <g>
                         <rect
@@ -739,12 +723,12 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
           </div>
 
           <span className="text-[#66b2ff] font-medium">
-            Tip: 정점을 클릭하거나 Tab으로 이동해 Enter를 누르면 1-Hop 연결망 드로어가 열립니다.
+            Tip: 정점을 클릭하거나 Tab + Enter를 누르면 우측 상세 드로어가 열립니다.
           </span>
         </div>
       </div>
 
-      {/* 하단: 위상 파급도(Topological Impact) 우선순위 복습 큐 */}
+      {/* 하단: 위상 파급도 우선순위 복습 큐 */}
       <div className="bento-tile-white p-5 sm:p-7 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="space-y-0.5 min-w-0">
@@ -773,22 +757,16 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                   현재 취약(Weak/Again) 또는 복습 요망(Review)으로 분류된 정점이 없습니다.
                 </p>
                 <p className="text-xs text-[#6e6e73]">
-                  플래시카드에서 헷갈리는 용어에 Again/Review를 표시하거나 압박 면접 초안을 작성하면 위상 파급도 순 복습 큐가 생성됩니다.
+                  단어장에서 헷갈리는 용어에 Again/Review를 표시하거나 90초 면접 초안을 작성하면 우선순위 복습 큐가 생성됩니다.
                 </p>
               </div>
             </div>
             <button
               type="button"
-              onClick={() =>
-                onJumpToWorkspaceTab(
-                  'flashcards',
-                  selectedModule === 'all' ? 'mod1' : selectedModule,
-                  'mod1-fc-zpd'
-                )
-              }
+              onClick={() => onNavigateCanonical('mod1-fc-zpd')}
               className="inline-flex min-h-[38px] items-center gap-1.5 rounded-full bg-[var(--accent-solid)] hover:bg-[var(--accent-solid-hover)] px-4 py-2 text-xs font-semibold text-white shrink-0 transition-colors"
             >
-              <span>플래시카드 진단 시작</span>
+              <span>단어장 진단 시작</span>
               <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </button>
           </div>
@@ -798,14 +776,6 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
               .slice(0, MAX_DISPLAY_WEAK_CARDS)
               .map((item) => {
                 const { node, mastery: mState } = item;
-                const targetTab: WorkspaceTabId =
-                  node.kind === 'theory'
-                    ? 'theories'
-                    : node.kind === 'flashcard'
-                    ? 'flashcards'
-                    : node.kind === 'case'
-                    ? 'cases'
-                    : 'interview';
 
                 return (
                   <div
@@ -848,33 +818,22 @@ export const KnowledgeGraphMap: React.FC<KnowledgeGraphMapProps> = ({
                       )}
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-black/[0.06]">
+                    <div className="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-black/[0.06]">
                       <button
                         type="button"
                         onClick={() => onSelectNode(node.id)}
                         className="inline-flex min-h-[30px] items-center gap-1 rounded-full bg-white hover:bg-black/[0.04] border border-black/[0.07] px-3 py-1 text-[11px] font-semibold text-[#1d1d1f]"
                       >
-                        <span>상세 보기</span>
+                        <span>노드 상세</span>
                       </button>
 
                       <button
                         type="button"
-                        onClick={() => onJumpToStory(node.moduleId, node.id)}
-                        className="inline-flex min-h-[30px] items-center gap-1 rounded-full bg-[var(--accent-subtle)] hover:bg-[#0071e3]/16 px-3 py-1 text-[11px] font-semibold text-[var(--accent-solid)]"
+                        onClick={() => onNavigateCanonical(node.id)}
+                        className="inline-flex min-h-[30px] items-center gap-1 rounded-full bg-[#1d1d1f] hover:bg-[#2c2c2e] px-3.5 py-1 text-[11px] font-semibold text-white"
                       >
-                        <Compass className="w-3 h-3 shrink-0" />
-                        <span>스토리 복습</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          onJumpToWorkspaceTab(targetTab, node.moduleId, node.id)
-                        }
-                        className="inline-flex min-h-[30px] items-center gap-1 rounded-full bg-[#1d1d1f] hover:bg-[#2c2c2e] px-3 py-1 text-[11px] font-semibold text-white"
-                      >
-                        <span>훈련 이동</span>
-                        <ExternalLink className="w-3 h-3 shrink-0" />
+                        <span>학습하러 이동</span>
+                        <ArrowRight className="w-3 h-3 shrink-0" />
                       </button>
                     </div>
                   </div>

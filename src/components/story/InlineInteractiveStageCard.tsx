@@ -1,11 +1,10 @@
-import React, { useId, useMemo, useState } from 'react';
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   ArrowUpRight,
   Brain,
   Cpu,
   Gauge,
   Layers,
-  Network,
   Sliders,
   Wrench
 } from 'lucide-react';
@@ -13,9 +12,7 @@ import { getTheoryVisualBlueprint } from '../../data/theoryVisuals';
 import {
   GraphAdjacencyIndex,
   KnowledgeGraphNode,
-  MasteryState,
-  ModuleId,
-  WorkspaceTabId
+  MasteryState
 } from '../../types/graph';
 import { CaseLenses, ClassroomCase, TheoryConcept } from '../../types/study';
 import {
@@ -28,13 +25,7 @@ interface SharedStageProps {
   adjacency: GraphAdjacencyIndex;
   nodeMap: Record<string, KnowledgeGraphNode>;
   masteryMap: Record<string, MasteryState>;
-  onInspectNode: (nodeId: string) => void;
-  onJumpToStoryNode: (moduleId: ModuleId, nodeId: string) => void;
-  onJumpToWorkspace: (
-    tab: WorkspaceTabId,
-    moduleId: ModuleId,
-    nodeId: string
-  ) => void;
+  onNavigateNode: (nodeId: string) => void;
 }
 
 interface TheoryInlineStageProps extends SharedStageProps {
@@ -52,6 +43,9 @@ export type InlineInteractiveStageCardProps =
   | CaseInlineStageProps;
 
 type TheorySubView = 'diagram' | 'clt-lab';
+type CaseLensTabId = 'matrix' | keyof CaseLenses;
+
+const CLT_PROSTHETICS_THEORY_ID = 'mod2-theory-clt-prosthetics';
 
 const WM_MAX_CAPACITY = 100;
 const PROSTHETICS_REDUCTION = 26;
@@ -72,6 +66,16 @@ const MASTERY_DOT_COLOR: Record<MasteryState, string> = {
   unseen: '#9ca3af'
 };
 
+const CASE_LENS_TABS: ReadonlyArray<{
+  id: CaseLensTabId;
+  label: string;
+}> = [
+  { id: 'matrix', label: '종합 매트릭스' },
+  { id: 'behavioral', label: '1. 행동주의(FBA)' },
+  { id: 'cognitive', label: '2. 인지·보철' },
+  { id: 'motivational', label: '3. 동기·상담' }
+];
+
 export const InlineInteractiveStageCard: React.FC<
   InlineInteractiveStageCardProps
 > = (props) => {
@@ -86,14 +90,21 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
   adjacency,
   nodeMap,
   masteryMap,
-  onInspectNode,
-  onJumpToStoryNode,
-  onJumpToWorkspace
+  onNavigateNode
 }) => {
   const sliderUid = useId();
+  const tabBaseId = useId();
+  const hasCltLab = theory.id === CLT_PROSTHETICS_THEORY_ID;
   const [subView, setSubView] = useState<TheorySubView>('diagram');
+  const cltTabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  // CLT 마이크로 실험기 로컬 상태
+  useEffect(() => {
+    if (!hasCltLab && subView !== 'diagram') {
+      setSubView('diagram');
+    }
+  }, [hasCltLab, subView]);
+
+  // CLT 마이크로 실험기 로컬 상태 (mod2-theory-clt-prosthetics 전용)
   const [intrinsicBase, setIntrinsicBase] = useState<number>(
     DEFAULT_INTRINSIC_LOAD
   );
@@ -109,51 +120,19 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
     [theory]
   );
 
-  // O(deg(v)) 1-Hop Ego-Subgraph 추출 (DEFINES_TERM / APPLIED_IN_CASE / DEFENDS_QUESTION / CROSS_MODULE_BRIDGE)
-  const egoLinks = useMemo(() => {
+  // 파생 학술 용어(DEFINES_TERM)만 추출 — 클릭 시 실전훈련 > 단어장 고유 위치로 직행
+  const derivedTermNodes = useMemo(() => {
     const outEdges = adjacency.outgoingByNode[theory.id] ?? [];
-    const inEdges = adjacency.incomingByNode[theory.id] ?? [];
-
-    const termNodes: KnowledgeGraphNode[] = [];
-    const appliedAndQuestionNodes: KnowledgeGraphNode[] = [];
-    const crossBridgeItems: Array<{
-      directionLabel: string;
-      otherNode: KnowledgeGraphNode;
-      rationaleKo?: string;
-    }> = [];
-
+    const terms: KnowledgeGraphNode[] = [];
     for (const edge of outEdges) {
-      const tgt = nodeMap[edge.target];
-      if (!tgt) continue;
       if (edge.relation === 'DEFINES_TERM') {
-        termNodes.push(tgt);
-      } else if (
-        edge.relation === 'APPLIED_IN_CASE' ||
-        edge.relation === 'DEFENDS_QUESTION'
-      ) {
-        appliedAndQuestionNodes.push(tgt);
-      } else if (edge.relation === 'CROSS_MODULE_BRIDGE') {
-        crossBridgeItems.push({
-          directionLabel: '심화 전이',
-          otherNode: tgt,
-          rationaleKo: edge.rationaleKo
-        });
+        const tgt = nodeMap[edge.target];
+        if (tgt) {
+          terms.push(tgt);
+        }
       }
     }
-
-    for (const edge of inEdges) {
-      const src = nodeMap[edge.source];
-      if (!src) continue;
-      if (edge.relation === 'CROSS_MODULE_BRIDGE') {
-        crossBridgeItems.push({
-          directionLabel: '선수 기반',
-          otherNode: src,
-          rationaleKo: edge.rationaleKo
-        });
-      }
-    }
-
-    return { termNodes, appliedAndQuestionNodes, crossBridgeItems };
+    return terms;
   }, [adjacency, nodeMap, theory.id]);
 
   const cltMetrics = useMemo(() => {
@@ -186,51 +165,75 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
     useWorkedExample
   ]);
 
+  const handleCltTabKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    idx: number
+  ) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    const nextIdx = idx === 0 ? 1 : 0;
+    const nextView: TheorySubView = nextIdx === 0 ? 'diagram' : 'clt-lab';
+    setSubView(nextView);
+    cltTabRefs.current[nextIdx]?.focus();
+  };
+
   return (
     <div
       onClick={(e) => e.stopPropagation()}
       className="rounded-[22px] bg-[#f5f5f7] p-4 sm:p-5 space-y-4 border border-black/[0.04]"
     >
-      {/* 상단 스테이지 헤더 + 애플 세그먼트 피커 */}
+      {/* 상단 스테이지 헤더 + (인지부하이론 전용) 보철 실험기 스위치 */}
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         <div className="min-w-0">
           <span className="text-[11px] font-semibold text-[var(--accent-solid)] block">
-            인터랙티브 개념 도식 스테이지
+            핵심 도식 &amp; 통념·처방 슬라이드
           </span>
           <p className="text-xs sm:text-sm font-bold text-[#1d1d1f] truncate">
             {blueprint.diagramTitle}
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        {hasCltLab && (
           <div
             role="tablist"
-            aria-label={`${theory.titleKo} 인터랙티브 실험 도구`}
-            className="inline-flex apple-segmented-track"
+            aria-label={`${theory.titleKo} 도식 및 보철 실험기 전환`}
+            className="single-row-tablist apple-segmented-track"
           >
             <button
+              ref={(el) => {
+                cltTabRefs.current[0] = el;
+              }}
+              id={`${tabBaseId}-diagram`}
               role="tab"
               type="button"
+              tabIndex={subView === 'diagram' ? 0 : -1}
               aria-selected={subView === 'diagram'}
               data-active={subView === 'diagram' ? 'true' : 'false'}
               onClick={() => setSubView('diagram')}
-              className={`apple-segmented-pill no-press-scale min-h-[30px] px-3 py-1 text-xs flex items-center gap-1.5 ${
+              onKeyDown={(e) => handleCltTabKeyDown(e, 0)}
+              className={`apple-segmented-pill no-press-scale min-h-[32px] px-3 py-1 text-xs flex items-center gap-1.5 whitespace-nowrap ${
                 subView === 'diagram'
                   ? 'text-[#1d1d1f]'
                   : 'text-[#424245] hover:text-[#1d1d1f]'
               }`}
             >
               <Layers className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-              <span>구조 도식</span>
+              <span>도식 슬라이드</span>
             </button>
 
             <button
+              ref={(el) => {
+                cltTabRefs.current[1] = el;
+              }}
+              id={`${tabBaseId}-clt-lab`}
               role="tab"
               type="button"
+              tabIndex={subView === 'clt-lab' ? 0 : -1}
               aria-selected={subView === 'clt-lab'}
               data-active={subView === 'clt-lab' ? 'true' : 'false'}
               onClick={() => setSubView('clt-lab')}
-              className={`apple-segmented-pill no-press-scale min-h-[30px] px-3 py-1 text-xs flex items-center gap-1.5 ${
+              onKeyDown={(e) => handleCltTabKeyDown(e, 1)}
+              className={`apple-segmented-pill no-press-scale min-h-[32px] px-3 py-1 text-xs flex items-center gap-1.5 whitespace-nowrap ${
                 subView === 'clt-lab'
                   ? 'text-[#1d1d1f]'
                   : 'text-[#424245] hover:text-[#1d1d1f]'
@@ -240,32 +243,26 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
               <span>보철 실험기</span>
             </button>
           </div>
-
-          <button
-            type="button"
-            onClick={() =>
-              onJumpToWorkspace('graph', theory.moduleId, theory.id)
-            }
-            className="min-h-[32px] inline-flex items-center gap-1 rounded-full bg-white hover:bg-black/[0.05] border border-black/[0.06] px-3 py-1 text-[11px] font-semibold text-[#1d1d1f] transition-colors"
-            title="90-노드 지식 그래프에서 이 이론의 위치 보기"
-          >
-            <Network
-              className="w-3 h-3 text-[var(--accent-solid)] shrink-0"
-              aria-hidden="true"
-            />
-            <span>그래프 열기</span>
-          </button>
-        </div>
+        )}
       </div>
 
       {/* 본문 스테이지 뷰포트 */}
-      {subView === 'diagram' ? (
-        <TheoryVisualRenderer blueprint={blueprint} frameless />
+      {!hasCltLab || subView === 'diagram' ? (
+        <div
+          role={hasCltLab ? 'tabpanel' : undefined}
+          aria-labelledby={hasCltLab ? `${tabBaseId}-diagram` : undefined}
+        >
+          <TheoryVisualRenderer blueprint={blueprint} frameless />
+        </div>
       ) : (
-        <div className="rounded-[18px] bg-white p-3.5 sm:p-5 border border-black/[0.05] shadow-2xs space-y-4 tabular-nums">
-          <div className="flex flex-wrap items-center justify-between gap-2">
+        <div
+          role="tabpanel"
+          aria-labelledby={`${tabBaseId}-clt-lab`}
+        >
+          <div className="rounded-[18px] bg-white p-3.5 sm:p-5 border border-black/[0.05] shadow-2xs space-y-4 tabular-nums">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent-subtle)] px-3 py-1 text-xs font-semibold text-[var(--accent-solid)]">
-                <Cpu className="w-3.5 h-3.5 shrink-0" />
+                <Cpu className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                 <span>작업기억 병목(WM Bottleneck) 및 환경적 보철 실험기</span>
               </span>
               <span
@@ -383,6 +380,7 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <button
                 type="button"
+                aria-pressed={useProsthetics}
                 onClick={() => setUseProsthetics((prev) => !prev)}
                 className={`text-left rounded-[14px] border p-3 space-y-1 transition-colors ${
                   useProsthetics
@@ -392,7 +390,7 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
               >
                 <div className="flex items-center justify-between gap-1 text-xs font-bold">
                   <span className="inline-flex items-center gap-1">
-                    <Wrench className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <Wrench className="w-3.5 h-3.5 text-emerald-600 shrink-0" aria-hidden="true" />
                     <span>외적 보철</span>
                   </span>
                   <span className="text-[11px] text-emerald-700">
@@ -406,6 +404,7 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
 
               <button
                 type="button"
+                aria-pressed={useWorkedExample}
                 onClick={() => setUseWorkedExample((prev) => !prev)}
                 className={`text-left rounded-[14px] border p-3 space-y-1 transition-colors ${
                   useWorkedExample
@@ -415,7 +414,7 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
               >
                 <div className="flex items-center justify-between gap-1 text-xs font-bold">
                   <span className="inline-flex items-center gap-1">
-                    <Gauge className="w-3.5 h-3.5 text-[var(--accent-solid)] shrink-0" />
+                    <Gauge className="w-3.5 h-3.5 text-[var(--accent-solid)] shrink-0" aria-hidden="true" />
                     <span>완성 예제</span>
                   </span>
                   <span className="text-[11px] text-[var(--accent-solid)]">
@@ -429,6 +428,7 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
 
               <button
                 type="button"
+                aria-pressed={useChunking}
                 onClick={() => setUseChunking((prev) => !prev)}
                 className={`text-left rounded-[14px] border p-3 space-y-1 transition-colors ${
                   useChunking
@@ -438,7 +438,7 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
               >
                 <div className="flex items-center justify-between gap-1 text-xs font-bold">
                   <span className="inline-flex items-center gap-1">
-                    <Brain className="w-3.5 h-3.5 text-violet-600 shrink-0" />
+                    <Brain className="w-3.5 h-3.5 text-violet-600 shrink-0" aria-hidden="true" />
                     <span>스키마 청킹</span>
                   </span>
                   <span className="text-[11px] text-violet-700">
@@ -450,87 +450,40 @@ const TheoryInlineStage: React.FC<TheoryInlineStageProps> = ({
                 </p>
               </button>
             </div>
+          </div>
         </div>
       )}
 
-      {/* 하단 1-Hop Ego-Subgraph 리본 (파생 용어 · 적용 사례 · 모듈 간 브릿지 점프) */}
-      <div className="space-y-2.5 pt-0.5">
-        {egoLinks.termNodes.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-semibold text-[#6e6e73] mr-0.5 shrink-0 whitespace-nowrap">
-              파생 학술 용어:
-            </span>
-            {egoLinks.termNodes.map((fcNode) => {
-              const mState = masteryMap[fcNode.id] ?? 'unseen';
-              return (
-                <button
-                  key={fcNode.id}
-                  type="button"
-                  onClick={() => onInspectNode(fcNode.id)}
-                  className="inline-flex min-h-[28px] items-center gap-1.5 rounded-full bg-white hover:bg-black/[0.04] border border-black/[0.06] px-2.5 py-1 text-[11px] font-semibold text-[#1d1d1f] transition-colors whitespace-nowrap"
-                >
-                  <span
-                    className="w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: MASTERY_DOT_COLOR[mState] }}
-                    aria-hidden="true"
-                  />
-                  <span>{fcNode.titleKo}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {egoLinks.crossBridgeItems.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {egoLinks.crossBridgeItems.map((bridge) => (
+      {/* 파생 학술 용어 칩 (클릭 시 실전훈련 > 단어장 해당 카드로 직행) */}
+      {derivedTermNodes.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+          <span className="text-[11px] font-semibold text-[#6e6e73] mr-0.5 shrink-0 whitespace-nowrap">
+            파생 학술 용어 (단어장 직행):
+          </span>
+          {derivedTermNodes.map((fcNode) => {
+            const mState = masteryMap[fcNode.id] ?? 'unseen';
+            return (
               <button
-                key={`${theory.id}-bridge-${bridge.otherNode.id}`}
+                key={fcNode.id}
                 type="button"
-                onClick={() =>
-                  onJumpToStoryNode(
-                    bridge.otherNode.moduleId,
-                    bridge.otherNode.id
-                  )
-                }
-                title={bridge.rationaleKo}
-                className="group rounded-[14px] bg-[var(--accent-subtle)] hover:bg-[#0071e3]/15 border border-[#0071e3]/15 px-3 py-2 text-left flex flex-col gap-1 transition-colors"
+                onClick={() => onNavigateNode(fcNode.id)}
+                className="group inline-flex min-h-[28px] items-center gap-1.5 rounded-full bg-white hover:bg-[var(--accent-subtle)] border border-black/[0.06] hover:border-[#0071e3]/25 px-2.5 py-1 text-[11px] font-semibold text-[#1d1d1f] hover:text-[var(--accent-solid)] transition-colors whitespace-nowrap"
               >
-                <div className="flex items-center justify-between gap-2 w-full">
-                  <span className="shrink-0 whitespace-nowrap text-[10.5px] font-bold text-[var(--accent-solid)]">
-                    {bridge.directionLabel}
-                  </span>
-                  <span className="shrink-0 whitespace-nowrap inline-flex items-center gap-0.5 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold text-[var(--accent-solid)] uppercase tabular-nums">
-                    <span>{bridge.otherNode.moduleId}</span>
-                    <ArrowUpRight className="w-3 h-3 shrink-0" aria-hidden="true" />
-                  </span>
-                </div>
-                <span className="text-[11.5px] font-semibold text-[#1d1d1f] leading-snug korean-keep-all min-w-0">
-                  {bridge.otherNode.titleKo}
-                </span>
+                <span
+                  className="w-2 h-2 rounded-full shrink-0"
+                  style={{ backgroundColor: MASTERY_DOT_COLOR[mState] }}
+                  aria-hidden="true"
+                />
+                <span>{fcNode.titleKo}</span>
+                <ArrowUpRight
+                  className="w-3 h-3 text-[#86868b] group-hover:text-[var(--accent-solid)] shrink-0"
+                  aria-hidden="true"
+                />
               </button>
-            ))}
-          </div>
-        )}
-
-        {egoLinks.appliedAndQuestionNodes.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5">
-            {egoLinks.appliedAndQuestionNodes.map((relNode) => (
-              <button
-                key={relNode.id}
-                type="button"
-                onClick={() => onInspectNode(relNode.id)}
-                className="inline-flex min-h-[28px] max-w-full items-center gap-1.5 rounded-[10px] bg-white/90 hover:bg-white border border-black/[0.06] px-2.5 py-1 text-[11px] font-medium text-[#424245] text-left transition-colors"
-              >
-                <span className="shrink-0 whitespace-nowrap rounded bg-[#f5f5f7] px-1.5 py-0.5 text-[10px] font-bold text-[#6e6e73]">
-                  {relNode.kind === 'case' ? '사례' : '면접'}
-                </span>
-                <span className="truncate max-w-[220px]">{relNode.titleKo}</span>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
@@ -539,13 +492,13 @@ const CaseInlineStage: React.FC<CaseInlineStageProps> = ({
   classroomCase,
   adjacency,
   nodeMap,
-  onInspectNode
+  onNavigateNode
 }) => {
-  const [selectedLens, setSelectedLens] = useState<'matrix' | keyof CaseLenses>(
-    'matrix'
-  );
+  const lensTabBaseId = useId();
+  const [selectedLens, setSelectedLens] = useState<CaseLensTabId>('matrix');
+  const lensTabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  // O(deg-(v)) 역방향 원천 이론 추출 (APPLIED_IN_CASE incoming edges)
+  // 역방향 원천 이론 추출 (APPLIED_IN_CASE incoming edges -> 클릭 시 개념학습 내 해당 이론으로 스크롤)
   const sourceTheories = useMemo(() => {
     const inEdges = adjacency.incomingByNode[classroomCase.id] ?? [];
     const list: KnowledgeGraphNode[] = [];
@@ -557,51 +510,84 @@ const CaseInlineStage: React.FC<CaseInlineStageProps> = ({
     return list;
   }, [adjacency, classroomCase.id, nodeMap]);
 
+  useEffect(() => {
+    const activeIdx = CASE_LENS_TABS.findIndex((t) => t.id === selectedLens);
+    if (activeIdx >= 0) {
+      lensTabRefs.current[activeIdx]?.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest'
+      });
+    }
+  }, [selectedLens]);
+
+  const handleLensKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    idx: number
+  ) => {
+    let nextIdx = idx;
+    if (e.key === 'ArrowRight') {
+      nextIdx = (idx + 1) % CASE_LENS_TABS.length;
+    } else if (e.key === 'ArrowLeft') {
+      nextIdx = (idx - 1 + CASE_LENS_TABS.length) % CASE_LENS_TABS.length;
+    } else if (e.key === 'Home') {
+      nextIdx = 0;
+    } else if (e.key === 'End') {
+      nextIdx = CASE_LENS_TABS.length - 1;
+    } else {
+      return;
+    }
+    e.preventDefault();
+    const nextTab = CASE_LENS_TABS[nextIdx];
+    setSelectedLens(nextTab.id);
+    lensTabRefs.current[nextIdx]?.focus();
+  };
+
   return (
     <div
       onClick={(e) => e.stopPropagation()}
       className="rounded-[20px] bg-white p-4 sm:p-5 border border-black/[0.06] space-y-4"
     >
-      {/* 원천 처방 이론 역추적 배지 + 3중 렌즈 세그먼트 피커 */}
+      {/* 원천 처방 이론 역추적 배지 + 3중 렌즈 단일 행 탭 피커 */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-1.5 min-w-0">
-          <span className="text-[11px] font-semibold text-[#6e6e73] mr-0.5 shrink-0 whitespace-nowrap">
-            처방 근거 이론:
-          </span>
-          {sourceTheories.map((th) => (
-            <button
-              key={th.id}
-              type="button"
-              onClick={() => onInspectNode(th.id)}
-              className="inline-flex min-h-[28px] max-w-full items-center gap-1 rounded-[10px] bg-[#f5f5f7] hover:bg-black/[0.07] px-2.5 py-1 text-[11px] font-semibold text-[#1d1d1f] text-left korean-keep-all transition-colors"
-            >
-              <span>{th.titleKo}</span>
-            </button>
-          ))}
-        </div>
+        {sourceTheories.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5 min-w-0">
+            <span className="text-[11px] font-semibold text-[#6e6e73] mr-0.5 shrink-0 whitespace-nowrap">
+              처방 근거 이론:
+            </span>
+            {sourceTheories.map((th) => (
+              <button
+                key={th.id}
+                type="button"
+                onClick={() => onNavigateNode(th.id)}
+                className="inline-flex min-h-[28px] max-w-full items-center gap-1 rounded-[10px] bg-[#f5f5f7] hover:bg-[var(--accent-subtle)] px-2.5 py-1 text-[11px] font-semibold text-[#1d1d1f] hover:text-[var(--accent-solid)] text-left korean-keep-all transition-colors"
+              >
+                <span>{th.titleKo}</span>
+              </button>
+            ))}
+          </div>
+        )}
 
         <div
           role="tablist"
           aria-label={`${classroomCase.title} 3중 처방 렌즈 전환`}
-          className="flex flex-wrap items-center gap-1 rounded-[14px] bg-[#f5f5f7] p-1"
+          className="single-row-tablist rounded-[14px] bg-[#f5f5f7] p-1"
         >
-          {(
-            [
-              { id: 'matrix', label: '종합 매트릭스' },
-              { id: 'behavioral', label: '1. 행동주의(FBA)' },
-              { id: 'cognitive', label: '2. 인지·보철' },
-              { id: 'motivational', label: '3. 동기·상담' }
-            ] as const
-          ).map((tab) => {
+          {CASE_LENS_TABS.map((tab, idx) => {
             const isActive = selectedLens === tab.id;
             return (
               <button
                 key={tab.id}
+                ref={(el) => {
+                  lensTabRefs.current[idx] = el;
+                }}
+                id={`${lensTabBaseId}-${tab.id}`}
                 role="tab"
                 type="button"
+                tabIndex={isActive ? 0 : -1}
                 aria-selected={isActive}
                 onClick={() => setSelectedLens(tab.id)}
-                className={`no-press-scale min-h-[30px] rounded-[10px] px-3 py-1 text-xs font-semibold transition-colors ${
+                onKeyDown={(e) => handleLensKeyDown(e, idx)}
+                className={`no-press-scale min-h-[32px] rounded-[10px] px-3 py-1 text-xs font-semibold whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-white text-[#1d1d1f] shadow-2xs'
                     : 'text-[#424245] hover:text-[#1d1d1f]'
@@ -615,7 +601,10 @@ const CaseInlineStage: React.FC<CaseInlineStageProps> = ({
       </div>
 
       {/* 선택된 3중 렌즈 도식 렌더링 */}
-      <div>
+      <div
+        role="tabpanel"
+        aria-labelledby={`${lensTabBaseId}-${selectedLens}`}
+      >
         {selectedLens === 'matrix' ? (
           <TriLensSummaryMatrix classroomCase={classroomCase} />
         ) : (

@@ -6,7 +6,7 @@ import {
   Ellipsis,
   GraduationCap,
   Home,
-  Network,
+  Layers,
   RotateCcw,
   Search,
   Sparkles,
@@ -62,7 +62,6 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
   const [isHoldingReset, setIsHoldingReset] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
-  // Scroll-Driven Animation 미지원 브라우저용 rAF + style.transform 폴백
   useEffect(() => {
     const supportsScrollTimeline =
       typeof CSS !== 'undefined' &&
@@ -100,7 +99,6 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
     };
   }, [mode]);
 
-  // 스튜디오 관리 드롭다운 외부 클릭 및 Escape 닫기
   useEffect(() => {
     if (!isManageOpen) return;
 
@@ -161,7 +159,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
       holdTimerRef.current = null;
       await onResetProgress();
       setIsManageOpen(false);
-      showToast('모든 스토리·워크스페이스 진행 상태가 초기화되었습니다.');
+      showToast('모든 학습 진행 상태가 초기화되었습니다.');
     }, HOLD_RESET_DURATION_MS);
   };
 
@@ -177,7 +175,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
 
   return (
     <header className="no-print print:hidden sticky top-0 z-40 apple-glass-light text-[#1d1d1f] border-b border-black/[0.07] pt-[env(safe-area-inset-top)]">
-      {/* 상단 2px Apple Blue 스크롤 진행률 인디케이터 */}
+      {/* 상단 2px 스크롤 진행률 인디케이터 */}
       <div
         aria-hidden="true"
         className="h-[2px] w-full bg-black/[0.04] overflow-hidden"
@@ -188,14 +186,13 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
         />
       </div>
 
-      {/* 단일 48px 컴팩트 프로스티드 글래스 리본 (content-first-noise-reduction: 뷰포트 12% 미만 단일 행 유지) */}
+      {/* 단일 48px 컴팩트 헤더 리본 */}
       <div className="max-w-[1280px] mx-auto px-3.5 sm:px-6 h-12 flex items-center justify-between gap-2">
-        {/* 좌측: 애플 스타일 미니멀 워드마크 (홈 쇼케이스 이동) */}
+        {/* 좌측: 스튜디오 워드마크 */}
         <button
           type="button"
           onClick={() => onChangeMode('home')}
           className="inline-flex items-center gap-2 rounded-full py-1 pr-2.5 text-left group min-w-0"
-          title="EduPsych Studio 홈 쇼케이스로 이동"
         >
           <span className="w-7 h-7 rounded-full bg-[#1d1d1f] text-white flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
             <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" />
@@ -205,9 +202,9 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
           </span>
         </button>
 
-        {/* 중앙(lg+): [홈 · 스토리 · 워크스페이스] 3-모드 애플 세그먼트 피커 */}
+        {/* 중앙(lg+): [홈 · 개념학습 · 실전훈련] 3대 영역 내비게이션 */}
         <nav
-          aria-label="주요 학습 모드"
+          aria-label="주요 학습 영역"
           className="hidden lg:inline-flex apple-segmented-track"
         >
           {(
@@ -219,15 +216,15 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
               },
               {
                 id: 'story',
-                label: '스토리 커리큘럼',
+                label: '개념학습',
                 icon: (
                   <BookOpenCheck className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                 )
               },
               {
                 id: 'workspace',
-                label: '스터디 워크스페이스',
-                icon: <Network className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                label: '실전훈련',
+                icon: <Layers className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
               }
             ] as const
           ).map((item) => {
@@ -239,7 +236,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
                 data-active={isActive ? 'true' : 'false'}
                 aria-current={isActive ? 'page' : undefined}
                 onClick={() => onChangeMode(item.id)}
-                className={`apple-segmented-pill no-press-scale min-h-[32px] px-4 py-1 text-xs flex items-center gap-1.5 ${
+                className={`nav-mode-btn apple-segmented-pill no-press-scale min-h-[32px] px-4 py-1 text-xs flex items-center gap-1.5 ${
                   isActive
                     ? 'text-[#1d1d1f]'
                     : 'text-[#424245] hover:text-[#1d1d1f]'
@@ -252,14 +249,13 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
           })}
         </nav>
 
-        {/* 우측: 글로벌 스포트라이트 검색 + 복습 표적 + 데스크톱 AI 질문 + [⋯] 스튜디오 관리 팝오버 */}
+        {/* 우측: 통합 검색(⌘K) + 복습 배지 + 데스크톱 AI 질문 + [⋯] 관리 메뉴 */}
         <div className="flex items-center gap-1.5 shrink-0 tabular-nums">
           <button
             type="button"
-            aria-label="90개 노드 스포트라이트 검색 열기"
+            aria-label="통합 검색 열기"
             onClick={onOpenSearch}
             className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center gap-1.5 rounded-full bg-black/[0.05] hover:bg-black/[0.09] px-2.5 sm:px-3 py-1 text-xs font-semibold text-[#1d1d1f]"
-            title="90개 학습 노드 즉시 검색 (⌘K)"
           >
             <Search className="w-3.5 h-3.5 text-[#424245] shrink-0" aria-hidden="true" />
             <span className="hidden sm:inline">검색</span>
@@ -268,7 +264,6 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
             </kbd>
           </button>
 
-          {/* 복습 표적 서브그래프 바로가기 */}
           <button
             type="button"
             onClick={onJumpToWeakGraph}
@@ -277,7 +272,6 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
                 ? 'bg-rose-500/12 text-rose-700 hover:bg-rose-500/18'
                 : 'bg-black/[0.05] text-[#424245] hover:bg-black/[0.09]'
             }`}
-            title="위상 파급도 기준 복습 필요 서브그래프 열기"
           >
             <AlertTriangle
               aria-hidden="true"
@@ -288,7 +282,6 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
             <span>복습 {counts.weakOrReview}</span>
           </button>
 
-          {/* 데스크톱 전용 AI 질문 캡슐 (모바일은 하단 글래스 독 우측 런처가 담당) */}
           <button
             type="button"
             aria-expanded={isAiTutorOpen}
@@ -299,13 +292,11 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
                 ? 'bg-[var(--accent-solid)] text-white shadow-sm'
                 : 'bg-[var(--accent-subtle)] text-[var(--accent-solid)] hover:bg-[#0071e3]/15'
             }`}
-            title="2-Hop 지식 그래프 기반 교재 우선 AI 튜터 (⌘J)"
           >
             <Sparkles className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
             <span>AI 질문</span>
           </button>
 
-          {/* [⋯] 스튜디오 관리(백업·복원·진도 요약·초기화) 드롭다운 */}
           <div ref={menuWrapperRef} className="relative">
             <button
               ref={menuTriggerRef}
@@ -319,7 +310,6 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
                   ? 'bg-[#1d1d1f] text-white'
                   : 'bg-black/[0.05] hover:bg-black/[0.09] text-[#1d1d1f]'
               }`}
-              title="진도 요약 · JSON 백업 · 복원 · 초기화"
             >
               <Ellipsis className="w-4 h-4" aria-hidden="true" />
             </button>
@@ -334,13 +324,14 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
                 <div className="rounded-[14px] bg-[#f5f5f7] p-3 space-y-1.5">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[11px] font-semibold text-[#6e6e73]">
-                      학습 그래프 텔레메트리
+                      학습 진도 요약
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-[#424245] border border-black/[0.05]">
                       <span
                         className={`w-1.5 h-1.5 rounded-full ${
                           isServerConnected ? 'bg-emerald-500' : 'bg-[#0071e3]'
                         }`}
+                        aria-hidden="true"
                       />
                       <span>{isServerConnected ? '로컬 DB' : '브라우저 저장소'}</span>
                     </span>
@@ -366,7 +357,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
                     className="w-full min-h-[38px] rounded-[12px] bg-[#f5f5f7] hover:bg-black/[0.07] px-3 py-2 text-xs font-semibold text-[#1d1d1f] flex items-center justify-between gap-2"
                   >
                     <span className="flex items-center gap-2">
-                      <Download className="w-3.5 h-3.5 text-[#0071e3] shrink-0" />
+                      <Download className="w-3.5 h-3.5 text-[#0071e3] shrink-0" aria-hidden="true" />
                       <span>진행도 JSON 백업 다운로드</span>
                     </span>
                   </button>
@@ -377,7 +368,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
                     className="w-full min-h-[38px] rounded-[12px] bg-[#f5f5f7] hover:bg-black/[0.07] px-3 py-2 text-xs font-semibold text-[#1d1d1f] flex items-center justify-between gap-2"
                   >
                     <span className="flex items-center gap-2">
-                      <Upload className="w-3.5 h-3.5 text-[#0071e3] shrink-0" />
+                      <Upload className="w-3.5 h-3.5 text-[#0071e3] shrink-0" aria-hidden="true" />
                       <span>백업 JSON 파일에서 복원</span>
                     </span>
                   </button>
@@ -410,7 +401,7 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
                       aria-hidden="true"
                       className="hold-confirm-overlay pointer-events-none absolute inset-0 bg-rose-600/20"
                     />
-                    <RotateCcw className="w-3.5 h-3.5 relative z-10 shrink-0" />
+                    <RotateCcw className="w-3.5 h-3.5 relative z-10 shrink-0" aria-hidden="true" />
                     <span className="relative z-10">
                       {isHoldingReset
                         ? '계속 누르면 초기화됩니다...'
@@ -424,7 +415,6 @@ export const DualModeTopBar: React.FC<DualModeTopBarProps> = ({
         </div>
       </div>
 
-      {/* 토스트 알림 */}
       {toastMsg && (
         <div
           role="status"

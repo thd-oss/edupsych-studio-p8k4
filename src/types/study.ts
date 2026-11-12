@@ -1,13 +1,5 @@
 export type ModuleId = 'mod1' | 'mod2' | 'mod3' | 'mod4' | 'mod5';
 
-export type NavigationTabId =
-  | 'dashboard'
-  | 'theories'
-  | 'flashcards'
-  | 'cases'
-  | 'interview'
-  | 'cheatsheet';
-
 export type FlashcardStatus = 'unseen' | 'again' | 'review' | 'mastered';
 
 export type StudyItemType = 'theory' | 'flashcard' | 'case' | 'question';

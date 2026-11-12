@@ -53,6 +53,8 @@ export interface VisualDeckSlide {
   footerFlowHint?: string;
   gaugeSegments?: VisualDeckGaugeSegment[];
   contrastPair?: VisualDeckContrastPair;
+  imageUrl?: string;
+  imageAlt?: string;
   accent: DeckAccentTone;
 }
 
@@ -341,6 +343,37 @@ export function buildTheoryVisualDeck(blueprint: TheoryVisualBlueprint): {
     : [];
 
   return { diagramSlides, contrastSlides };
+}
+
+/**
+ * 중첩 모달리티 탭을 제거하고 '핵심 구조 도식 + 통념 vs 처방(+ 인포그래픽)'을
+ * 하나의 연속된 가로 슬라이드 시퀀스로 통합 반환합니다.
+ */
+export function buildUnifiedTheoryVisualSlides(
+  blueprint: TheoryVisualBlueprint
+): VisualDeckSlide[] {
+  const { diagramSlides, contrastSlides } = buildTheoryVisualDeck(blueprint);
+  const unified: VisualDeckSlide[] = [...diagramSlides, ...contrastSlides];
+
+  if (blueprint.illustrationUrl) {
+    unified.push({
+      id: `${blueprint.theoryId}-infographic`,
+      stepBadge: '도해 요약',
+      secondaryBadge: '인포그래픽',
+      chipLabel: '인포그래픽',
+      title: blueprint.diagramTitle,
+      subtitle:
+        blueprint.illustrationCaption ??
+        '핵심 메커니즘과 임상 적용을 한 장에 압축한 시각 도해',
+      imageUrl: blueprint.illustrationUrl,
+      imageAlt:
+        blueprint.illustrationCaption ?? `${blueprint.diagramTitle} 인포그래픽`,
+      footerFlowHint: '터치하여 전체 도해 확대 보기',
+      accent: 'sky'
+    });
+  }
+
+  return unified;
 }
 
 // ============================================================================

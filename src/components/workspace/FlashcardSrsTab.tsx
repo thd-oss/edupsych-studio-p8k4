@@ -4,12 +4,11 @@ import {
   ArrowLeftRight,
   ArrowRight,
   Bookmark,
+  BookOpenCheck,
   CheckCircle2,
-  Compass,
   Grid,
   HelpCircle,
   Layers,
-  Network,
   Plus,
   RotateCw,
   Save,
@@ -18,29 +17,31 @@ import {
   X,
   XCircle
 } from 'lucide-react';
-import { ModuleId } from '../../types/graph';
+import { ModuleId, StoryScrollRequest } from '../../types/graph';
 import { Flashcard, FlashcardStatus } from '../../types/study';
 
 interface FlashcardSrsTabProps {
   flashcards: Flashcard[];
   selectedModule: ModuleId | 'all';
   bookmarks: string[];
+  focusRequest?: StoryScrollRequest | null;
+  onConsumeFocusRequest?: () => void;
   onUpdateStatus: (cardId: string, status: FlashcardStatus) => void;
   onToggleBookmark: (cardId: string) => void;
   onCreateFlashcard: (moduleId: ModuleId, item: Flashcard) => Promise<void>;
-  onInspectNode: (nodeId: string) => void;
-  onJumpToStory: (moduleId: ModuleId, nodeId: string) => void;
+  onJumpToConceptContext: (nodeId: string) => void;
 }
 
 export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
   flashcards,
   selectedModule,
   bookmarks,
+  focusRequest = null,
+  onConsumeFocusRequest,
   onUpdateStatus,
   onToggleBookmark,
   onCreateFlashcard,
-  onInspectNode,
-  onJumpToStory
+  onJumpToConceptContext
 }) => {
   const [displayMode, setDisplayMode] = useState<'deck' | 'grid'>('deck');
   const [direction, setDirection] = useState<'ko-to-en' | 'en-to-ko'>(
@@ -112,10 +113,43 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
     });
   }, [moduleFilteredCards, statusFilter, searchQuery]);
 
+  // 모듈·필터 변경 시 기본 0번 인덱스 리셋 (단, 외부 딥링크 포커스 요청 처리 중에는 덮어쓰지 않음)
   useEffect(() => {
+    if (focusRequest) return;
     setCurrentIndex(0);
     setIsDeckFlipped(false);
-  }, [selectedModule, statusFilter, searchQuery]);
+  }, [selectedModule, statusFilter, searchQuery, focusRequest]);
+
+  // 개념학습 파생 학술 용어 칩·검색·그래프에서 특정 플래시카드 직행 시 해당 카드로 즉시 포커스
+  useEffect(() => {
+    if (!focusRequest) return;
+    const existsInAll = flashcards.some((c) => c.id === focusRequest.nodeId);
+    if (!existsInAll) {
+      onConsumeFocusRequest?.();
+      return;
+    }
+    if (statusFilter !== 'all' || searchQuery !== '') {
+      setStatusFilter('all');
+      setSearchQuery('');
+      return;
+    }
+    const targetIdx = filteredCards.findIndex(
+      (c) => c.id === focusRequest.nodeId
+    );
+    if (targetIdx >= 0) {
+      setDisplayMode('deck');
+      setCurrentIndex(targetIdx);
+      setIsDeckFlipped(false);
+      onConsumeFocusRequest?.();
+    }
+  }, [
+    focusRequest,
+    flashcards,
+    filteredCards,
+    statusFilter,
+    searchQuery,
+    onConsumeFocusRequest
+  ]);
 
   const activeCard: Flashcard | undefined =
     filteredCards[Math.min(currentIndex, Math.max(0, filteredCards.length - 1))];
@@ -130,7 +164,8 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
         target &&
         (target.tagName === 'INPUT' ||
           target.tagName === 'TEXTAREA' ||
-          target.tagName === 'SELECT')
+          target.tagName === 'SELECT' ||
+          target.tagName === 'BUTTON')
       ) {
         return;
       }
@@ -195,10 +230,10 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
           <div className="space-y-1 min-w-0">
             <span className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-extrabold text-emerald-900">
               <Layers className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-              <span>한-영 간격 인출 플래시카드 덱 (47+ 카드)</span>
+              <span>한-영 학술 단어장 ({counts.total}개 용어)</span>
             </span>
             <h3 className="text-base sm:text-xl font-extrabold text-slate-900">
-              한-영 학술 용어 능동적 인출 훈련 (스토리 퀵 체크와 100% 실시간 동기화)
+              한-영 학술 용어 능동적 인출 훈련 (평가 즉시 지식그래프 숙련도에 실시간 반영)
             </h3>
           </div>
 
@@ -260,7 +295,7 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
           </div>
         </div>
 
-        {/* 숙련도 필터 버튼 & 헷갈리는 카드 전용 필터 */}
+        {/* 숙련도 필터 버튼 & 검색 */}
         <div className="pt-3 border-t border-slate-900/[0.06] flex flex-wrap items-center justify-between gap-3 tabular-nums">
           <div className="chip-scroll-row flex items-center gap-1.5 min-w-0 max-w-full">
             {(
@@ -268,7 +303,7 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
                 { id: 'all', label: `전체 (${counts.total})` },
                 {
                   id: 'confusing',
-                  label: `헷갈리는 카드(Again+Review) (${counts.confusing})`
+                  label: `헷갈리는 카드 (${counts.confusing})`
                 },
                 { id: 'again', label: `모름 Again (${counts.again})` },
                 { id: 'review', label: `애매함 Review (${counts.review})` },
@@ -293,13 +328,14 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
             ))}
           </div>
 
-          <div className="relative min-w-[240px] flex-1 max-w-xs">
+          <div className="relative min-w-[220px] flex-1 max-w-xs">
             <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="한글·영문 용어 검색..."
+              aria-label="단어장 한글 및 영문 용어 검색"
               className="w-full rounded-lg bg-slate-50 border border-slate-900/[0.08] pl-9 pr-3 py-1.5 text-base sm:text-xs text-slate-900 focus:bg-white focus:border-indigo-500"
             />
           </div>
@@ -318,6 +354,7 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
+                aria-label="카드 추가 폼 닫기"
                 className="text-slate-500 hover:text-slate-800"
               >
                 <X className="w-4 h-4" />
@@ -327,6 +364,7 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
               <select
                 value={newModId}
                 onChange={(e) => setNewModId(e.target.value as ModuleId)}
+                aria-label="소속 모듈 선택"
                 className="rounded-xl border border-emerald-200 bg-white px-3 py-2 text-base sm:text-xs font-bold text-slate-800"
               >
                 <option value="mod1">Module 1</option>
@@ -403,10 +441,10 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
           {/* 덱 상단 네비게이션 */}
           <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-extrabold text-slate-600 tabular-nums px-1">
             <span>
-              카드 {currentIndex + 1} / {filteredCards.length} ({activeCard.id})
+              카드 {currentIndex + 1} / {filteredCards.length}
             </span>
-            <span className="text-indigo-600">
-              단축키: Space / Enter (0ms 즉시 뒤집기) · ← / → (이전/다음 카드)
+            <span className="text-indigo-600 hidden sm:inline">
+              단축키: Space / Enter (즉시 뒤집기) · ← / → (이전/다음 카드)
             </span>
           </div>
 
@@ -414,6 +452,7 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
           <div
             role="button"
             tabIndex={0}
+            data-node-id={activeCard.id}
             onClick={() => setIsDeckFlipped((prev) => !prev)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -433,7 +472,7 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
                   {activeCard.moduleId.toUpperCase()}
                 </span>
                 <span className="rounded-lg bg-slate-100 border border-slate-200 px-2.5 py-0.5 text-xs font-bold text-slate-700 uppercase">
-                  현재 상태: {activeCard.status}
+                  상태: {activeCard.status}
                 </span>
               </div>
 
@@ -443,30 +482,15 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
               >
                 <button
                   type="button"
-                  onClick={() =>
-                    onJumpToStory(activeCard.moduleId, activeCard.id)
-                  }
+                  onClick={() => onJumpToConceptContext(activeCard.id)}
                   className={`inline-flex min-h-[32px] items-center gap-1 rounded-xl px-2.5 py-1 text-xs font-extrabold border ${
                     isDeckFlipped
                       ? 'bg-white/10 text-indigo-200 border-white/15 hover:bg-white/20'
                       : 'bg-indigo-50 text-indigo-800 border-indigo-200 hover:bg-indigo-100'
                   }`}
                 >
-                  <Compass className="w-3.5 h-3.5 shrink-0" />
-                  <span>스토리 맥락</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onInspectNode(activeCard.id)}
-                  className={`inline-flex min-h-[32px] items-center gap-1 rounded-xl px-2.5 py-1 text-xs font-extrabold border ${
-                    isDeckFlipped
-                      ? 'bg-white/10 text-slate-200 border-white/15 hover:bg-white/20'
-                      : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
-                  }`}
-                >
-                  <Network className="w-3.5 h-3.5 shrink-0" />
-                  <span>그래프 연결망</span>
+                  <BookOpenCheck className="w-3.5 h-3.5 shrink-0" />
+                  <span>관련 개념학습</span>
                 </button>
 
                 <button
@@ -508,7 +532,7 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
               {!isDeckFlipped ? (
                 <div className="rounded-2xl bg-slate-50 border border-slate-200 p-4 text-xs sm:text-sm text-slate-600 flex items-center justify-between">
                   <span>
-                    반대 언어 원서 용어와 핵심 정의·교실 처방 예시를 머릿속으로 인출한 뒤 카드를 클릭하세요.
+                    반대 언어 원서 용어와 핵심 정의·교실 처방 예시를 머릿속으로 인출한 뒤 카드를 터치하세요.
                   </span>
                   <RotateCw className="w-4 h-4 text-indigo-600 shrink-0 ml-2" />
                 </div>
@@ -549,7 +573,7 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
             </div>
 
             <div className="text-right text-xs font-bold text-slate-400">
-              {isDeckFlipped ? '클릭하여 앞면으로 접기' : '클릭하여 정답 확인 (0ms)'}
+              {isDeckFlipped ? '터치하여 앞면으로 접기' : '터치하여 정답 확인'}
             </div>
           </div>
 
@@ -618,6 +642,7 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
             return (
               <div
                 key={card.id}
+                data-node-id={card.id}
                 className={`rounded-2xl border p-5 flex flex-col justify-between gap-4 transition-colors ${
                   isFlipped
                     ? 'bg-slate-900 text-white border-indigo-500'
@@ -629,22 +654,13 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
                     <span className="rounded bg-indigo-600 px-2 py-0.5 text-[10px] font-extrabold text-white uppercase tabular-nums">
                       {card.moduleId.toUpperCase()} · {card.status}
                     </span>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => onJumpToStory(card.moduleId, card.id)}
-                        className="rounded-lg bg-indigo-50 hover:bg-indigo-100 px-2 py-1 text-[11px] font-bold text-indigo-800"
-                      >
-                        스토리 맥락
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => onInspectNode(card.id)}
-                        className="rounded-lg bg-slate-100 hover:bg-slate-200 px-2 py-1 text-[11px] font-bold text-slate-700"
-                      >
-                        연결망
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => onJumpToConceptContext(card.id)}
+                      className="rounded-lg bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 text-[11px] font-bold text-indigo-800"
+                    >
+                      관련 개념학습
+                    </button>
                   </div>
 
                   <div
@@ -684,7 +700,7 @@ export const FlashcardSrsTab: React.FC<FlashcardSrsTabProps> = ({
                       </div>
                     ) : (
                       <p className="text-xs text-indigo-600 font-bold">
-                        ▼ 클릭하여 정의 및 처방 예시 펼치기
+                        ▼ 터치하여 정의 및 처방 예시 펼치기
                       </p>
                     )}
                   </div>

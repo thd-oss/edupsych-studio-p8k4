@@ -293,6 +293,90 @@
 }
 
 /* 모바일 가로 스와이프 필터/탭 트랙 */
+@property --fade-start {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --fade-end {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@layer components {
+  .single-row-tablist {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.375rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: inline proximity;
+    scroll-padding-inline: 2rem;
+    touch-action: manipulation;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .single-row-tablist::-webkit-scrollbar {
+    display: none;
+  }
+
+  .single-row-tablist > [role='tab'] {
+    position: relative;
+    flex: none;
+    scroll-snap-align: start;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .single-row-tablist {
+    --fade-size: 2rem;
+    --fade-dir: right;
+    --fade-start-pos: 0;
+    --fade-end-pos: 100%;
+    mask:
+      linear-gradient(black, black) no-clip subtract,
+      linear-gradient(to var(--fade-dir), black, transparent)
+        var(--fade-start-pos) 0 / var(--fade-start) 100% no-repeat no-clip,
+      linear-gradient(to var(--fade-dir), transparent, black)
+        var(--fade-end-pos) 0 / var(--fade-end) 100% no-repeat no-clip;
+    animation:
+      tablist-reveal-fade-start linear both,
+      tablist-hide-fade-end linear both;
+    animation-timeline: scroll(self inline);
+    animation-range:
+      0 var(--fade-size),
+      calc(100% - var(--fade-size)) 100%;
+  }
+}
+
+@keyframes tablist-reveal-fade-start {
+  to {
+    --fade-start: var(--fade-size);
+  }
+}
+
+@keyframes tablist-hide-fade-end {
+  from {
+    --fade-end: var(--fade-size);
+  }
+}
+
+/* 색상 외 형태 인디케이터 (WCAG 1.4.1 & Forced Colors Mode 보존) */
+[role='tab'][aria-selected='true']::after,
+.nav-mode-btn[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0.65rem;
+  inset-block-end: 0.2rem;
+  border-block-end: 2px solid currentColor;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
 .chip-scroll-row {
   display: flex;
   align-items: center;
@@ -300,7 +384,7 @@
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
-  touch-action: pan-x;
+  touch-action: manipulation;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -329,7 +413,7 @@
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
-  touch-action: pan-x;
+  touch-action: manipulation;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }

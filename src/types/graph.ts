@@ -10,11 +10,9 @@ export type { ModuleId };
 export type AppMode = 'home' | 'story' | 'workspace';
 
 export type WorkspaceTabId =
-  | 'graph'
-  | 'theories'
   | 'flashcards'
-  | 'cases'
   | 'interview'
+  | 'graph'
   | 'cheatsheet';
 
 export type NodeKind = 'module' | 'theory' | 'flashcard' | 'case' | 'question';

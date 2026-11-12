@@ -1,12 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   Bookmark,
+  BookOpenCheck,
   CheckCircle2,
-  Compass,
   Eye,
   EyeOff,
   MessageSquareWarning,
-  Network,
   Pause,
   Play,
   Plus,
@@ -17,7 +16,7 @@ import {
   X
 } from 'lucide-react';
 import { analyzeInterviewKeywords } from '../../store/useStudyGraphStore';
-import { ModuleId } from '../../types/graph';
+import { ModuleId, StoryScrollRequest } from '../../types/graph';
 import {
   InterviewDraftRecord,
   InterviewQuestion
@@ -28,6 +27,8 @@ interface InterviewDefenseTabProps {
   selectedModule: ModuleId | 'all';
   bookmarks: string[];
   interviewDrafts: Record<string, InterviewDraftRecord>;
+  focusRequest?: StoryScrollRequest | null;
+  onConsumeFocusRequest?: () => void;
   onToggleBookmark: (questionId: string) => void;
   onSaveDraft: (
     questionId: string,
@@ -39,24 +40,28 @@ interface InterviewDefenseTabProps {
     moduleId: ModuleId,
     item: InterviewQuestion
   ) => Promise<void>;
-  onInspectNode: (nodeId: string) => void;
-  onJumpToStory: (moduleId: ModuleId, nodeId: string) => void;
+  onJumpToConceptContext: (nodeId: string) => void;
 }
 
 const DEFAULT_TIMER_SECONDS = 90;
 const WARNING_THRESHOLD_SECONDS = 20;
+const SCROLL_FOCUS_DELAY_MS = 60;
+const SCRIPT_TAB_ORDER: Array<'main' | 'followup'> = ['main', 'followup'];
 
 export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
   questions,
   selectedModule,
   bookmarks,
   interviewDrafts,
+  focusRequest = null,
+  onConsumeFocusRequest,
   onToggleBookmark,
   onSaveDraft,
   onCreateQuestion,
-  onInspectNode,
-  onJumpToStory
+  onJumpToConceptContext
 }) => {
+  const baseId = useId();
+
   // 90초 실전 압박 타이머 상태
   const [secondsLeft, setSecondsLeft] = useState<number>(DEFAULT_TIMER_SECONDS);
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -71,6 +76,9 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
     Record<string, 'main' | 'followup'>
   >({});
   const [savedToastId, setSavedToastId] = useState<string | null>(null);
+  const scriptTabButtonRefs = useRef<Record<string, HTMLButtonElement | null>>(
+    {}
+  );
 
   // 신규 문항 추가 폼
   const [showAddForm, setShowAddForm] = useState(false);
@@ -98,6 +106,21 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
     if (selectedModule === 'all') return questions;
     return questions.filter((q) => q.moduleId === selectedModule);
   }, [questions, selectedModule]);
+
+  // 검색·그래프에서 특정 면접 문항 직행 시 해당 카드로 부드럽게 스크롤
+  useEffect(() => {
+    if (!focusRequest) return;
+    const timer = window.setTimeout(() => {
+      const targetEl = document.getElementById(
+        `workspace-question-${focusRequest.nodeId}`
+      );
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      onConsumeFocusRequest?.();
+    }, SCROLL_FOCUS_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [focusRequest, filteredQuestions.length, onConsumeFocusRequest]);
 
   const getMainAnswer = (qId: string) =>
     mainInputs[qId] !== undefined
@@ -151,6 +174,19 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
     setShowAddForm(false);
   };
 
+  const handleMobileScriptTabKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    qId: string,
+    currentKey: 'main' | 'followup'
+  ) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    e.preventDefault();
+    const nextKey: 'main' | 'followup' =
+      currentKey === 'main' ? 'followup' : 'main';
+    setMobileScriptTabMap((prev) => ({ ...prev, [qId]: nextKey }));
+    scriptTabButtonRefs.current[`${qId}-${nextKey}`]?.focus();
+  };
+
   const formattedTime = `${String(Math.floor(secondsLeft / 60)).padStart(
     2,
     '0'
@@ -168,17 +204,17 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
           <div className="space-y-1 min-w-0">
             <span className="inline-flex items-center gap-1.5 rounded-lg bg-rose-50 border border-rose-200 px-2.5 py-0.5 text-xs font-extrabold text-rose-900">
               <MessageSquareWarning className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-              <span>90초 압박 면접 키워드 채점기 ({filteredQuestions.length}개 문항)</span>
+              <span>90초 구술 면접 훈련 ({filteredQuestions.length}개 문항)</span>
             </span>
             <h3 className="text-base sm:text-xl font-extrabold text-slate-900">
               실전 압박 면접 90초 타이머 &amp; 필수 학술 키워드 자동 채점기
             </h3>
             <p className="text-xs text-slate-600">
-              필수 키워드 커버리지 <strong>80% 이상 달성 시 지식 그래프 노드가 Mastered(초록색)</strong>로 즉시 전환됩니다.
+              필수 키워드 커버리지 <strong>80% 이상 달성 시 지식그래프 정점이 숙련 완료(Mastered)</strong>로 전환됩니다.
             </p>
           </div>
 
-          {/* 90초 카운트다운 위젯 (tabular-nums + 0초 도달 시 2회 펄스 후 정지) */}
+          {/* 90초 카운트다운 위젯 */}
           <div className="flex flex-wrap items-center gap-2.5 tabular-nums">
             <div
               className={`rounded-xl border px-4 py-2 flex items-center gap-2.5 ${
@@ -281,6 +317,7 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
+                aria-label="문항 추가 폼 닫기"
                 className="text-slate-500 hover:text-slate-800"
               >
                 <X className="w-4 h-4" />
@@ -290,6 +327,7 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
               <select
                 value={newModId}
                 onChange={(e) => setNewModId(e.target.value as ModuleId)}
+                aria-label="소속 모듈 선택"
                 className="rounded-lg border border-rose-200 bg-white px-3 py-2 text-base sm:text-xs font-bold text-slate-800"
               >
                 <option value="mod1">Module 1</option>
@@ -354,12 +392,14 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
             q.requiredKeywords
           );
           const isModelOpen = Boolean(showModelMap[q.id]);
+          const activeMobileScriptTab = mobileScriptTabMap[q.id] ?? 'main';
 
           return (
             <article
               key={q.id}
               id={`workspace-question-${q.id}`}
-              className="surface-card overflow-hidden"
+              data-node-id={q.id}
+              className="surface-card overflow-hidden scroll-mt-24"
             >
               {/* 상단 질문 헤더 */}
               <div className="bg-slate-50/90 border-b border-slate-900/[0.08] px-5 py-4 space-y-3">
@@ -386,20 +426,11 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
                   <div className="flex flex-wrap items-center gap-1.5">
                     <button
                       type="button"
-                      onClick={() => onJumpToStory(q.moduleId, q.id)}
+                      onClick={() => onJumpToConceptContext(q.id)}
                       className="inline-flex min-h-[32px] items-center gap-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 px-3 py-1 text-xs font-extrabold text-white transition-colors"
                     >
-                      <Compass className="w-3.5 h-3.5 shrink-0" />
-                      <span>스토리 맥락 보기</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => onInspectNode(q.id)}
-                      className="inline-flex min-h-[32px] items-center gap-1 rounded-lg bg-white hover:bg-slate-100 border border-slate-900/[0.08] px-3 py-1 text-xs font-extrabold text-slate-800 transition-colors"
-                    >
-                      <Network className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                      <span>그래프 연결망</span>
+                      <BookOpenCheck className="w-3.5 h-3.5 shrink-0" />
+                      <span>관련 개념학습 보기</span>
                     </button>
 
                     <button
@@ -435,11 +466,10 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
 
               {/* 본문: 실시간 키워드 체크리스트 + 답변 작성 + 모범답안 */}
               <div className="p-5 sm:p-6 space-y-4">
-                {/* 실시간 필수 키워드 매칭 칩 (누락 키워드 클릭 시 원클릭 삽입) */}
                 <div className="surface-subtle p-4 space-y-2.5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="text-xs font-extrabold text-slate-900">
-                      루브릭 필수 학술 키워드 실시간 감지 (누락된 빨간 키워드를 클릭하면 답안에 자동 삽입됩니다):
+                      루브릭 필수 학술 키워드 실시간 감지 (미충족 키워드 터치 시 답안에 자동 삽입):
                     </span>
                     <span className="text-xs font-extrabold text-indigo-700 tabular-nums">
                       {analysis.matchedKeywords.length} /{' '}
@@ -475,7 +505,7 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
                   </div>
                 </div>
 
-                {/* 모바일(< lg): 모범답안 상단 고정 대조 패널 + 본질문/꼬리질문 세그먼트 탭 전환 */}
+                {/* 모바일(< lg): 모범답안 상단 대조 + 1줄 본질문/꼬리질문 전환 */}
                 <div className="lg:hidden space-y-3">
                   {isModelOpen && (
                     <div className="rounded-xl bg-slate-900 text-white p-3.5 space-y-1.5 border border-slate-800 max-h-[24dvh] overflow-y-auto overscroll-contain">
@@ -491,94 +521,98 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
 
                   <div
                     role="tablist"
-                    aria-label="본 질문 및 꼬리질문 답변 전환"
-                    className="grid grid-cols-2 gap-1 rounded-xl bg-slate-100 border border-slate-900/[0.08] p-1"
+                    aria-label="구술 답변 유형"
+                    className="single-row-tablist gap-1 rounded-xl bg-slate-100 border border-slate-900/[0.08] p-1"
                   >
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={
-                        (mobileScriptTabMap[q.id] ?? 'main') === 'main'
-                      }
-                      onClick={() =>
-                        setMobileScriptTabMap((prev) => ({
-                          ...prev,
-                          [q.id]: 'main'
-                        }))
-                      }
-                      className={`no-press-scale min-h-[36px] rounded-lg px-2.5 py-1.5 text-xs font-extrabold transition-colors ${
-                        (mobileScriptTabMap[q.id] ?? 'main') === 'main'
-                          ? 'bg-indigo-600 text-white shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      ① 본 질문 스크립트
-                    </button>
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={mobileScriptTabMap[q.id] === 'followup'}
-                      onClick={() =>
-                        setMobileScriptTabMap((prev) => ({
-                          ...prev,
-                          [q.id]: 'followup'
-                        }))
-                      }
-                      className={`no-press-scale min-h-[36px] rounded-lg px-2.5 py-1.5 text-xs font-extrabold transition-colors ${
-                        mobileScriptTabMap[q.id] === 'followup'
-                          ? 'bg-rose-600 text-white shadow-xs'
-                          : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      ② 꼬리질문 방어
-                    </button>
+                    {SCRIPT_TAB_ORDER.map((tabKey) => {
+                      const isSelected = activeMobileScriptTab === tabKey;
+                      const tabDomId = `${baseId}-${q.id}-tab-${tabKey}`;
+                      return (
+                        <button
+                          key={tabKey}
+                          ref={(el) => {
+                            scriptTabButtonRefs.current[`${q.id}-${tabKey}`] = el;
+                          }}
+                          id={tabDomId}
+                          type="button"
+                          role="tab"
+                          aria-selected={isSelected}
+                          tabIndex={isSelected ? 0 : -1}
+                          onClick={() =>
+                            setMobileScriptTabMap((prev) => ({
+                              ...prev,
+                              [q.id]: tabKey
+                            }))
+                          }
+                          onKeyDown={(e) =>
+                            handleMobileScriptTabKeyDown(e, q.id, tabKey)
+                          }
+                          className={`no-press-scale flex-1 min-h-[36px] rounded-lg px-2.5 py-1.5 text-xs font-extrabold transition-colors ${
+                            isSelected
+                              ? tabKey === 'main'
+                                ? 'bg-indigo-600 text-white shadow-xs'
+                                : 'bg-rose-600 text-white shadow-xs'
+                              : 'text-slate-600 hover:text-slate-900'
+                          }`}
+                        >
+                          {tabKey === 'main'
+                            ? '① 본 질문 스크립트'
+                            : '② 꼬리질문 방어'}
+                        </button>
+                      );
+                    })}
                   </div>
 
-                  {(mobileScriptTabMap[q.id] ?? 'main') === 'main' ? (
-                    <div className="space-y-1.5">
-                      <label
-                        htmlFor={`mobile-main-ans-${q.id}`}
-                        className="text-xs font-extrabold text-slate-800 block"
-                      >
-                        ① 본 질문 구술 답변 스크립트
-                      </label>
-                      <textarea
-                        id={`mobile-main-ans-${q.id}`}
-                        rows={4}
-                        value={mainText}
-                        onChange={(e) =>
-                          setMainInputs((prev) => ({
-                            ...prev,
-                            [q.id]: e.target.value
-                          }))
-                        }
-                        placeholder="핵심 학술 키워드를 포함하여 본 질문에 대한 과학자-실무자 방어 논리를 서술하세요..."
-                        className="w-full rounded-xl border border-slate-900/[0.08] bg-slate-50 p-3.5 text-base text-slate-900 focus:bg-white focus:border-indigo-500"
-                      />
-                    </div>
-                  ) : (
-                    <div className="space-y-1.5">
-                      <label
-                        htmlFor={`mobile-follow-ans-${q.id}`}
-                        className="text-xs font-extrabold text-rose-800 block"
-                      >
-                        ② 압박 꼬리질문 방어 스크립트
-                      </label>
-                      <textarea
-                        id={`mobile-follow-ans-${q.id}`}
-                        rows={4}
-                        value={followText}
-                        onChange={(e) =>
-                          setFollowUpInputs((prev) => ({
-                            ...prev,
-                            [q.id]: e.target.value
-                          }))
-                        }
-                        placeholder="면접관의 압박 꼬리질문에 대한 구체적인 교실·상담 처방 절차를 서술하세요..."
-                        className="w-full rounded-xl border border-rose-200 bg-rose-50/30 p-3.5 text-base text-slate-900 focus:bg-white focus:border-rose-500"
-                      />
-                    </div>
-                  )}
+                  <div
+                    role="tabpanel"
+                    aria-labelledby={`${baseId}-${q.id}-tab-${activeMobileScriptTab}`}
+                  >
+                    {activeMobileScriptTab === 'main' ? (
+                      <div className="space-y-1.5">
+                        <label
+                          htmlFor={`mobile-main-ans-${q.id}`}
+                          className="text-xs font-extrabold text-slate-800 block"
+                        >
+                          ① 본 질문 구술 답변 스크립트
+                        </label>
+                        <textarea
+                          id={`mobile-main-ans-${q.id}`}
+                          rows={4}
+                          value={mainText}
+                          onChange={(e) =>
+                            setMainInputs((prev) => ({
+                              ...prev,
+                              [q.id]: e.target.value
+                            }))
+                          }
+                          placeholder="핵심 학술 키워드를 포함하여 본 질문에 대한 과학자-실무자 방어 논리를 서술하세요..."
+                          className="w-full rounded-xl border border-slate-900/[0.08] bg-slate-50 p-3.5 text-base text-slate-900 focus:bg-white focus:border-indigo-500"
+                        />
+                      </div>
+                    ) : (
+                      <div className="space-y-1.5">
+                        <label
+                          htmlFor={`mobile-follow-ans-${q.id}`}
+                          className="text-xs font-extrabold text-rose-800 block"
+                        >
+                          ② 압박 꼬리질문 방어 스크립트
+                        </label>
+                        <textarea
+                          id={`mobile-follow-ans-${q.id}`}
+                          rows={4}
+                          value={followText}
+                          onChange={(e) =>
+                            setFollowUpInputs((prev) => ({
+                              ...prev,
+                              [q.id]: e.target.value
+                            }))
+                          }
+                          placeholder="면접관의 압박 꼬리질문에 대한 구체적인 교실·상담 처방 절차를 서술하세요..."
+                          className="w-full rounded-xl border border-rose-200 bg-rose-50/30 p-3.5 text-base text-slate-900 focus:bg-white focus:border-rose-500"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* 데스크톱(lg+): 본 질문 & 꼬리질문 좌우 2컬럼 동시 입력 */}
@@ -661,7 +695,7 @@ export const InterviewDefenseTab: React.FC<InterviewDefenseTabProps> = ({
                   <div className="flex items-center gap-2">
                     {savedToastId === q.id && (
                       <span className="text-xs font-extrabold text-emerald-700">
-                        채점 기록 및 지식 그래프 동기화 완료
+                        채점 기록 및 지식그래프 동기화 완료
                       </span>
                     )}
                     <button

@@ -1,8 +1,5 @@
-import React from 'react';
+import React, { useEffect, useId, useRef } from 'react';
 import {
-  BookOpen,
-  Brain,
-  Compass,
   Layers,
   MessageSquareWarning,
   Network,
@@ -16,25 +13,22 @@ import {
   MasteryState,
   ModuleId,
   PrioritizedWeakNodeItem,
+  StoryScrollRequest,
   WorkspaceTabId
 } from '../../types/graph';
 import {
-  ClassroomCase,
   Flashcard,
   FlashcardStatus,
   InterviewDraftRecord,
   InterviewQuestion,
   ModulePayload,
   StudyItemType,
-  StudyItemUnion,
-  TheoryConcept
+  StudyItemUnion
 } from '../../types/study';
-import { CaseSimulatorTab } from './CaseSimulatorTab';
 import { CheatSheetPrintTab } from './CheatSheetPrintTab';
 import { FlashcardSrsTab } from './FlashcardSrsTab';
 import { InterviewDefenseTab } from './InterviewDefenseTab';
 import { KnowledgeGraphMap } from './KnowledgeGraphMap';
-import { TheoryArchiveTab } from './TheoryArchiveTab';
 
 interface StudyWorkspaceViewProps {
   activeTab: WorkspaceTabId;
@@ -44,11 +38,13 @@ interface StudyWorkspaceViewProps {
   weakFocusActive: boolean;
   onToggleWeakFocus: (next: boolean) => void;
   selectedNodeId: string | null;
-  onSelectNode: (nodeId: string) => void;
+  focusRequest: StoryScrollRequest | null;
+  onConsumeFocusRequest: () => void;
+  onSelectGraphNode: (nodeId: string) => void;
+  onNavigateCanonical: (nodeId: string) => void;
+  onJumpToConceptContext: (nodeId: string) => void;
   modules: ModulePayload[];
-  allTheories: TheoryConcept[];
   allFlashcards: Flashcard[];
-  allCases: ClassroomCase[];
   allQuestions: InterviewQuestion[];
   nodes: KnowledgeGraphNode[];
   edges: KnowledgeGraphEdge[];
@@ -60,11 +56,6 @@ interface StudyWorkspaceViewProps {
   userNotes: Record<string, string>;
   interviewDrafts: Record<string, InterviewDraftRecord>;
   onToggleBookmark: (itemId: string) => void;
-  onUpdateItemNote: (itemId: string, note: string) => void;
-  onUpdateTheoryContent: (
-    theoryId: string,
-    updatedFields: Partial<TheoryConcept>
-  ) => Promise<void>;
   onUpdateFlashcardStatus: (cardId: string, status: FlashcardStatus) => void;
   onSaveInterviewDraft: (
     questionId: string,
@@ -77,7 +68,6 @@ interface StudyWorkspaceViewProps {
     moduleId: ModuleId,
     item: StudyItemUnion
   ) => Promise<void>;
-  onJumpToStory: (moduleId: ModuleId, nodeId: string) => void;
 }
 
 const WORKSPACE_TABS: Array<{
@@ -87,38 +77,26 @@ const WORKSPACE_TABS: Array<{
   icon: React.ReactNode;
 }> = [
   {
-    id: 'graph',
-    labelKo: '지식 그래프 맵',
-    countBadge: '90',
-    icon: <Network className="w-4 h-4 shrink-0" />
-  },
-  {
-    id: 'theories',
-    labelKo: '핵심 이론 비교',
-    countBadge: '20',
-    icon: <BookOpen className="w-4 h-4 shrink-0" />
-  },
-  {
     id: 'flashcards',
-    labelKo: '한-영 플래시카드',
+    labelKo: '단어장',
     countBadge: '47',
     icon: <Layers className="w-4 h-4 shrink-0" />
   },
   {
-    id: 'cases',
-    labelKo: '교실 사례 3중 렌즈',
-    countBadge: '10',
-    icon: <Brain className="w-4 h-4 shrink-0" />
-  },
-  {
     id: 'interview',
-    labelKo: '압박 면접 디펜스',
+    labelKo: '90초 면접',
     countBadge: '13',
     icon: <MessageSquareWarning className="w-4 h-4 shrink-0" />
   },
   {
+    id: 'graph',
+    labelKo: '지식그래프',
+    countBadge: '90',
+    icon: <Network className="w-4 h-4 shrink-0" />
+  },
+  {
     id: 'cheatsheet',
-    labelKo: 'A4 요약 시트 인쇄',
+    labelKo: '요약 인쇄',
     countBadge: 'PDF',
     icon: <Printer className="w-4 h-4 shrink-0" />
   }
@@ -132,11 +110,13 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   weakFocusActive,
   onToggleWeakFocus,
   selectedNodeId,
-  onSelectNode,
+  focusRequest,
+  onConsumeFocusRequest,
+  onSelectGraphNode,
+  onNavigateCanonical,
+  onJumpToConceptContext,
   modules,
-  allTheories,
   allFlashcards,
-  allCases,
   allQuestions,
   nodes,
   edges,
@@ -148,41 +128,86 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   userNotes,
   interviewDrafts,
   onToggleBookmark,
-  onUpdateItemNote,
-  onUpdateTheoryContent,
   onUpdateFlashcardStatus,
   onSaveInterviewDraft,
-  onCreateNewItem,
-  onJumpToStory
+  onCreateNewItem
 }) => {
+  const tablistId = useId();
+  const tabButtonRefs = useRef<Record<WorkspaceTabId, HTMLButtonElement | null>>(
+    {
+      flashcards: null,
+      interview: null,
+      graph: null,
+      cheatsheet: null
+    }
+  );
+
+  // 선택된 탭이 가로 스크롤 컨테이너 가장자리에 가려지지 않도록 자동 스크롤
+  useEffect(() => {
+    const activeBtn = tabButtonRefs.current[activeTab];
+    activeBtn?.scrollIntoView({
+      block: 'nearest',
+      inline: 'nearest',
+      behavior: 'smooth'
+    });
+  }, [activeTab]);
+
+  const handleTabKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    const count = WORKSPACE_TABS.length;
+    let nextIndex: number | null = null;
+    if (e.key === 'ArrowRight') {
+      nextIndex = (index + 1) % count;
+    } else if (e.key === 'ArrowLeft') {
+      nextIndex = (index - 1 + count) % count;
+    } else if (e.key === 'Home') {
+      nextIndex = 0;
+    } else if (e.key === 'End') {
+      nextIndex = count - 1;
+    }
+    if (nextIndex !== null) {
+      e.preventDefault();
+      const targetTab = WORKSPACE_TABS[nextIndex].id;
+      onChangeTab(targetTab);
+      tabButtonRefs.current[targetTab]?.focus();
+    }
+  };
+
   return (
     <div className="max-w-[1440px] mx-auto px-3.5 sm:px-6 py-4 sm:py-6 space-y-5">
-      {/* 워크스페이스 상단 탭 & 모듈 필터 바 (비고정 인라인 카드) */}
-      <section className="no-print print:hidden bento-tile-white p-4 sm:p-5 space-y-3.5">
-        {/* 데스크톱(lg+) 6대 워크스페이스 탭 */}
+      {/* 실전훈련 4대 도구 1줄 탭 & 모듈 필터 카드 (모바일·데스크톱 공통 노출) */}
+      <section className="no-print print:hidden bento-tile-white p-3.5 sm:p-5 space-y-3">
         <div
           role="tablist"
-          aria-label="스터디 워크스페이스 도구 탭"
-          className="hidden lg:grid lg:grid-cols-3 xl:grid-cols-6 gap-2"
+          aria-label="실전훈련 도구"
+          className="single-row-tablist gap-2 pb-1"
         >
-          {WORKSPACE_TABS.map((tab) => {
+          {WORKSPACE_TABS.map((tab, idx) => {
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
+                ref={(el) => {
+                  tabButtonRefs.current[tab.id] = el;
+                }}
+                id={`${tablistId}-tab-${tab.id}`}
                 role="tab"
                 type="button"
                 aria-selected={isActive}
+                tabIndex={isActive ? 0 : -1}
                 onClick={() => onChangeTab(tab.id)}
-                className={`no-press-scale min-h-[42px] rounded-[14px] px-3.5 py-2 text-xs font-semibold flex items-center justify-between gap-2 transition-colors ${
+                onKeyDown={(e) => handleTabKeyDown(e, idx)}
+                className={`no-press-scale sm:flex-1 min-h-[42px] shrink-0 rounded-[14px] px-3.5 py-2 text-xs font-semibold flex items-center justify-between gap-2 transition-colors ${
                   isActive
                     ? 'bg-[#1d1d1f] text-white shadow-xs'
                     : 'bg-[#f5f5f7] text-[#424245] hover:bg-black/[0.07] hover:text-[#1d1d1f]'
                 }`}
               >
-                <span className="flex items-center gap-1.5 min-w-0 truncate">
+                <span className="flex items-center gap-1.5 whitespace-nowrap">
                   {tab.icon}
-                  <span className="truncate">{tab.labelKo}</span>
+                  <span>{tab.labelKo}</span>
                 </span>
                 <span
                   className={`rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums shrink-0 ${
@@ -198,16 +223,16 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
           })}
         </div>
 
-        {/* 모듈 공통 필터 바 & 스토리 모드 복귀 브릿지 */}
-        <div className="lg:pt-3 lg:border-t lg:border-black/[0.06] flex flex-wrap items-center justify-between gap-2 tabular-nums">
+        {/* 모듈 범위 필터 바 (1줄 가로 스크롤) */}
+        <div className="pt-2.5 border-t border-black/[0.06] flex items-center gap-2 tabular-nums">
           <div className="mobile-strip-scroll sm:flex-wrap flex items-center gap-1.5 min-w-0 max-w-full">
             <span className="text-xs font-semibold text-[#6e6e73] mr-0.5 shrink-0">
-              모듈:
+              범위:
             </span>
             <button
               type="button"
               onClick={() => onChangeModule('all')}
-              className={`min-h-[34px] rounded-full px-3.5 py-1 text-xs font-semibold shrink-0 transition-colors ${
+              className={`min-h-[32px] rounded-full px-3 py-1 text-xs font-semibold shrink-0 transition-colors ${
                 selectedModule === 'all'
                   ? 'bg-[var(--accent-solid)] text-white'
                   : 'bg-[#f5f5f7] text-[#424245] hover:bg-black/[0.07]'
@@ -224,7 +249,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                   key={m.id}
                   type="button"
                   onClick={() => onChangeModule(m.id)}
-                  className={`min-h-[34px] rounded-full px-3.5 py-1 text-xs font-semibold flex items-center gap-1.5 shrink-0 transition-colors ${
+                  className={`min-h-[32px] rounded-full px-3 py-1 text-xs font-semibold flex items-center gap-1.5 shrink-0 transition-colors ${
                     isSelected
                       ? 'bg-[#1d1d1f] text-white'
                       : 'bg-[#f5f5f7] text-[#424245] hover:bg-black/[0.07]'
@@ -241,119 +266,75 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
               );
             })}
           </div>
-
-          <button
-            type="button"
-            onClick={() =>
-              onJumpToStory(
-                selectedModule === 'all' ? 'mod1' : selectedModule,
-                selectedNodeId ?? 'mod1-theory-piaget'
-              )
-            }
-            className="hidden lg:inline-flex min-h-[34px] items-center gap-1.5 rounded-full bg-[var(--accent-subtle)] hover:bg-[#0071e3]/15 px-3.5 py-1 text-xs font-semibold text-[var(--accent-solid)] shrink-0 transition-colors"
-          >
-            <Compass className="w-3.5 h-3.5 shrink-0" />
-            <span>스토리 커리큘럼에서 보기</span>
-          </button>
         </div>
       </section>
 
-      {/* 활성 탭 컨텐츠 */}
-      {activeTab === 'graph' && (
-        <KnowledgeGraphMap
-          nodes={nodes}
-          edges={edges}
-          nodeMap={nodeMap}
-          adjacency={adjacency}
-          masteryMap={masteryMap}
-          prioritizedWeakQueue={prioritizedWeakQueue}
-          selectedModule={selectedModule}
-          onChangeModule={onChangeModule}
-          weakFocusActive={weakFocusActive}
-          onToggleWeakFocus={onToggleWeakFocus}
-          selectedNodeId={selectedNodeId}
-          onSelectNode={onSelectNode}
-          onJumpToStory={onJumpToStory}
-          onJumpToWorkspaceTab={(tab, modId, nodeId) => {
-            onChangeModule(modId);
-            onChangeTab(tab);
-            onSelectNode(nodeId);
-          }}
-        />
-      )}
+      {/* 활성 탭 패널 */}
+      <div
+        role="tabpanel"
+        aria-labelledby={`${tablistId}-tab-${activeTab}`}
+      >
+        {activeTab === 'flashcards' && (
+          <FlashcardSrsTab
+            flashcards={allFlashcards}
+            selectedModule={selectedModule}
+            bookmarks={bookmarks}
+            focusRequest={focusRequest}
+            onConsumeFocusRequest={onConsumeFocusRequest}
+            onUpdateStatus={onUpdateFlashcardStatus}
+            onToggleBookmark={onToggleBookmark}
+            onCreateFlashcard={(modId, item) =>
+              onCreateNewItem('flashcard', modId, item)
+            }
+            onJumpToConceptContext={onJumpToConceptContext}
+          />
+        )}
 
-      {activeTab === 'theories' && (
-        <TheoryArchiveTab
-          theories={allTheories}
-          selectedModule={selectedModule}
-          bookmarks={bookmarks}
-          nodeMap={nodeMap}
-          masteryMap={masteryMap}
-          onToggleBookmark={onToggleBookmark}
-          onUpdateNote={onUpdateItemNote}
-          onUpdateTheoryContent={onUpdateTheoryContent}
-          onCreateTheory={(modId, item) =>
-            onCreateNewItem('theory', modId, item)
-          }
-          onInspectNode={onSelectNode}
-          onJumpToStory={onJumpToStory}
-        />
-      )}
+        {activeTab === 'interview' && (
+          <InterviewDefenseTab
+            questions={allQuestions}
+            selectedModule={selectedModule}
+            bookmarks={bookmarks}
+            interviewDrafts={interviewDrafts}
+            focusRequest={focusRequest}
+            onConsumeFocusRequest={onConsumeFocusRequest}
+            onToggleBookmark={onToggleBookmark}
+            onSaveDraft={onSaveInterviewDraft}
+            onCreateQuestion={(modId, item) =>
+              onCreateNewItem('question', modId, item)
+            }
+            onJumpToConceptContext={onJumpToConceptContext}
+          />
+        )}
 
-      {activeTab === 'flashcards' && (
-        <FlashcardSrsTab
-          flashcards={allFlashcards}
-          selectedModule={selectedModule}
-          bookmarks={bookmarks}
-          onUpdateStatus={onUpdateFlashcardStatus}
-          onToggleBookmark={onToggleBookmark}
-          onCreateFlashcard={(modId, item) =>
-            onCreateNewItem('flashcard', modId, item)
-          }
-          onInspectNode={onSelectNode}
-          onJumpToStory={onJumpToStory}
-        />
-      )}
+        {activeTab === 'graph' && (
+          <KnowledgeGraphMap
+            nodes={nodes}
+            edges={edges}
+            nodeMap={nodeMap}
+            adjacency={adjacency}
+            masteryMap={masteryMap}
+            prioritizedWeakQueue={prioritizedWeakQueue}
+            selectedModule={selectedModule}
+            onChangeModule={onChangeModule}
+            weakFocusActive={weakFocusActive}
+            onToggleWeakFocus={onToggleWeakFocus}
+            selectedNodeId={selectedNodeId}
+            onSelectNode={onSelectGraphNode}
+            onNavigateCanonical={onNavigateCanonical}
+          />
+        )}
 
-      {activeTab === 'cases' && (
-        <CaseSimulatorTab
-          cases={allCases}
-          selectedModule={selectedModule}
-          bookmarks={bookmarks}
-          userNotes={userNotes}
-          onToggleBookmark={onToggleBookmark}
-          onUpdateCaseNote={onUpdateItemNote}
-          onCreateCase={(modId, item) => onCreateNewItem('case', modId, item)}
-          onInspectNode={onSelectNode}
-          onJumpToStory={onJumpToStory}
-        />
-      )}
-
-      {activeTab === 'interview' && (
-        <InterviewDefenseTab
-          questions={allQuestions}
-          selectedModule={selectedModule}
-          bookmarks={bookmarks}
-          interviewDrafts={interviewDrafts}
-          onToggleBookmark={onToggleBookmark}
-          onSaveDraft={onSaveInterviewDraft}
-          onCreateQuestion={(modId, item) =>
-            onCreateNewItem('question', modId, item)
-          }
-          onInspectNode={onSelectNode}
-          onJumpToStory={onJumpToStory}
-        />
-      )}
-
-      {activeTab === 'cheatsheet' && (
-        <CheatSheetPrintTab
-          modules={modules}
-          selectedModule={selectedModule}
-          bookmarks={bookmarks}
-          userNotes={userNotes}
-          interviewDrafts={interviewDrafts}
-        />
-      )}
+        {activeTab === 'cheatsheet' && (
+          <CheatSheetPrintTab
+            modules={modules}
+            selectedModule={selectedModule}
+            bookmarks={bookmarks}
+            userNotes={userNotes}
+            interviewDrafts={interviewDrafts}
+          />
+        )}
+      </div>
     </div>
   );
 };

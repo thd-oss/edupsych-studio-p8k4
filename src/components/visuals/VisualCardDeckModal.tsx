@@ -544,7 +544,16 @@ export const InlineVisualCardReel: React.FC<InlineVisualCardReelProps> = ({
                       </div>
                     )}
 
-                    {slide.contrastPair ? (
+                    {slide.imageUrl ? (
+                      <div className="pt-0.5">
+                        <img
+                          src={slide.imageUrl}
+                          alt={slide.imageAlt ?? slide.title}
+                          loading="lazy"
+                          className="w-full h-32 object-contain rounded-[12px] bg-[#f5f5f7] border border-black/[0.05]"
+                        />
+                      </div>
+                    ) : slide.contrastPair ? (
                       <div className="space-y-1.5 pt-0.5">
                         <p className="rounded-xl bg-rose-50/90 border border-rose-200/80 px-2.5 py-1.5 text-xs text-rose-950 line-clamp-2 korean-keep-all">
                           <strong className="font-extrabold text-rose-800 mr-1">
@@ -1092,6 +1101,18 @@ export const VisualCardDeckModal: React.FC<VisualCardDeckModalProps> = ({
                             ))}
                           </div>
                         </div>
+                      )}
+
+                      {/* 카드 내장 인포그래픽 도해 */}
+                      {slide.imageUrl && (
+                        <figure className="pt-1 space-y-2">
+                          <img
+                            src={slide.imageUrl}
+                            alt={slide.imageAlt ?? slide.title}
+                            loading="lazy"
+                            className="w-full max-h-[48dvh] object-contain rounded-[16px] bg-[#f5f5f7] border border-black/[0.06] mx-auto"
+                          />
+                        </figure>
                       )}
 
                       {/* 통념 vs 증거기반 처방 대조 */}
